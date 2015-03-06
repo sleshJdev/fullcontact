@@ -1,0 +1,146 @@
+@CHARSET "UTF-8";
+
+.smart-green {
+	float: none;
+}
+
+.avatart-file{
+	visibility: hidden;
+	position: absolute;
+	z-index: 100;
+}
+
+.delete {
+	visibility: hidden;
+	position: absolute;
+	z-index: 100;
+}
+
+#contact-info2 input {
+	width: 100%;
+	max-width: 100%;
+}
+
+.form {
+	float: left;
+	width: 100%;
+	height: 100%;
+	margin-bottom: 50px;
+}
+
+#dialog-phone-hook, #dialog-atachment-hook {
+	height: 100%;
+	width: 90%;
+	border: 1px solid #000;
+	border-radius: 10px;
+	cursor: pointer;
+	margin-bottom: 10px;
+	background-color: grey;
+	color: white;
+}
+
+#contact {
+	width: 43%;
+	float: right;
+}
+
+.vertical-tables {
+	width: 55%;
+	float: left;
+}
+
+#phones, #atachments {
+	margin: 50px 0;
+}
+
+.table-title {
+	float: left;
+	position: absolute;
+	margin-left: 200px;
+	text-align: center;
+	background-color: #9DC45F;
+	color: #ffffff;
+	border-radius: 5px;
+}
+
+.table-menu {
+	background-color: #9DC45F;
+	clear: both;
+}
+
+.pick-all {
+	float: left;
+	margin-left: 10px;
+}
+
+.menu {
+	float: right;
+}
+
+.ul-inline li {
+	display: inline-block;
+}
+
+.center-cell {
+	width: 20px;
+	margin: 0 auto;
+}
+
+.h1-right {
+	margin-right: 40%;
+	float: right;
+}
+
+.avatar-default {
+	width: 128px;
+	height: 128px;
+	background-image: url("../images/icons/avatart-default.png");
+	background-repeat: no-repeat;
+	float: left;
+	cursor: pointer;
+}
+
+.avatar{
+	width: 128px;
+	height: 128px;
+	background-repeat: no-repeat;
+	float: left;
+	cursor: pointer;
+}
+
+.contact-info table {
+	float: right;
+}
+
+.submit {
+	margin: 10px;
+	float: left;
+	clear: both;
+}
+
+#dialog-phone-form, #dialog-atachment-form {
+	display: inline-block;
+	visibility: hidden;
+	position: absolute;
+	z-index: 100;
+}
+
+.dimmer {
+	background: #ffffff;
+	position: absolute;
+	opacity: .5;
+	top: 0;
+	z-index: 99;
+}
+
+.send-div {
+	width: 100px;
+	margin: 0 auto;
+	position: relative;
+	right: -121px;
+	top: -28px;
+}
+
+.hidden-link {
+	visibility: hidden;
+}

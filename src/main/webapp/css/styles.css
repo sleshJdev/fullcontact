@@ -1,0 +1,185 @@
+@CHARSET "UTF-8";
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+html, body {
+	height: 100%;
+}
+
+body, input, textarea, select, button {
+	font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana,
+		"lucida sans unicode", tahoma, sans-serif;
+	font-size: 15px;
+	color: rgb(61, 70, 77);
+	font-weight: normal;
+}
+
+h1, h3 {
+	text-align: center;
+	padding: 10px 0 5px 5px;
+}
+
+a {
+	color: rgb(40, 149, 241);
+	text-decoration: none;
+}
+
+a:hover {
+	color: red;
+}
+
+#content img {
+	cursor: pointer;
+}
+
+.error {
+	border-radius: 20px;
+	border: 3px dotted red;
+	width: 60%;
+	padding: 50px;
+	margin: 50px auto;
+	width: 60%;
+}
+ 
+.error a {
+	float: right;
+}
+
+.error-icon {
+	width: 128px;
+	height: 128px;
+	background-image: url("../images/icons/error2.png");
+	float: left;
+}
+
+.error-value {
+	color: red;
+}
+
+.error-header {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	margin-bottom: 50px;
+}
+
+.error-title {
+	color: blue;
+}
+
+.error-ul {
+	padding-left: 150px;
+}
+
+.error-ul ul {
+	text-align: left;
+	margin: 0 auto;
+}
+
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image: url('success.png');
+}
+
+.nice-color {
+	background-color: #FFCC02;
+}
+
+.close-icon-box {
+	width: 24px;
+	height: 24px;
+	float: right;
+	background-image: url("../images/icons/close.png");
+	top: 8px;
+	right: 33px;
+	cursor: pointer;
+}
+
+.table {
+	border: none;
+	width: 100%;
+}
+
+.table-header th {
+	background-color: #DFF2BF;
+	color: black;
+}
+
+.table tr:nth-child(even) {
+	background: #ccc
+}
+
+.table tr:nth-child(odd) {
+	background: #fff
+}
+
+div#container {
+	margin: 0 auto;
+	width: 90%;
+	height: 100%;
+}
+
+div#header {
+	height: 100px;
+	margin: 20px auto;
+}
+
+div#logo-left {
+	float: left;
+	width: 100px;
+	height: 100px;
+	background-image: url("../images/logo-left.png");
+	background-repeat: no-repeat;
+	background-image: url("../images/logo-left.png");
+}
+
+#logo-center {
+	width: 300px;
+	height: 100px;
+	background-image: url("../images/logo-center.png");
+	background-repeat: no-repeat;
+	position: absolute;
+	left: 50%;
+	margin-left: -150px;
+}
+
+div#logo-right {
+	float: right;
+	width: 100px;
+	height: 100px;
+	background-image: url("../images/logo-right.png");
+	background-repeat: no-repeat;
+	height: 100px;
+}
+
+div#menu {
+	display: inline-block;
+}
+
+div#menu li {
+	display: inline;
+	padding: 20px;
+}
+
+div#content {
+	width: 100%;
+	min-height: 50%;
+	margin-bottom: 50px;
+}
+
+div.clear {
+	clear: both;
+	margin: 10px 0;
+}
+
+div#footer {
+	width: 100%;
+	line-height: 100px;
+	text-align: center;
+	vertical-align: middle;
+	background-color: orange;
+	margin-bottom: 20px;
+}

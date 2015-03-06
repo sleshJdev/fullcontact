@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+.smart-green {
+	max-width: 50%;
+}
+
+.required{
+	color: red;
+	padding-left: 5px;
+}

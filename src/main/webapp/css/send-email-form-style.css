@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+#message-box{
+	width: 55%;
+	float: left;
+}
+
+#attachment-box{
+	width: 33%;
+	float: right;
+}
+
+.attachment-field {
+	display: inline-block;
+	cursor: pointer;
+	border: 1px solid black;
+	padding: 5px;
+}

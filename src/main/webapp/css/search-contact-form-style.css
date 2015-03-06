@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+
+/*######## Smart Green ########*/
+.smart-green {
+	max-width: 50%;
+}
+
+#oneline, #search-form input{
+	width: 100%;
+}
+
+.line{
+	float:right;
+	width: 100%;
+}
+.radio-div{
+	width: 20%;
+	float: right;
+}
+.input-div{
+	width: 80%;
+	float: right;
+}
+
+input[type="submit"]{
+	float: right;
+	clear: both;
+}

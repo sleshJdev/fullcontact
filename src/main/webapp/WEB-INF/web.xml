@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>FullContact</display-name>
+	<servlet>
+		<servlet-name>Dispatcher</servlet-name>
+		<servlet-class>by.slesh.itechart.fullcontact.servlet.controller.FrontController</servlet-class>
+		<multipart-config>
+			<max-file-size>20848820</max-file-size>
+			<max-request-size>418018841</max-request-size>
+			<file-size-threshold>1048576</file-size-threshold>
+		</multipart-config>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ExceptionHandler</servlet-name>
+		<servlet-class>by.slesh.itechart.fullcontact.servlet.handler.ExceptionHandler</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ExceptionHandler</servlet-name>
+		<url-pattern>/error</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>/action/*</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/error</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error</location>
+	</error-page>
+
+	<context-param>
+		<param-name>upload-directory</param-name>
+		<param-value>upload</param-value>
+	</context-param>
+	<context-param>
+		<param-name>public-directory</param-name>
+		<param-value>public</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>by.slesh.itechart.fullcontact.servlet.listener.FileLocationListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>StartFilter</filter-name>
+		<filter-class>by.slesh.itechart.fullcontact.filter.StartFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>StartFilter</filter-name>
+		<url-pattern>/</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>
