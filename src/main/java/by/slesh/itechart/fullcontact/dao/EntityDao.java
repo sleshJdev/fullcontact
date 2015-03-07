@@ -124,6 +124,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
 	long id = 0;
 	if (StringUtils.isEmptyOrWhitespaceOnly(getIdQuery)) {
+	    LOGGER.info("RETURN: query empty or null");
 	    return 0;
 	}
 	try {
@@ -152,6 +153,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	LOGGER.info("id: {}", id);
 
 	if (StringUtils.isEmptyOrWhitespaceOnly(getQuery) || reader == null) {
+	    LOGGER.info("RETURN: query empty or null");
 	    return null;
 	}
 
@@ -160,10 +162,12 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    connect();
 	    preparedStatement = getPrepareStatement(getQuery);
 	    preparedStatement.setLong(1, id);
+	    
+	    LOGGER.info("query: {}", preparedStatement);
+
 	    ResultSet resultSet = preparedStatement.executeQuery();
 	    item = reader.read(resultSet);
 	    
-	    LOGGER.info("query: {}", preparedStatement);
 	    LOGGER.info("entity with id {}: {}", id, item);
 	} finally {
 	    closeResources();
@@ -177,6 +181,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	LOGGER.info("BEGIN");
 
 	if (StringUtils.isEmptyOrWhitespaceOnly(getLimitQuery) || reader == null) {
+	    LOGGER.info("RETURN: query empty or null");
 	    return null;
 	}
 	List<T> list = null;
@@ -200,6 +205,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	LOGGER.info("BEGIN");
 
 	if (StringUtils.isEmptyOrWhitespaceOnly(getAllQuery) || reader == null) {
+	    LOGGER.info("RETURN: query empty or null");
 	    return null;
 	}
 	List<T> list = null;

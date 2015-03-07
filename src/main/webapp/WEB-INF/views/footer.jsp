@@ -5,8 +5,8 @@
 	<div id="logo-left"></div>
 	<div id="logo-right"></div>
 	<div id="footer">
-		<strong>Copyright © <%=LocalDate.now().getYear()%> Eugene
-			Putsykovich(slesh)
+		<strong>
+			Copyright © <%=LocalDate.now().getYear()%> Eugene Putsykovich(slesh)
 		</strong>
 	</div>
 </div>

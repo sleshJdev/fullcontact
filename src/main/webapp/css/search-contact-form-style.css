@@ -10,20 +10,24 @@
 	width: 100%;
 }
 
-.line{
-	float:right;
-	width: 100%;
-}
-.radio-div{
-	width: 20%;
-	float: right;
-}
-.input-div{
-	width: 80%;
-	float: right;
+.line {
+	margin: 50px 0;
 }
 
-input[type="submit"]{
+.date-pick{
+	float: left;
+	margin-right: 50px;
+	width: 16px;
+	height: 16px;
+	margin-top: 10px;
+}
+
+.date-input{
+	float: left;
+	width: 75%;
+}
+
+.date-radio{
 	float: right;
-	clear: both;
+	width: 10%;
 }

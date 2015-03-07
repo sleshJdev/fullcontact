@@ -44,7 +44,7 @@ public class FrontController extends HttpServlet {
 	    throw new ServletException(e);
 	}
 
-	LOGGER.info("END\n\n\n");
+	LOGGER.info("END\n\n\n\n\n\n\n");
     }
 
     @Override

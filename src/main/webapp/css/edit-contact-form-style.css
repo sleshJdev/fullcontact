@@ -4,12 +4,6 @@
 	float: none;
 }
 
-.avatart-file{
-	visibility: hidden;
-	position: absolute;
-	z-index: 100;
-}
-
 .delete {
 	visibility: hidden;
 	position: absolute;

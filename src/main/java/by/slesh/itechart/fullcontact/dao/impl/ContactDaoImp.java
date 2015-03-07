@@ -1,8 +1,10 @@
 package by.slesh.itechart.fullcontact.dao.impl;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,10 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import by.slesh.itechart.fullcontact.dao.AtachmentDao;
 import by.slesh.itechart.fullcontact.dao.ContactDao;
+import by.slesh.itechart.fullcontact.dao.DaoReader;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.PhoneDao;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
-import by.slesh.itechart.fullcontact.util.DaoProcessUtil;
+import by.slesh.itechart.fullcontact.domain.Entity;
+
+import com.mysql.jdbc.StringUtils;
 
 /**
  * @author Eugene Putsykovich(slesh) Feb 13, 2015
@@ -25,43 +30,42 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactDaoImp.class);
 
     private static final String ORDER_BY = 
-	    "ORDER BY contacts.contact_id ASC ";
+	    "\n\t ORDER BY contacts.contact_id ASC ";
     
     private static final String GET_QUERY = 
-	      "\n SELECT contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth, avatar_path, "
-	    + "\n\t sexes.sex_id, sexes.sex_value, "
-	    + "\n\t nationalities.nationality_id, nationalities.nationality_value, "
-	    + "\n\t family_status.family_status_id, family_status_value, "
-	    + "\n\t web_site, email_address, current_employment, country, city, street, house, block, apartment, city_index, "
-	    + "\n\t phones.phone_id, phones.phone_value, phones.phone_comment, phones.phone_country_code, phones.phone_operator_code, "
-	    + "\n\t phones.phone_type_id, phones_types.phone_type_value, "
-	    + "\n\t atachments.atachment_id, atachments.atachment_name, atachments.atachment_upload_date, atachments.atachment_comment "
-	    + "\n FROM contacts "
-	    + "\n LEFT JOIN nationalities ON contacts.nationality_id	= nationalities.nationality_id "
-	    + "\n LEFT JOIN sexes 	  ON contacts.sex_id		= sexes.sex_id "
-	    + "\n LEFT JOIN family_status ON contacts.family_status_id	= family_status.family_status_id "
-            + "\n LEFT JOIN phones 	  ON contacts.contact_id	= phones.contact_id "
-            + "\n LEFT JOIN phones_types  ON phones.phone_type_id 	= phones_types.phone_type_id "
-            + "\n LEFT JOIN atachments 	  ON contacts.contact_id	= atachments.contact_id ";
+	      "\n\t SELECT "
+	    + "\n\t\t contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth,web_site, email_address, current_employment, country, city, street, house, block, apartment, city_index, "
+	    + "\n\t\t sexes.sex_id, sexes.sex_value, "
+	    + "\n\t\t nationalities.nationality_id, nationalities.nationality_value, "
+	    + "\n\t\t family_status.family_status_id, family_status.family_status_value, "
+	    + "\n\t\t phones.phone_id, phones.phone_value, phones.phone_comment, phones.phone_country_code, phones.phone_operator_code, phones.phone_type_id, phones_types.phone_type_value, "
+	    + "\n\t\t atachments.atachment_id, atachments.contact_id,  atachments.atachment_name, atachments.atachment_upload_date, atachments.atachment_comment "
+	    + "\n\t FROM contacts "
+	    + "\n\t LEFT JOIN nationalities 	ON contacts.nationality_id	= nationalities.nationality_id "
+	    + "\n\t LEFT JOIN sexes 	  	ON contacts.sex_id		= sexes.sex_id "
+	    + "\n\t LEFT JOIN family_status 	ON contacts.family_status_id	= family_status.family_status_id "
+            + "\n\t LEFT JOIN phones 	  	ON contacts.contact_id		= phones.contact_id "
+            + "\n\t LEFT JOIN phones_types  	ON phones.phone_type_id 	= phones_types.phone_type_id "
+            + "\n\t LEFT JOIN atachments 	ON contacts.contact_id		= atachments.contact_id ";
   
   private static final String GET_LIMIT_QUERY = 
-	      "\n SELECT contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth, "
-	    + "\n\t current_employment, country, city, street, house, block, apartment, city_index "
-	    + "\n FROM contacts " 
-	    + "\n " + ORDER_BY
-	    + "\n LIMIT ?, ? ";
+	      "\n\t SELECT contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth, "
+	    + "\n\t\t current_employment, country, city, street, house, block, apartment, city_index "
+	    + "\n\t FROM contacts " 
+	    + "\n\t " + ORDER_BY
+	    + "\n\t LIMIT ?, ? ";
 
     private static final String GET_BY_ID_QUERY = 
 	    GET_QUERY
-          + " \n WHERE contacts.contact_id = ? \n " 
+          + " \n\t WHERE contacts.contact_id = ? \n " 
           + ORDER_BY;
     
     private static final String COUNT_QUERY = 
-	    "SELECT COUNT(*) FROM contacts";
+	    "\t SELECT COUNT(*) FROM contacts";
     
     private static final String DELETE_QUERY = 
-	      "\n DELETE FROM contacts "
-	    + "\n WHERE contact_id = ?";
+	      "\n\t DELETE FROM contacts "
+	    + "\n\t WHERE contact_id = ?";
     
     public ContactDaoImp() {
 	this(true, true);
@@ -101,9 +105,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     private static final String SET_AVATAR_PATH_QUERY = 
-	      "\n UPDATE contacts "
-	    + "\n SET avatar_path = ? "
-	    + "\n WHERE contact_id = ? ";
+	      "\n\t UPDATE contacts "
+	    + "\n\t SET avatar_path = ? "
+	    + "\n\t WHERE contact_id = ? ";
     
     @Override
     public void setAvatar(long contactId, String path) throws ClassNotFoundException, IOException, SQLException {
@@ -124,9 +128,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     private static final String GET_AVATAR_PATH_QUERY = 
-	      "\n SELECT avatar_path "
-	    + "\n FROM contacts "
-	    + "\n WHERE contact_id = ?";
+	      "\n\t SELECT avatar_path "
+	    + "\n\t FROM contacts "
+	    + "\n\t WHERE contact_id = ?";
             
     @Override
     public String getAvatar(long contactId) throws ClassNotFoundException, IOException, SQLException {
@@ -153,16 +157,16 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     private static final String GET_EMAIL_QUERY = 
-	     "\n SELECT email_address "
-	   + "\n FROM contacts " 
-	   + "\n WHERE contact_id = ?";
+	     "\n\t SELECT email_address "
+	   + "\n\t FROM contacts " 
+	   + "\n\t WHERE contact_id = ?";
 
     @Override
     public String getEmail(long contactId) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("contact id = {}", contactId);
 
-	String emailAdress = "";
+	String emailAdress = null;
 	try {
 	    connect();
 	    preparedStatement = getPrepareStatement(GET_EMAIL_QUERY);
@@ -184,11 +188,11 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     private static final String ADD_CONTACT_QUERY = 
-	      "\n INSERT INTO contacts"
-	    + "\n\t (first_name, last_name, middle_name, date_of_birth, "
-	    + "\n\t sex_id, nationality_id, family_status_id, "
-	    + "\n\t web_site, email_address, current_employment, country, city, street, house, block, apartment, city_index) "
-	    + "\n VALUES (?, ?, ?, ?,\n ?, ?, ?,\n ?, ?, ?, ?,\n ?, ?, ?, ?, ?, ?)";
+	      "\n\t INSERT INTO contacts"
+	    + "\n\t\t (first_name, last_name, middle_name, date_of_birth, "
+	    + "\n\t\t sex_id, nationality_id, family_status_id, "
+	    + "\n\t\t web_site, email_address, current_employment, country, city, street, house, block, apartment, city_index) "
+	    + "\n\t VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @Override
     public void add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
@@ -235,96 +239,163 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 
 	LOGGER.info("END");
     }
+    
+    private static final String SEARCH_QUERY_TEMPLATE = 
+	            GET_QUERY
+	       + " \n\t WHERE \n\t ( ";
+	    		
+    private static final String SEARCH_LIKE_TEMPLATE = 
+	    	"\n\t\t %s LIKE ? AND ";
 
-    private static final String SEARCH_WHEN_TEMPLATE = 
-	    "\n\t %s  LIKE '%s' OR";
+    private static final String SEARCH_COMPARE_DATE_TEMPLATE = 
+	    	"\n\t\t %s %s ?  OR ";
+    
+    private static final String END = 
+	    	" \n\t )";
 
-    private static final String SEARCH_QUERY_TEMPLATE = GET_QUERY
-	    + "\nWHERE\n( %s \n)";
+    private interface Setter {
+	public void set(PreparedStatement preparedStatement) throws SQLException;
+    }
+
+    private final class SetterFactory {
+	private int counter = 0;
+
+	public final Setter getSetterForString(String value) {
+
+	    return new Setter() {
+		@Override
+		public void set(PreparedStatement preparedStatement) throws SQLException {
+		    preparedStatement.setString(++counter, String.format("%%%s%%", value));
+		}
+	    };
+	}
+
+	public final Setter getSetterForDate(java.sql.Date date) {
+
+	    return new Setter() {
+		@Override
+		public void set(PreparedStatement preparedStatement) throws SQLException {
+		    preparedStatement.setDate(++counter, date);
+		}
+	    };
+	}
+    }
 
     @Override
-    public List<ContactEntity> search(ContactEntity contact) 
-	    throws ClassNotFoundException, IOException, SQLException {
+    public List<ContactEntity> search(ContactEntity contact, boolean isLess) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 
-	String q = "";// when statement
-	String f = "";// field name
-
-	f = contact.getFirstName();
-	q = DaoProcessUtil.processToken(q, f, "contacts.first_name",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getMiddleName();
-	q = DaoProcessUtil.processToken(q, f, "contacts.middle_name",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getLastName();
-	q = DaoProcessUtil.processToken(q, f, "contacts.last_name",
-		SEARCH_WHEN_TEMPLATE);
-
-//	f = contact.getDateOfBirth();
-//	q = DataProcessHelper.processToken(q, f, "contacts.date_of_birth",
-//		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getSex();
-	q = DaoProcessUtil.processToken(q, f, "contacts.sex",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getFamilyStatus();
-	q = DaoProcessUtil.processToken(q, f, "contacts.family_status",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getWebSite();
-	q = DaoProcessUtil.processToken(q, f, "contacts.web_site",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getEmailAddress();
-	q = DaoProcessUtil.processToken(q, f, "contacts.email_address",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getCurrentEmployment();
-	q = DaoProcessUtil.processToken(q, f, "contacts.current_employment",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getCountry();
-	q = DaoProcessUtil.processToken(q, f, "contacts.country",
-		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getCity();
-	q = DaoProcessUtil.processToken(q, f, "contacts.city",
-		SEARCH_WHEN_TEMPLATE);
-
-//	f = contact.getAddress();
-//	q = DataProcessHelper.processToken(q, f, "contacts.address",
-//		SEARCH_WHEN_TEMPLATE);
-
-	f = contact.getCityIndex();
-	q = DaoProcessUtil.processToken(q, f, "contacts.city_index",
-		SEARCH_WHEN_TEMPLATE);
-
-	q = q.substring(0, q.lastIndexOf("OR"));
-
-	String query = String.format(SEARCH_QUERY_TEMPLATE, q);
+	SetterFactory setterFactory = new SetterFactory();
+	List<ContactDaoImp.Setter> setters = new ArrayList<ContactDaoImp.Setter>();
+	String query = SEARCH_QUERY_TEMPLATE;// when statement
 	
-	LOGGER.info("query: " + query);
+	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getFirstName())) {
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.first_name"));
+	    setters.add(setterFactory.getSetterForString(contact.getFirstName()));
+	}
+	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getMiddleName())) {
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.middle_name"));
+	    setters.add(setterFactory.getSetterForString(contact.getMiddleName()));
+	}
+	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getLastName())) {
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.last_name"));
+	    setters.add(setterFactory.getSetterForString(contact.getLastName()));
+	}
+	if (contact.getDateOfBirth() != null) {
+	    String s = isLess ? "<" : ">";
+	    query = query.concat(String.format(SEARCH_COMPARE_DATE_TEMPLATE, "contacts.date_of_birth", s));
+	    setters.add(setterFactory.getSetterForDate(contact.getDateOfBirth()));
+	}
+	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getWebSite())) {
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.web_site"));
+	    setters.add(setterFactory.getSetterForString(contact.getWebSite()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getEmailAddress())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.email_address"));
+	    setters.add(setterFactory.getSetterForString(contact.getEmailAddress()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCurrentEmployment())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.current_employment"));
+	    setters.add(setterFactory.getSetterForString(contact.getCurrentEmployment()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCountry())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.country"));
+	    setters.add(setterFactory.getSetterForString(contact.getCountry()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCity())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.city"));
+	    setters.add(setterFactory.getSetterForString(contact.getCity()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getStreet())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.street"));
+	    setters.add(setterFactory.getSetterForString(contact.getStreet()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getHouse())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.house"));
+	    setters.add(setterFactory.getSetterForString(contact.getHouse()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getBlock())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.block"));
+	    setters.add(setterFactory.getSetterForString(contact.getBlock()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getApartment())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.apartment"));
+	    setters.add(setterFactory.getSetterForString(contact.getApartment()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCityIndex())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.city_index"));
+	    setters.add(setterFactory.getSetterForString(contact.getCityIndex()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getSex())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "sexes.sex_value"));
+	    setters.add(setterFactory.getSetterForString(contact.getSex()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getNationality())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "nationalities.nationality_value"));
+	    setters.add(setterFactory.getSetterForString(contact.getNationality()));
+	}
+	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getFamilyStatus())){
+	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "family_status.family_status_value"));
+	    setters.add(setterFactory.getSetterForString(contact.getFamilyStatus()));
+	}
+	 
+	query = query.substring(0, query.lastIndexOf("AND")).concat(END);
+	
+	List<ContactEntity> contacts = null;
+	try{
+	    connect();
+	    preparedStatement = getPrepareStatement(query);
+	    for (Setter setter : setters) {
+		setter.set(preparedStatement);
+	    }
+	    resultSet = preparedStatement.executeQuery();
+	    
+	    LOGGER.info("query: {}", preparedStatement);
+	    
+	    DaoReader<Entity> reader = Readers.FULL_CONTACT_READER;
+	    contacts = new ArrayList<ContactEntity>();
+	    ContactEntity contactEntity = null;
+	    while ((contactEntity = (ContactEntity) reader.read(resultSet)) != null) {
+		contacts.add(contactEntity);
+	    }
+	    
+	    LOGGER.info("found {} contacts", contacts.size());
+	}finally{
+	    closeResources();
+	}
 
-	setReader(Readers.FULL_CONTACT_READER);
-	List<ContactEntity> contacts = super.getAll();
-
-	LOGGER.info("found " + contacts.size() + " contacts");
 	LOGGER.info("END");
-
 	return contacts;
     }
 
     private static final String UPDATE_QUERY = 
-	    "\n UPDATE contacts "
-	  + "\n SET "
-	  + "\n\t first_name = ?, last_name = ?, middle_name = ?, date_of_birth = ?, "
-	  + "\n\t sex_id = ?, nationality_id = ?, family_status_id = ?, "
-	  + "\n\t web_site = ?, email_address = ?, current_employment = ?, country = ?, city = ?, "
-	  + "\n\t street = ?, house = ?, block = ?, apartment = ?, city_index = ? "
-	  + "\n WHERE contact_id = ?";
+	    "\n\t UPDATE contacts "
+	  + "\n\t SET "
+	  + "\n\t\t first_name = ?, last_name = ?, middle_name = ?, date_of_birth = ?, "
+	  + "\n\t\t sex_id = ?, nationality_id = ?, family_status_id = ?, "
+	  + "\n\t\t web_site = ?, email_address = ?, current_employment = ?, country = ?, city = ?, "
+	  + "\n\t\t street = ?, house = ?, block = ?, apartment = ?, city_index = ? "
+	  + "\n\t WHERE contact_id = ?";
 
     @Override
     public void update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {

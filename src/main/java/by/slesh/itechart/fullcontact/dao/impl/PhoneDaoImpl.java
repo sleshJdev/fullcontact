@@ -28,10 +28,10 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
     }
     
     private static final String ADD_PHONE_TEMPLATE = 
-	      "\n INSERT INTO phones "
-	    + "\n\t (phones.contact_id, phones.phone_value, phones.phone_type_id, phones.phone_comment, "
-	    + "\n\t  phones.phone_country_code, phones.phone_operator_code) "
-	    + "\n VALUES (?, ?, ?, ?, ?, ?)";
+	      "\n\t INSERT INTO phones "
+	    + "\n\t\t (phones.contact_id, phones.phone_value, phones.phone_type_id, phones.phone_comment, "
+	    + "\n\t\t phones.phone_country_code, phones.phone_operator_code) "
+	    + "\n\t VALUES (?, ?, ?, ?, ?, ?)";
     
     @Override
     public long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
@@ -39,13 +39,13 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 
 	List<PhoneEntity> phones = contact.getPhones();
 	if (phones == null || phones.size() == 0) {
-	    LOGGER.info("return: no phones for add");
+	    LOGGER.info("RETURN: no phones for add");
 	    return 0;
 	}
 	long rowsAddeds = 0;
 	try {
 	    connect();
-	    Getable<PhoneTypeEntity> phoneTypeDao = DaoFactory.getPhoneTypeDao(true, false);
+	    EntityDao<PhoneTypeEntity> phoneTypeDao = DaoFactory.getPhoneTypeDao(true, false);
 	    Iterator<PhoneEntity> iterator = phones.iterator();
 	    long id = contact.getId();
 	    while (iterator.hasNext()) {
@@ -64,9 +64,10 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 			phone.setId(resultSet.getLong(1));
 		    }
 		    ++rowsAddeds;
-		    closeResource(null, preparedStatement);
 		    
 		    LOGGER.info("{} query: {}", rowsAddeds, preparedStatement);
+
+		    closeResource(null, preparedStatement);
 		}
 	    }
 	} finally {
@@ -80,8 +81,8 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
     }
     
     private static final String DELETE_PHONE_QUERY_TEMPLATE = 
-	      "\n DELETE FROM phones " 
-	    + "\n WHERE phone_id NOT IN ( ? ) AND contact_id = ?";
+	      "\n\t DELETE FROM phones " 
+	    + "\n\t WHERE phone_id IN ( %s ) AND contact_id = ?";
     
     @Override
     public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
@@ -96,9 +97,9 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	try {
 	    connect();
 	    String inStatement = Arrays.toString(ids).replaceAll("[\\]\\[]", "");
-	    preparedStatement = getPrepareStatement(DELETE_PHONE_QUERY_TEMPLATE);
-	    preparedStatement.setString(1, inStatement);
-	    preparedStatement.setLong(2, contactId);
+	    String query = String.format(DELETE_PHONE_QUERY_TEMPLATE, inStatement);
+	    preparedStatement = getPrepareStatement(query);
+	    preparedStatement.setLong(1, contactId);
 	    preparedStatement.executeUpdate();
 	    rowsDeleted = preparedStatement.getUpdateCount();
 
@@ -113,14 +114,14 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
     }
 
     private static final String UPDATE_PHONE_QUERY = 
-	      "\n UPDATE phones "
-	    + "\n SET " 
-	    + "\n\t phone_value = ?, " 
-	    + "\n\t phone_type_id = ?, "
-	    + "\n\t phone_comment = ?, "
-	    + "\n\t phone_country_code = ?, "
-	    + "\n\t phone_operator_code = ? "
-	    + "\n WHERE phone_id = ?";
+	      "\n\t UPDATE phones "
+	    + "\n\t SET " 
+	    + "\n\t\t phone_value = ?, " 
+	    + "\n\t\t phone_type_id = ?, "
+	    + "\n\t\t phone_comment = ?, "
+	    + "\n\t\t phone_country_code = ?, "
+	    + "\n\t\t phone_operator_code = ? "
+	    + "\n\t WHERE phone_id = ?";
 
     @Override
     public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
@@ -128,7 +129,7 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 
 	List<PhoneEntity> phones = contact.getPhones();
 	if (phones == null || phones.size() == 0) {
-	    LOGGER.info("return update()");
+	    LOGGER.info("RETURN: not phones for update");
 	    return 0;
 	}
 	long rowsUpdated = 0;

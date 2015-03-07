@@ -32,7 +32,7 @@ public class ContactEntity extends Entity {
 
     public ContactEntity() {
     }
-    
+
     public ContactEntity(long id, String firstName, String lastName, String middleName, Date dateOfBirth,
 	    String avatarPath, String sex, String nationality, String familyStatus, String webSite,
 	    String emailAddress, String currentEmployment, String country, String city, String street, String house,
@@ -119,6 +119,9 @@ public class ContactEntity extends Entity {
     }
 
     public void setPhones(List<PhoneEntity> phones) {
+	if (phones == null) {
+	    return;
+	}
 	for (PhoneEntity phone : phones) {
 	    addPhone(phone);
 	}
@@ -133,6 +136,9 @@ public class ContactEntity extends Entity {
     }
 
     public void setAtachments(List<AtachmentEntity> atachments) {
+	if (atachments == null) {
+	    return;
+	}
 	for (AtachmentEntity atachment : atachments) {
 	    addAtachment(atachment);
 	}
@@ -232,53 +238,55 @@ public class ContactEntity extends Entity {
 
     @Override
     public String toString() {
-	StringBuilder sb = new StringBuilder("\n***Contact id={ " + id + " }***");
-	sb.append("\nfirst name: ");
+	StringBuilder sb = new StringBuilder("\n\t***Contact id={ " + id + " }***");
+	sb.append("\n\t\tfirst name: ");
 	sb.append(getFirstName());
-	sb.append("\nlast name: ");
+	sb.append("\n\t\tlast name: ");
 	sb.append(lastName);
-	sb.append("\nmiddle name: ");
+	sb.append("\n\t\tmiddle name: ");
 	sb.append(middleName);
-	sb.append("\ndate of birth: ");
+	sb.append("\n\t\tdate of birth: ");
 	sb.append(dateOfBirth);
-	sb.append("\nsex: ");
+	sb.append("\n\tsex: ");
 	sb.append(sex);
-	sb.append("\nnationality: ");
+	sb.append("\n\tnationality: ");
 	sb.append(nationality);
+	sb.append("\n\tavatart path: ");
+	sb.append(avatarPath);
 
 	if (phones != null) {
 	    for (PhoneEntity phone : phones) {
-		sb.append("\n");
+		sb.append("\n\t");
 		sb.append(phone);
 	    }
 	}
 
 	if (atachments != null) {
 	    for (AtachmentEntity atachment : atachments) {
-		sb.append("\n");
+		sb.append("\n\t");
 		sb.append(atachment);
 	    }
 	}
 
-	sb.append("\nfamily_status: ");
+	sb.append("\n\tfamily_status: ");
 	sb.append(familyStatus);
-	sb.append("\nwebSite: ");
+	sb.append("\n\twebSite: ");
 	sb.append(webSite);
-	sb.append("\ncurrentEmlpoyment: ");
+	sb.append("\n\tcurrentEmlpoyment: ");
 	sb.append(currentEmployment);
-	sb.append("\ncountry: ");
+	sb.append("\n\tcountry: ");
 	sb.append(country);
-	sb.append("\ncity: ");
+	sb.append("\n\tcity: ");
 	sb.append(city);
-	sb.append("\nstreet: ");
+	sb.append("\n\tstreet: ");
 	sb.append(street);
-	sb.append("\nhouse: ");
+	sb.append("\n\thouse: ");
 	sb.append(house);
-	sb.append("\nblock: ");
+	sb.append("\n\tblock: ");
 	sb.append(block);
-	sb.append("\napartment: ");
+	sb.append("\n\tapartment: ");
 	sb.append(apartment);
-	sb.append("\nindex: ");
+	sb.append("\n\tindex: ");
 	sb.append(cityIndex);
 
 	return sb.toString();

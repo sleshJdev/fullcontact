@@ -22,5 +22,5 @@ public interface ContactDao {
 
     public String getEmail(long contactId) throws ClassNotFoundException, IOException, SQLException;
 
-    public List<ContactEntity> search(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
+    public List<ContactEntity> search(ContactEntity contact, boolean isLessDate) throws ClassNotFoundException, IOException, SQLException;
 }

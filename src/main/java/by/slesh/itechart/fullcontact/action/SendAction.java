@@ -85,7 +85,9 @@ public class SendAction extends AbstractAction {
 	    files = processParts(parts, path);
 	}
 
-	performeMailing(to, subject, message, files);
+	if(files.size() > 0){
+	    performeMailing(to, subject, message, files);
+	}
 
 	LOGGER.info("obtained files: {}", parts.size());
     }
@@ -153,10 +155,10 @@ public class SendAction extends AbstractAction {
 	    fileContent = part.getInputStream();
 
 	    int read = 0;
-	    final byte[] bytes = new byte[1024];
+	    final byte[] buffer = new byte[1024];
 
-	    while ((read = fileContent.read(bytes)) != -1) {
-		out.write(bytes, 0, read);
+	    while ((read = fileContent.read(buffer)) != -1) {
+		out.write(buffer, 0, read);
 	    }
 	} finally {
 	    if (out != null) {

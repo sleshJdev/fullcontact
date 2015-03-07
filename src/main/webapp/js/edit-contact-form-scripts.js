@@ -25,13 +25,42 @@ function init() {
 
 	selectAllAtachmentsButton = document.getElementById("select-all-atachments");
 	selectAllAtachmentsButton.setAttribute("onclick", "selectAllAtachments(true);");
-
+	
 	phoneTable = document.getElementById("phone-table").tBodies[0];
 	atachmentTable = document.getElementById("atachment-table").tBodies[0];
 
-//	document.getElementById("edit-contact-form").onsubmit = copyData;
+	document.getElementById("edit-contact-form").onsubmit = copyData;
 	document.getElementById("for-test").onclick = clickListener;
-	document.getElementById("avatar").onclick = pickAvatar;
+	
+	var avatarBox = document.getElementById("avatar");
+	var newAvatar = document.getElementById("hidden-pick-avatart");
+	
+	avatarBox.addEventListener('click', function() {
+		newAvatar.click();
+	}, false);
+
+	newAvatar.addEventListener('change', function(e) {
+		if (typeof FileReader == "undefined") {
+			return true;
+		}
+		var file = e.target.files[0];
+		if ((/image/i).test(file.type)) {
+			var reader = new FileReader();
+
+			avatarBox.removeAttribute("class");
+			avatarBox.setAttribute("class", "avatar");
+			avatarBox.innerHTML = "";
+			var imgTag = document.createElement("img");
+			avatarBox.appendChild(imgTag);
+
+			reader.onload = (function(img) {
+				return function(evt) {
+					img.src = evt.target.result;
+				};
+			}(imgTag));
+			reader.readAsDataURL(file);
+		}
+	}, false);
 
 	document.getElementById("hidden-deleting-atachment-ids").value = "";
 	document.getElementById("hidden-deleting-phone-ids").value = "";
@@ -46,18 +75,24 @@ function init() {
 /*
  * Stub listener
  */
-function clickListener() {
-	var NAME_PATTERN = /^[A-Za-z0-9 ]{3,20}$/;
-	var name = "hell#o";
-	if (!NAME_PATTERN.test(name)) {
-		alert("You valid Name ." + name);
+function clickListener(e, div) {
+	var PATTERN = /^.{0,100}$/;
+	var value = "weqweqweqweqwe";
+	if (!PATTERN.test(value)) {
+		alert("Atachment Comment. Max Length 100 characters.");
+	}else{
+		alert("Ok!");
 	}
+//	var PATTERN = /.{0, 100}/;
+//	var value = "weqweqweqweqwe";
+//	if (!PATTERN.test(value)) {
+//		alert("Atachment Comment. Max Length 100 characters.");
+//	}else{
+//		alert("Ok!");
+//	}
+//	copyData();
 }
 
-function pickAvatar(){
-	var fileInput = document.getElementById("hidden-pick-avatart");
-	fileInput.click();
-}
 
 /*
  * Put all updated data to 'hidden' input before submit to server.
@@ -68,23 +103,12 @@ function pickAvatar(){
  */
 function prepareBeforeSubmit(table, suffixName) {
 	console.log("prepareBeforeSubmit BEGIN");
-	console.log("suffixName: " + suffixName);
-	
-	var deletingRows = document.getElementById("hidden-deleting-" + suffixName + "-ids");
-	deletingRows.value = "";
+	console.log("\tsuffixName: " + suffixName);
 	
 	var rows = table.getElementsByTagName("tr");
-
-	for (var y = 1; y < rows.length; ++y) {
-		var css = rows[y].className;
-		if (css.indexOf("delete") != -1) {
-			var phoneId = rows[y].getElementsByClassName("table-" + suffixName + "-id")[0];
-			deletingRows.value += phoneId.value + " ";
-			continue;
-		}
-
+	for (var y = 1; y < rows.length; ++y) {//skip header
 		var columns = rows[y].getElementsByTagName("td");
-		for (var x = 2; x < columns.length - 1; ++x) {
+		for (var x = 2; x < columns.length - 1; ++x) {//skip first 2 column(number, checkbox) and last(icon)
 			var cellValue = columns[x].getElementsByTagName("span")[0].textContent.trim();
 			var input = columns[x].getElementsByTagName("input")[0];
 			input.value = cellValue;
@@ -94,12 +118,37 @@ function prepareBeforeSubmit(table, suffixName) {
 	console.log("prepareBeforeSubmit END");
 }
 
+/*
+ * Special function for prepate atachment name
+ * It fill 'changed-atachment-name' and 'atachment-name' field
+ * For 'changed-atachment-name' execute contact 'salt' + 'changed-name(from from span[class=table-atachment-name])'
+ * This need to be compare old and new name on server   
+ */
+function specialPrepareAtachmentNameBeforeSubmit(){
+	console.log("prepareAtachmentNameBeforeSubmit() BEGIN")
+	
+//	var rows = atachmentTable.getElementsByTagName("tr");
+//	for(var y = 1; y < rows.length - 1; ++y){//skip header(first) and template row(last)
+//		var row = rows[y];
+//		var simpleName = row.getElementsByClassName("table-atachment-name")[0].textContent.trim();
+//		var salt = row.getElementsByClassName("table-atachment-name-salt")[0].value.trim();
+//		var changedName = row.getElementsByClassName("table-changed-atachment-name")[0];
+//		changedName.value = salt + simpleName;
+//		
+//		console.log("\tsimpleName: " + simpleName + ", salt: " + salt + ", changedName: " + changedName.value);
+//	}
+	
+	console.log("prepareAtachmentNameBeforeSubmit() END")
+}
+
 function copyData() {
 	prepareBeforeSubmit(phoneTable, "phone");
 	prepareBeforeSubmit(atachmentTable, "atachment");
 	
-	phoneTable.removeChild(phoneTemplate);
-	atachmentTable.removeChild(atachmentTemplate);
+	specialPrepareAtachmentNameBeforeSubmit();
+	
+	phoneTemplate.parentNode.removeChild(phoneTemplate);
+	atachmentTemplate.parentNode.removeChild(atachmentTemplate);
 }
 
 /*
@@ -152,24 +201,28 @@ function getCheckBoxesFromTable(table){
  */
 function selectAll(table, state) {
 	var checkboxes = getCheckBoxesFromTable(table);
-	for (var i = 0; i < checkboxes.length; ++i) {
+	for (var i = 0; i < checkboxes.length - 1; ++i) {
 		checkboxes[i].checked = state;
 	}
 };
 
 /*
- * Numberd
+ * Numberd rows
  */
 function numbered(table) {
-	var counter = 0;
+	var preffix = table == phoneTable ? "phone" : "atachment";
 	var rows = table.getElementsByTagName("tr");
 	for (var i = 1; i < rows.length - 1; ++i) {// skip header(first) and template(last)
-		if (rows[i].hasAttribute("class")) {
+		var row = rows[i];
+		if (row.hasAttribute("class")) {
 			continue;
 		}
-		rows[i].getElementsByTagName("span")[0].textContent = ++counter;
+		row.getElementsByTagName("span")[0].textContent = i;
+		
+		var iconEdit = row.getElementsByTagName("img")[0];
+		iconEdit.id = iconEdit.id.substring(0, iconEdit.id.lastIndexOf("-") + 1) + i;
+		iconEdit.setAttribute("onclick", preffix + "EditPopupShow('edit', " + i + ");");
 	}
-	return counter;
 }
 
 
@@ -177,8 +230,8 @@ function numbered(table) {
  * Enable checkboxes in atachments table
  */
 function selectAllAtachments(state) {
-	console.log("selectAllAtachments BEGIN");
-	console.log("state: " + state);
+	console.log("selectAllAtachments() BEGIN");
+	console.log("\tstate: " + state);
 	
 	selectAll(atachmentTable, state);
 	if (state) {
@@ -187,7 +240,7 @@ function selectAllAtachments(state) {
 		selectAllAtachmentsButton.setAttribute("onclick", "selectAllAtachments(true);");
 	}
 	
-	console.log("selectAllAtachments END");
+	console.log("selectAllAtachments() END");
 };
 
 /*
@@ -205,33 +258,33 @@ function selectAllPhones(state) {
 /*
  * Delete rows from table
  */
-
 function deletePhones() {
-	console.log("deletePhones BEGIN");
+	console.log("deletePhones() BEGIN");
 	deleteSelectedFrom(phoneTable, "phone");
-	console.log("deletePhones END");
+	console.log("deletePhones() END");
 }
 
 function deleteAtachments() {
-	console.log("deleteAtachments BEGIN");
+	console.log("deleteAtachments() BEGIN");
 	deleteSelectedFrom(atachmentTable, "atachment");
-	console.log("deleteAtachments END");
+	console.log("deleteAtachments() END");
 }
 
 function deleteSelectedFrom(table, suffixName) {
+	console.log("deleteSelectedFrom() BEGIN");
+	console.log("\tsuffixName: " + suffixName);
 	var deletingRows = document.getElementById("hidden-deleting-" + suffixName + "-ids");
 	var rows = table.getElementsByTagName("tr");
-	for (var y = 1; y < rows.length - 1; ++y) {// skip header(first) and
-												// template(last)
+	for (var y = 1; y < rows.length - 1; ++y) {// skip header(first) and template(last)
 		var inputs = rows[y].getElementsByTagName("input");
 		for (var x = 0; x < inputs.length; ++x) {
 			if (inputs[x].getAttribute("type") == "checkbox") {
 				if (inputs[x].checked) {
 					var itemId = rows[y].getElementsByClassName("table-" + suffixName + "-id")[0];
+					console.log("itemId: " + itemId.value);
 					if (itemId.value.indexOf("-1") == -1) {
-						if (deletingRows.value.indexOf(itemId.value) == -1) {
-							deletingRows.value += itemId.value + " ";
-						}
+						deletingRows.value += itemId.value + " ";
+						console.log("id: " + itemId.value + " - add to delete list");
 					}
 					rows[y].classList.add("remove-me");
 				}
@@ -251,8 +304,13 @@ function deleteSelectedFrom(table, suffixName) {
 				hasMoreToDelete = true;
 			}
 		}
-		console.log("loop delete");
+		console.log("\tloop delete");
 	} while (hasMoreToDelete);
+	
+	numbered(phoneTable);
+	numbered(atachmentTable);
+	
+	console.log("deleteSelectedFrom() END");
 }
 
 /*
@@ -273,6 +331,7 @@ function getPosition(element) {
 		element = element.offsetParent;
 	}
 
+	console.log("\t x: " + x + ", y: " + y);
 	console.log("getPosition of element END");
 	return [ x, y ];
 }
@@ -289,6 +348,7 @@ function getSize(element) {
 	var width = element.getBoundingClientRect().right
 			- element.getBoundingClientRect().left;
 
+	console.log("\t width: " + width + ", height: " + height);
 	console.log("getSize of element END");
 	
 	return [ width, height ];

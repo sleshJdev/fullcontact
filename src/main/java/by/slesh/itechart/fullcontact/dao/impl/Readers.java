@@ -13,6 +13,8 @@ import by.slesh.itechart.fullcontact.domain.Entity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 
 public final class Readers {
+//    private final static Logger LOGGER = LoggerFactory.getLogger(Readers.class);
+    
     public static final DaoReader<Entity> FULL_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
@@ -34,18 +36,18 @@ public final class Readers {
 		} else {
 		    break;
 		}
-		long phoneId = resultSet.getLong("phone_id");
-		if (phonesId.get(phoneId) == null) {
+		Long phoneId = resultSet.getLong("phones.phone_id");
+		if (phonesId.get(phoneId) == null && phoneId > 0) {
 		    PhoneEntity phone = new PhoneEntity();
 		    readTo(resultSet, phone);
 		    phonesId.put(phoneId, phone);
 		}
 
-		long atachmentid = resultSet.getLong("atachment_id");
-		if (atachmentsId.get(atachmentid) == null) {
+		Long atachmentId = resultSet.getLong("atachments.atachment_id");
+		if (atachmentsId.get(atachmentId) == null && atachmentId > 0) {
 		    AtachmentEntity atachment = new AtachmentEntity();
 		    readTo(resultSet, atachment);
-		    atachmentsId.put(atachmentid, atachment);
+		    atachmentsId.put(atachmentId, atachment);
 		}
 	    } while (resultSet.next());
 
@@ -104,6 +106,31 @@ public final class Readers {
 	    return entity;
 	}
     };
+    
+    public static final DaoReader<Entity> ATACHMENTS_READER = new DaoReader<Entity>() {
+	@Override
+	public Entity read(ResultSet resultSet) throws SQLException {
+	    if (resultSet.isBeforeFirst()) {
+		resultSet.next();
+	    }
+	    if (resultSet.isAfterLast()) {
+		return null;
+	    }
+	    AtachmentEntity atachment = new AtachmentEntity();
+	    long atachmentId = resultSet.getLong(1);
+	    do {
+		long id = resultSet.getLong(1);
+		if (atachmentId == id) {
+		    readTo(resultSet, atachment);
+		} else {
+		    break;
+		}
+	    } while (resultSet.next());
+
+	    return atachment;
+
+	}
+    };
 
     private static void readSmallPartTo(ResultSet resultSet, ContactEntity contact) throws SQLException {
 	contact.setSex(resultSet.getString("sex_value"));
@@ -144,7 +171,7 @@ public final class Readers {
 
     private static void readTo(ResultSet resultSet, AtachmentEntity atachment) throws SQLException {
 	atachment.setId(resultSet.getLong("atachments.atachment_id"));
-	atachment.setContactId(resultSet.getLong("contacts.contact_id"));
+	atachment.setContactId(resultSet.getLong("atachments.contact_id"));
 	atachment.setName(resultSet.getString("atachments.atachment_name"));
 	atachment.setUploadDate(resultSet.getDate("atachments.atachment_upload_date"));
 	atachment.setComment(resultSet.getString("atachments.atachment_comment"));

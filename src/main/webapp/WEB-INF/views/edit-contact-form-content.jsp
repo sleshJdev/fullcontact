@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/form-style.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/edit-contact-form-style.css" />
@@ -19,10 +20,14 @@
 		<input type="hidden" name="contact-id" value="${contact.id}">
 		<input type="hidden" id="hidden-deleting-phone-ids" name="deleting-phone-ids" >
 		<input type="hidden" id="hidden-deleting-atachment-ids" name="deleting-atachmet-ids" >
-		<input type="file" id="hidden-pick-avatart" name="hidden-avatar-file" class="avatart-file">	<!--class="avatart-file"  -->	
+		<input type="file" id="hidden-pick-avatart" name="hidden-avatar-file" class="hidden">	<!--class="avatart-file"  -->	
+		
+		<input id="for-test" type="button" value="Click me">
+<!-- 		<div id="test-div-1"> -->
+<!-- 			<div class="div1">qweqwqweqwe111</div> -->
+<!-- 		</div> -->
 		
 		<h1>EDIT CONTACT</h1>
-		<input id="for-test" type="button" value="Click me">
 		
 		<div class="vertical-tables">
 		
@@ -158,20 +163,20 @@
 									<img 
 										alt="Edit" title="Edit" 
 										class="edit-phone"
-										id="edit-phone-icon${loop.index + 1}"
+										id="edit-phone-icon-${loop.index + 1}"
 										src="${pageContext.request.contextPath}/images/icons/edit.png">
 								</div>
 							</td>
 						</tr>
 					</c:forEach>
 					<tr id="table-phone-row-template" style="visibility:collapse;">
-						<td><input type="hidden" class="table-phone-id" name="phone-id"><span></span></td>
+						<td><input type="hidden" class="table-phone-id" name="phone-id"><span>-1</span></td>
 						<td><div class="center-cell"> <input type="checkbox"></div></td>
-						<td><input type="hidden" name="phone-country-code" value=""><span class="table-phone-country-code"></span></td>
-						<td><input type="hidden" name="phone-operator-code" value=""><span class="table-phone-operator-code"></span></td>
-						<td><input type="hidden" name="phone-value" value=""><span class="table-phone-value"></span></td>
-						<td><input type="hidden" name="phone-type" value="Mobile"><span class="table-phone-type"></span></td>
-						<td><input type="hidden" name="phone-comment" value=""><span class="table-phone-comment"></span></td>
+						<td><input type="hidden" name="phone-country-code" ><span class="table-phone-country-code"></span></td>
+						<td><input type="hidden" name="phone-operator-code" ><span class="table-phone-operator-code"></span></td>
+						<td><input type="hidden" name="phone-value" ><span class="table-phone-value"></span></td>
+						<td><input type="hidden" name="phone-type" value="Home"><span class="table-phone-type"></span></td>
+						<td><input type="hidden" name="phone-comment" ><span class="table-phone-comment"></span></td>
 						<td><div class="center-cell"> <img alt="Edit" title="Edit" class="edit-phone" src="${pageContext.request.contextPath}/images/icons/edit.png"></div></td>
 					</tr>
 				</table>
@@ -208,7 +213,6 @@
 						</ul>
 					</div>
 				</div>
-				
 				<table id="atachment-table" class="table">
 					<tr>
 						<th></th>
@@ -229,8 +233,25 @@
 								</div>
 							</td>
 							<td >
-								<input type="hidden" name="atachment-name" value="${atachment.name }">
-								<span class="table-atachment-name">${atachment.name }</span>
+								<a href="load?name=${atachment.name }">
+									<span class="table-atachment-name">
+										<c:set var="indexOf" value="${fn:indexOf(atachment.name, '_') }"/>
+										<c:set var="nameLength" value="${fn:length(atachment.name) }"/>
+	<%-- 										<c:forEach var="i" begin="0" end="${nameLength }"> --%>
+	<%-- 											<c:if test="${i < nameLength}"> --%>
+	<%-- 												<c:set var="c" value="${fn:substring(atachment.name, i, i + 1) }"/> --%>
+	<%-- 												<c:if test="${c == '_' }"> --%>
+	<%-- 													<c:set var="indexOf" value="${i }"/> --%>
+	<%-- 												</c:if> --%>
+	<%-- 											</c:if> --%>
+	<%-- 										</c:forEach> --%>
+											<c:set var="simpleName" value="${fn:substring(atachment.name, indexOf + 1, nameLength) }"/>
+										<c:out value="${simpleName }"/>
+									</span>
+								</a>
+								<input type="hidden" name="changed-atachment-name" value="${simpleName }" class="hidden table-changed-atachment-name"> <!-- new atachment name -->
+								<input type="hidden" name="atachment-name" value="${simpleName }" class="hidden table-origin-atachment-name"> <!-- order important! -->
+								<input type="hidden" name="atachment-name-salt" class="hidden table-atachment-name-salt" value="<c:out value="${fn:substring(atachment.name, 0, indexOf + 1) }"/>">
 							</td>
 							<td >
 								<input type="hidden" name="atachment-upload-date" value="${atachment.uploadDate }">
@@ -244,16 +265,21 @@
 								<div class="center-cell">
 									<img 
 										alt="Edit" title="Edit" class="edit-atachment"
-										id="edit-atachment-icon${loop.index + 1}"
+										id="edit-atachment-icon-${loop.index + 1}"
 										src="${pageContext.request.contextPath}/images/icons/edit.png">
 								</div>
 							</td>
 						</tr>
 					</c:forEach>
-					<tr id="table-atachment-row-template" style="visibility:collapse;">
+					<tr id="table-atachment-row-template" class="hidden">
 						<td><input type="hidden" class="table-atachment-id" name="atachment-id"><span></span></td>
 						<td><div class="center-cell"> <input type="checkbox"></div></td>
-						<td><input type="hidden" name="atachment-name"><span class="table-atachment-name"></span></td>
+						<td>
+							<span class="table-atachment-name"></span>
+							<input type="hidden" name="changed-atachment-name" class="table-changed-atachment-name"> <!-- order important! must on 2 row -->
+							<input type="hidden" name="atachment-name" class="table-origin-atachment-name">
+							<input type="hidden" name="atachment-name-salt" class="hidden table-atachment-name-salt">
+						</td>
 						<td><input type="hidden" name="atachment-upload-date"><span class="table-atachment-upload-date"></span></td>
 						<td><input type="hidden" name="atachment-comment"><span class="table-atachment-comment"></span></td>
 						<td><div class="center-cell"> <img alt="Edit" title="Edit" class="edit-atachment" src="${pageContext.request.contextPath}/images/icons/edit.png"> </div></td>

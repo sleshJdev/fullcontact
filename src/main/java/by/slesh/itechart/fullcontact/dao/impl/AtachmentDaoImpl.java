@@ -18,19 +18,27 @@ import by.slesh.itechart.fullcontact.domain.ContactEntity;
 public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements AtachmentDao {
     private final static Logger LOGGER = LoggerFactory.getLogger(AtachmentDaoImpl.class);
 
+    private static final String GET_QUERY = 
+	    "\n\t SELECT atachment_id, contact_id, atachment_name, "
+	  + "\n\t\t atachment_upload_date, atachment_comment "
+	  + "\n\t FROM atachments "
+          + "\n\t WHERE atachment_id = ?";
+    
     public AtachmentDaoImpl() {
     }
 
     public AtachmentDaoImpl(boolean isUseCurrentConnection,
 	    boolean isCloseConnectionAfterWork) {
 	super(isUseCurrentConnection, isCloseConnectionAfterWork);
+	setGetQuery(GET_QUERY);
+	setReader(Readers.ATACHMENTS_READER);
     }
 
     private static final String ADD_ATACHMENTS_TEMPLATE = 
-	      "\n INSERT INTO atachments "
-	    + "\n\t (atachments.contact_id, atachments.atachment_name, "
-	    + "\n\t atachments.atachment_upload_date, atachments.atachment_comment) "
-	    + "\n VALUES (?, ?, ?, ?)";
+	      "\n\t INSERT INTO atachments "
+	    + "\n\t\t (atachments.contact_id, atachments.atachment_name, "
+	    + "\n\t\t atachments.atachment_upload_date, atachments.atachment_comment) "
+	    + "\n\t VALUES (?, ?, ?, ?)";
 
     @Override
     public long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
@@ -38,7 +46,7 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
 
 	List<AtachmentEntity> atachments = contact.getAtachments();
 	if (atachments == null || atachments.size() == 0) {
-	    LOGGER.info("return: no atachments for add");
+	    LOGGER.info("RETURN: no atachments for add");
 	    return 0;
 	}
 	long rowsAddeds = 0;
@@ -69,7 +77,7 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
 	} finally {
 	    closeResources();
 	}
-
+	
 	LOGGER.info("add {} atachments", rowsAddeds);
 	LOGGER.info("END");
 
@@ -77,8 +85,8 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
     }
     
     private static final String DELETE_ATACHMENT_QUERY_TEMPLATE = 
-	      "\n DELETE FROM atachments " 
-	    + "\n WHERE atachments.atachment_id NOT IN ( ? ) AND contact_id = ?";
+	      "\n\t DELETE FROM atachments " 
+	    + "\n\t WHERE atachment_id IN ( %s ) AND contact_id = ?";
     
     @Override
     public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
@@ -91,11 +99,12 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
 	}
 	long rowsDeleted = 0;
 	try {
-	    String inStatement = Arrays.toString(ids).replaceAll("[\\]\\[]", "");
 	    connect();
-	    preparedStatement = getPrepareStatement(DELETE_ATACHMENT_QUERY_TEMPLATE);
-	    preparedStatement.setString(1, inStatement);
-	    preparedStatement.setLong(2, contactId);
+	    String inStatement = Arrays.toString(ids).replaceAll("[\\]\\[]", "");
+	    String query = String.format(DELETE_ATACHMENT_QUERY_TEMPLATE, inStatement);
+	    preparedStatement = getPrepareStatement(query);
+	    preparedStatement.setLong(1, contactId);
+	    preparedStatement.executeUpdate();
 	    rowsDeleted = preparedStatement.getUpdateCount();
 	    
 	    LOGGER.info("query: {}", preparedStatement);
@@ -110,12 +119,12 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
     }
 
     private static final String UPDATE_ATACHMENT_QUERY_TEMPLATE = 
-	      "\n UPDATE atachments "
-	    + "\n SET "
-	    + "\n\t atachment_name = ?, "
-	    + "\n\t atachment_upload_date = ?, "  
-	    + "\n\t atachment_comment = ? "  
-	    + "\n WHERE atachment_id = ?";
+	      "\n\t UPDATE atachments "
+	    + "\n\t SET "
+	    + "\n\t\t atachment_name = ?, "
+	    + "\n\t\t atachment_upload_date = ?, "  
+	    + "\n\t\t atachment_comment = ? "  
+	    + "\n\t WHERE atachment_id = ?";
 
     @Override
     public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
@@ -123,7 +132,7 @@ public class AtachmentDaoImpl extends EntityDao<AtachmentEntity> implements Atac
 
 	List<AtachmentEntity> atachments = contact.getAtachments();
 	if (atachments == null || atachments.size() == 0) {
-	    LOGGER.info("return: no atachments for update");
+	    LOGGER.info("RETURN: no atachments for update");
 	    return 0;
 	}
 	long rowsUpdated = 0;

@@ -35,6 +35,12 @@ a:hover {
 	cursor: pointer;
 }
 
+.hidden{
+	visibility: hidden;
+	position: absolute;
+	z-index: 100;
+}
+
 .error {
 	border-radius: 20px;
 	border: 3px dotted red;
