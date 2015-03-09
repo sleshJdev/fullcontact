@@ -18,6 +18,6 @@ public class JdbcConnectTest {
     public void testDefaultConnect() throws ClassNotFoundException, IOException, SQLException {
 	Connection connection = JdbcConnector.getCurrentConnection();
 	Assert.assertNotNull("Connection instance null", connection);
-	JdbcConnector.close(connection);
+	JdbcConnector.closeResource(connection);
     }
 }

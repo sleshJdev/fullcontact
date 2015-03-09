@@ -8,8 +8,10 @@
 <!-- Contact all emails to line --> 
 <c:set var="emailsList"  value="" />
 <c:forEach var="email" items="${emails}" varStatus="loop">
-	<c:set var="emailsList" value="${emailsList} ${email} ${!loop.last ? '; ' : ''}"/>
+	<c:set var="emailsList" value="${emailsList} ${email};"/><%-- ${!loop.last ? '; ' : ''} --%>
 </c:forEach>
+
+
 
 <div id="content">
 	<form id="contact-form" class="smart-green" action="send?x=send" method="post" enctype="multipart/form-data">
@@ -25,13 +27,13 @@
 				</label>
 				<label>
 					<span>Email:</span>
-					<input id="email" class="input" name="email-address" type="email" value="${emailsList}"/><br />
+					<input id="emails" class="input" name="email-address" type="text" value="${emailsList}" required="required"/><br />
 				</label>
 				<label>
 					<span>Template</span>
-					<select  name="email-type">
+					<select id="template-selector"  name="email-type">
+							<option value="plain" selected="selected">plain text</option>
 							<option value="congratulation">congratulation</option>
-							<option value="plain">plain message</option>
 					</select>
 				</label>
 				<label>

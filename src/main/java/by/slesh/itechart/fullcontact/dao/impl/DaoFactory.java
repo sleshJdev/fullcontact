@@ -3,6 +3,7 @@ package by.slesh.itechart.fullcontact.dao.impl;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
+import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.domain.FamilyStatusEntity;
 import by.slesh.itechart.fullcontact.domain.NationalityEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
@@ -36,5 +37,9 @@ public final class DaoFactory {
     
     public static EntityDao<ContactEntity>  getContactDao(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	return new ContactDaoImp(isUseCurrentConnection, isCloseConnectionAfterWork);
+    }
+    
+    public static EntityDao<EmailEntity> getEmailDao(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork){
+	return new EmailDaoImpl(isUseCurrentConnection, isCloseConnectionAfterWork);
     }
 }

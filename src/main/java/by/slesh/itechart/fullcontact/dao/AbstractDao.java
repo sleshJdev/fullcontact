@@ -25,7 +25,7 @@ public abstract class AbstractDao {
 
     public AbstractDao() {
     }
-
+    
     public AbstractDao(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	this.isUseCurrentConnection = isUseCurrentConnection;
 	this.isCloseConnectionAfterWork = isCloseConnectionAfterWork;

@@ -24,12 +24,9 @@ import by.slesh.itechart.fullcontact.dao.ContactDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.db.JdbcConnector;
+import by.slesh.itechart.fullcontact.db.local.Database;
 import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
-import by.slesh.itechart.fullcontact.domain.FamilyStatusEntity;
-import by.slesh.itechart.fullcontact.domain.NationalityEntity;
-import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
-import by.slesh.itechart.fullcontact.domain.SexEntity;
 import by.slesh.itechart.fullcontact.util.HttpProcessUtil;
 import by.slesh.itechart.fullcontact.util.PathUtil;
 
@@ -41,8 +38,8 @@ import com.mysql.jdbc.StringUtils;
  */
 public class EditAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(EditAction.class);
-    private final String SUCCESS = "Success statuc from " + getClass().getSimpleName() + "!";
-    private final String PROBLEM = "Some problem during editing/save contact " + getClass().getSimpleName() + "!";
+    private final String SUCCESS = "You Can Edit Your Some Contact";
+    private final String PROBLEM = "Some problem during editing/save contact !";
 
     private String action;
     private String idParameter;
@@ -89,70 +86,64 @@ public class EditAction extends AbstractAction {
 	try {
 	    ContactEntity contact = DaoFactory.getContactDao(true, true).get(id);
 	    File avatar = new File(String.format("%s%s", PathUtil.goToRoot(), contact.getAvatarPath()));
-	    if(!avatar.exists()){
+	    if (!avatar.exists()) {
 		contact.setAvatarPath(null);
 	    }
-	    List<NationalityEntity> list1 = DaoFactory.getNationalityDao(true, true).getAll();
-	    List<FamilyStatusEntity> list2 = DaoFactory.getFamilyStatusDao(true, true).getAll();
-	    List<SexEntity> list3 = DaoFactory.getSexDao(true, true).getAll();
-	    List<PhoneTypeEntity> list4 = DaoFactory.getPhoneTypeDao(true, true).getAll();
-	    getRequest().setAttribute("nationalitiesList", list1);
-	    getRequest().setAttribute("familyStatusesList", list2);
-	    getRequest().setAttribute("sexesList", list3);
-	    getRequest().setAttribute("phonesTypesList", list4);
+	    getRequest().setAttribute("nationalitiesList", Database.getNationalities());
+	    getRequest().setAttribute("familyStatusesList", Database.getFamilyStatuses());
+	    getRequest().setAttribute("sexesList", Database.getSexes());
+	    getRequest().setAttribute("phonesTypesList", Database.getPhoneTypes());
 	    getRequest().setAttribute("contact", contact);
 	} catch (ClassNotFoundException | SQLException e) {
 	    throw new ServletException(e);
 	}
-	
+
 	getRequest().setAttribute("content", "edit-contact-form-content.jsp");
 	getRequest().setAttribute("title", "Edit Contact Page");
 	getDispatcher().forward(getRequest(), getResponse());
 
 	LOGGER.info("END");
     }
-    
-    
-    
-    
-    
+
     ContactEntity contact;
 
     private void save() throws Exception {
 	LOGGER.info("BEGIN");
-	
+
 	contact = HttpProcessUtil.readContactFrom(getRequest());
-	
+
 	Collection<Part> parts = getRequest().getParts();
 	processParts(parts, contact);
-	
+
 	((ContactDao) DaoFactory.getContactDao(true, true)).update(contact);
 
 	long[] ids = null;
-	
+
 	if ((ids = HttpProcessUtil.checkForDeletingAtachments(getRequest())) != null) {
-	    final String uploadDirectory = getRequest().getServletContext().getAttribute("upload-directory-path").toString();
-	    EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);//open connection
+	    final String uploadDirectory = getRequest().getServletContext().getAttribute("upload-directory-path")
+		    .toString();
+	    EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);// open
+											      // connection
 	    for (long id : ids) {
 		AtachmentEntity atachment = atachmentDao.get(id);
-		
+
 		LOGGER.info("emtity is null? - {}", (atachment == null));
-		
+
 		File file = new File(String.format("%s%s%s", uploadDirectory, File.separator, atachment.getName()));
 		if (file.delete()) {
 
 		    LOGGER.info("atachment by path {} deleted successful", file.getPath());
 
 		} else {
-		    
+
 		    LOGGER.info("atachment by path {} not found or not exists", file.getPath());
-		
+
 		}
 	    }
-	    JdbcConnector.close();//close connection
+	    JdbcConnector.close();// close connection
 	    atachmentDao.deleteRange(contact.getId(), ids);
 	}
-	
+
 	if ((ids = HttpProcessUtil.checkForDeletingPhones(getRequest())) != null) {
 	    DaoFactory.getPhoneDao(true, true).deleteRange(contact.getId(), ids);
 	}
@@ -160,8 +151,9 @@ public class EditAction extends AbstractAction {
 
 	LOGGER.info("END");
     }
-    
-    private List<File> processParts(Collection<Part> parts, ContactEntity contact) throws IOException, ClassNotFoundException, SQLException {
+
+    private List<File> processParts(Collection<Part> parts, ContactEntity contact) throws IOException,
+	    ClassNotFoundException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("parts quantity: {}", parts == null ? null : parts.size());
 
@@ -176,87 +168,94 @@ public class EditAction extends AbstractAction {
 	String pathSave = null;
 
 	for (Part part : parts) {
-	    String name = valueOf(part, "name");//name of input field from
+	    String name = valueOf(part, "name");// name of input field from
 
-//	    LOGGER.info("part name: {}", name);
+	    // LOGGER.info("part name: {}", name);
 
 	    if (!StringUtils.isEmptyOrWhitespaceOnly(name)) {
-		String fileName = valueOf(part, "filename");//name of file
+		String fileName = valueOf(part, "filename");// name of file
 		if (StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
 		    continue;
 		}
-		
+
 		LOGGER.info("part name: {}", name);
-		
+
 		switch (name) {
 		case "hidden-avatar-file":
-		    file = processPart(part, publicDirectory, fileName);// saved file
+		    file = processPart(part, publicDirectory, fileName);// saved
+									// file
 		    pathSave = file.getPath().substring(root.length());// "/'path-to-target-folder'/'file-name'"
-		    String pathAvatar = dao.getAvatar(contactId);// same as pathSave, but from db
-		    
+		    String pathAvatar = dao.getAvatar(contactId);// same as
+								 // pathSave,
+								 // but from db
+
 		    LOGGER.info("path save avatar: {}", pathSave);
-		    
+
 		    if (!StringUtils.isEmptyOrWhitespaceOnly(pathAvatar)) {
-			String fullPath = String.format("%s%s", root, pathAvatar);// absolute path to current avatar
+			String fullPath = String.format("%s%s", root, pathAvatar);// absolute
+										  // path
+										  // to
+										  // current
+										  // avatar
 			File avatar = new File(fullPath);
 			if (avatar.delete()) {
-			    
+
 			    LOGGER.info("avatar by path {} deleted successful", fullPath);
-			    
+
 			    contact.setAvatarPath(null);
 			} else {
-			    
+
 			    LOGGER.info("avatar by path {} not found or not exists", fullPath);
-			    
+
 			}
 		    }
 		    dao.setAvatar(contactId, pathSave);
 		    break;
 		case "atachment-file":
 		    LOGGER.info("atachment file process...");
-		    
+
 		    AtachmentEntity atachment = null;
 		    for (AtachmentEntity item : contact.getAtachments()) {
-			if(fileName.equals(item.getName())){
-			    
+			if (fileName.equals(item.getName())) {
+
 			    LOGGER.info("origin name: {}, changed name: {}", fileName, item.getChangedName());
-			    
+
 			    fileName = item.getChangedName();
 			    atachment = item;
 			}
 		    }
-		    
+
 		    file = processPart(part, uploadDirectory, fileName);
 		    pathSave = file.getPath().substring(root.length());// /'path-to-target-folder'/'file-name'
-		    
+
 		    LOGGER.info("atachment file obtained: {}", file);
 		    LOGGER.info("path to save: {}", pathSave);
-		    
+
 		    atachment.setName(file.getName());
 		    atachment.setChangedName(file.getName());
-		    
-		    if(files == null){
+
+		    if (files == null) {
 			files = new ArrayList<File>();
 		    }
-		    
+
 		    files.add(file);
-		    
+
 		    break;
 		}
 	    }
 	}
-	
+
 	LOGGER.info("update atachments names....");
-	
+
 	/*
-	 * 1. Rename according file on disc
-	 * 2. Update names atachments: 'simple name' -> 'salt + changed name'
+	 * 1. Rename according file on disc 2. Update names atachments: 'simple
+	 * name' -> 'salt + changed name'
 	 */
 	for (AtachmentEntity atachment : contact.getAtachments()) {
 	    String name = atachment.getName();
 	    String changedName = atachment.getChangedName();
 	    String salt = atachment.getSalt();
-	    
+
 	    String newName = String.format("%s%s", salt, changedName);
 
 	    LOGGER.info("id: {}, name: {}, changedName: {}, salt: {}", atachment.getId(), name, changedName, salt);
@@ -281,16 +280,9 @@ public class EditAction extends AbstractAction {
 	    atachment.setName(newName);
 	    atachment.setChangedName(newName);
 	}
-	
+
 	LOGGER.info("END");
 	return files;
-    }
-    
-    public static void main(String[] args) {
-	String s1 = "1.jpeg";
-	String s2 = "111111111.jpeg";
-	
-	System.out.println("is equal - " + (!s1.equals(s2)));
     }
 
     private static final File processPart(Part part, final String destination, String fileName) throws IOException {

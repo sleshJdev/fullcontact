@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.FamilyStatusDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.FamilyStatusEntity;
 
 /**
@@ -37,7 +38,7 @@ public class FamilyStatusDaoImpl extends EntityDao<FamilyStatusEntity> implement
 	setGetIdQuery(GET_FAMILY_STATUS_ID_BY_VALUE_QUERY);
 	setGetLimitQuery(GET_LIMIT_QUERY);
 	setGetAllQuery(GET_ALL_QUERY);
-	setReader(Readers.ENTITY_READER);
+	setReader(DaoReadersContainer.ENTITY_READER);
     }
     
     @Override

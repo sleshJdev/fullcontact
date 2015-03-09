@@ -3,7 +3,6 @@ package by.slesh.itechart.fullcontact.dao.impl;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.Getable;
 import by.slesh.itechart.fullcontact.dao.PhoneDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
@@ -20,11 +20,26 @@ import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
     private final static Logger LOGGER = LoggerFactory.getLogger(PhoneDaoImpl.class);
 
+    private static final String GET_BY_ID_QUERY = 
+	    "\n\t SELECT  phones.phone_id, contact_id, phone_value, phones_types.phone_type_value, "
+	  + "\n\t\t  phone_comment, phone_country_code, phone_operator_code "
+	  + "\n\t FROM phones "
+          + "\n\t LEFT JOIN phones_types ON phones.phone_type_id = phones_types.phone_type_id "
+    	  + "\n\t WHERE phones.phone_id = ? ";
+    
+    private static final String DELETE_PHONE_QUERY_TEMPLATE = 
+	      "\n\t DELETE FROM phones " 
+	    + "\n\t WHERE phone_id IN ( %s ) AND contact_id = ?";
+    
     public PhoneDaoImpl() {
+	this(true, true);
     }
 
     public PhoneDaoImpl(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	super(isUseCurrentConnection, isCloseConnectionAfterWork);
+	setDeleteRangeQuery(DELETE_PHONE_QUERY_TEMPLATE);
+	setGetByIdQuery(GET_BY_ID_QUERY);
+	setReader(DaoReadersContainer.PHONES_READER);
     }
     
     private static final String ADD_PHONE_TEMPLATE = 
@@ -78,39 +93,6 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	LOGGER.info("END");
 
 	return rowsAddeds;
-    }
-    
-    private static final String DELETE_PHONE_QUERY_TEMPLATE = 
-	      "\n\t DELETE FROM phones " 
-	    + "\n\t WHERE phone_id IN ( %s ) AND contact_id = ?";
-    
-    @Override
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
-	LOGGER.info("BEGIN");
-	LOGGER.info("ids: {}", Arrays.toString(ids));
-
-	if (ids == null || ids.length == 0) {
-	    LOGGER.info("return: not phones for delete");
-	    return 0;
-	}
-	long rowsDeleted = 0;
-	try {
-	    connect();
-	    String inStatement = Arrays.toString(ids).replaceAll("[\\]\\[]", "");
-	    String query = String.format(DELETE_PHONE_QUERY_TEMPLATE, inStatement);
-	    preparedStatement = getPrepareStatement(query);
-	    preparedStatement.setLong(1, contactId);
-	    preparedStatement.executeUpdate();
-	    rowsDeleted = preparedStatement.getUpdateCount();
-
-	    LOGGER.info("query: {}", preparedStatement);
-	} finally {
-	    closeResources();
-	}
-
-	LOGGER.info("delete {} phones", rowsDeleted);
-
-	return rowsDeleted;
     }
 
     private static final String UPDATE_PHONE_QUERY = 

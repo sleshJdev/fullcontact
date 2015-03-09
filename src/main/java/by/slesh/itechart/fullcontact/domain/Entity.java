@@ -1,7 +1,7 @@
 package by.slesh.itechart.fullcontact.domain;
 
 
-public class Entity {
+public abstract class Entity {
     protected long id = -1;
     protected String value;
 

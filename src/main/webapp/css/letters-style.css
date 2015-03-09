@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+td{
+	padding-left: 15px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0px;
+    margin-left: 0px;
+}
+
+ul li {
+    background-image: url(sqpurple.gif);
+    background-repeat: no-repeat;
+    background-position: 0px center;
+}

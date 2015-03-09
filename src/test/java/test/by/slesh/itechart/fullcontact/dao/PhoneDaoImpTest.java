@@ -1,6 +1,6 @@
 package test.by.slesh.itechart.fullcontact.dao;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +17,13 @@ import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 
 public class PhoneDaoImpTest {
     @Test
+    public void testGetById() throws ClassNotFoundException, IOException, SQLException {
+	EntityDao<PhoneEntity> phoneDao = DaoFactory.getPhoneDao(true, true);
+	PhoneEntity phone = phoneDao.get(1);
+	assertNotNull(phone);
+    }
+
+    @Test
     public void testAdd() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
 	contact.setId(8);
@@ -26,16 +33,16 @@ public class PhoneDaoImpTest {
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
-	phone1.setCountryCode("add cc 1");
-	phone1.setOperatorCode("add oc 1");
+	phone1.setCountryCode("cc1");
+	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
 	phone2.setId(-1);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("add comment 2");
-	phone2.setCountryCode("add cc 2");
-	phone2.setOperatorCode("add oc 2");
+	phone2.setCountryCode("cc2");
+	phone2.setOperatorCode("oc2");
 
 	List<PhoneEntity> phones = new ArrayList<PhoneEntity>();
 	phones.add(phone1);
@@ -54,14 +61,10 @@ public class PhoneDaoImpTest {
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<PhoneEntity> phoneDao = DaoFactory.getPhoneDao(true, true);
-	EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
-	final long contactId = 2;
-	contactDao.delete(contactId);
-	final long[] ids = new long[] { -1 };
-	final long expectedQuantityUpdate = -1;
-	long actualQuantityDelete = phoneDao.deleteRange(2, ids);
-	
-	assertEquals("Not equals quantity UPDATE rows and actual entity", expectedQuantityUpdate, actualQuantityDelete);
+	final long[] ids = new long[] { 17, 18, 19 };
+	final long expectedQuantityUpdate = ids.length;
+	long actualQuantityDelete = phoneDao.deleteRange(1, ids);
+	assertEquals("Not equals quantity DELETE rows and actual entity", expectedQuantityUpdate, actualQuantityDelete);
     }
 
     @Test
@@ -75,8 +78,8 @@ public class PhoneDaoImpTest {
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
 	phone1.setComment("update comment 1");
-	phone1.setCountryCode("up cc 1");
-	phone1.setOperatorCode("up oc 1");
+	phone1.setCountryCode("cc1");
+	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
 	phone2.setId(2);
@@ -84,8 +87,8 @@ public class PhoneDaoImpTest {
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("update comment 2");
-	phone2.setCountryCode("up cc 2");
-	phone2.setOperatorCode("up oc 2");
+	phone2.setCountryCode("cc2");
+	phone2.setOperatorCode("oc2");
 
 	List<PhoneEntity> phones = new ArrayList<PhoneEntity>();
 	phones.add(phone1);

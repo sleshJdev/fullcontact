@@ -1,4 +1,4 @@
-package by.slesh.itechart.fullcontact.dao;
+package by.slesh.itechart.fullcontact.dao.reader;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

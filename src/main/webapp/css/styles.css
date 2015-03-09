@@ -41,6 +41,26 @@ a:hover {
 	z-index: 100;
 }
 
+.notify-link{
+	float: right;
+}
+
+.quantity{
+	background-color: yellow;
+	width:40px;
+	height:20px;
+	border: 1px solid red;
+	text-align: center;
+	border-radius: 10px;
+	float: right;
+	position: relative;
+	top: -10px;
+}
+
+.link{
+	float: left;
+}
+
 .error {
 	border-radius: 20px;
 	border: 3px dotted red;
@@ -84,10 +104,11 @@ a:hover {
 	margin: 0 auto;
 }
 
-.success {
+.status {
 	color: #4F8A10;
 	background-color: #DFF2BF;
 	background-image: url('success.png');
+	height: 50px;
 }
 
 .nice-color {

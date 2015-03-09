@@ -1,10 +1,8 @@
 package by.slesh.itechart.fullcontact.dao.impl;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.PhoneTypeDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 
 public class PhoneTypeDaoImpl extends EntityDao<PhoneTypeEntity> implements PhoneTypeDao {
@@ -33,11 +31,6 @@ public class PhoneTypeDaoImpl extends EntityDao<PhoneTypeEntity> implements Phon
 	setGetIdQuery(GET_PHONE_TYPE_ID_BY_VALUE_QUERY);
 	setGetAllQuery(GET_ALL_PHONES_TYPES_QUERY);
 	setGetLimitQuery(GET_LIMIT_QUERY);
-	setReader(Readers.ENTITY_READER);
-    }
-    
-    @Override
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
-	throw new SQLException("not supported this operation!");
+	setReader(DaoReadersContainer.ENTITY_READER);
     }
 }

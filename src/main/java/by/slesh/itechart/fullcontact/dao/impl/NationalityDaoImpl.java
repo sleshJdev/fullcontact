@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.NationalityDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.NationalityEntity;
 
 public class NationalityDaoImpl extends EntityDao<NationalityEntity> implements NationalityDao {
@@ -34,7 +35,7 @@ public class NationalityDaoImpl extends EntityDao<NationalityEntity> implements 
 	setGetIdQuery(GET_NATIONALITY_ID_BY_VALUE_QUERY);
 	setGetAllQuery(GET_ALL_QUERY);
 	setGetLimitQuery(GET_LIMIT_QUERY);
-	setReader(Readers.ENTITY_READER);
+	setReader(DaoReadersContainer.ENTITY_READER);
     }
     
     @Override

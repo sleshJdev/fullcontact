@@ -19,8 +19,26 @@ import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
+import by.slesh.itechart.fullcontact.settings.G;
 
 public class ContactDaoImplTest {
+    @Test
+    public void testGetNameByEmail() throws ClassNotFoundException, IOException, SQLException{
+	final String name = "Admin";
+	final String email = "shorin-roman@yandex.by";
+	ContactDao contactDao = (ContactDao) DaoFactory.getContactDao(true, true);
+	String result = contactDao.getName(email);
+	assertEquals(name, result);
+    }
+    
+    @Test
+    public void testGetContact() throws ClassNotFoundException, IOException, SQLException{
+	final long id = G.MY_ID;
+	ContactDao contactDao = (ContactDao) DaoFactory.getContactDao(true, true);
+	ContactEntity contact = contactDao.getContact(id);
+	assertNotNull("Contact is null", contact);
+    }
+    
     @Test
     public void testGetAll() throws ClassNotFoundException, IOException, SQLException {
 	Getable<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
@@ -46,7 +64,7 @@ public class ContactDaoImplTest {
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
 	long quantityBefore = contactDao.count();
-	contactDao.delete(1);
+	contactDao.delete(16);
 	long quantityAfter = contactDao.count();
 	assertEquals("Incorrent quantity rows", 1, (quantityBefore - quantityAfter));
     }
@@ -58,16 +76,16 @@ public class ContactDaoImplTest {
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
-	phone1.setCountryCode("add cc 1");
-	phone1.setOperatorCode("add oc 1");
+	phone1.setCountryCode("acc1");
+	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
 	phone2.setId(-1);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("add comment 2");
-	phone2.setCountryCode("add cc 2");
-	phone2.setOperatorCode("add oc 2");
+	phone2.setCountryCode("cc2");
+	phone2.setOperatorCode("oc2");
 
 	List<PhoneEntity> phones = new ArrayList<PhoneEntity>();
 	phones.add(phone1);
@@ -121,16 +139,16 @@ public class ContactDaoImplTest {
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
-	phone1.setCountryCode("update cc 1");
-	phone1.setOperatorCode("update oc 1");
+	phone1.setCountryCode("cc1");
+	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
 	phone2.setId(-1);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("update comment 2");
-	phone2.setCountryCode("update cc 2");
-	phone2.setOperatorCode("update oc 2");
+	phone2.setCountryCode("cc2");
+	phone2.setOperatorCode("oc2");
 
 	List<PhoneEntity> phones = new ArrayList<PhoneEntity>();
 	phones.add(phone1);
@@ -153,7 +171,7 @@ public class ContactDaoImplTest {
 	atachments.add(atachment2);
 	
 	ContactEntity contact = new ContactEntity();
-	contact.setId(3);
+	contact.setId(17);
 	contact.setFirstName("UpdateFirst");
 	contact.setLastName("UpdateLast");
 	contact.setMiddleName("UpdateMiddle");
@@ -166,7 +184,7 @@ public class ContactDaoImplTest {
 	contact.setEmailAddress("Update@mail.ru");
 	contact.setPhones(phones);
 	contact.setAtachments(atachments);
-	contact.setCountry("UpdateCountry");
+	contact.setCountry("UpdateCC");
 	contact.setCity("UpdateCity");
 	contact.setStreet("Street1");
 	contact.setHouse("13Houes");

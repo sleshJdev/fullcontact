@@ -1,12 +1,14 @@
 package by.slesh.itechart.fullcontact.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 public class EmailEntity extends Entity {
-    private long id;
     private long contactIdSender;
+    private ContactEntity sender;
+    private List<AtachmentEntity> atachments;
+    private List<ContactEntity> receivers;
     private String subject;
-    private String text;
     private Date sendDate;
 
     public EmailEntity() {
@@ -25,6 +27,30 @@ public class EmailEntity extends Entity {
 
     public void setContactIdSender(long contactIdSender) {
 	this.contactIdSender = contactIdSender;
+    }
+
+    public ContactEntity getSender() {
+	return sender;
+    }
+
+    public void setSender(ContactEntity sender) {
+	this.sender = sender;
+    }
+
+    public List<AtachmentEntity> getAtachments() {
+	return atachments;
+    }
+
+    public void setAtachments(List<AtachmentEntity> atachments) {
+	this.atachments = atachments;
+    }
+
+    public List<ContactEntity> getReceivers() {
+	return receivers;
+    }
+
+    public void setReceivers(List<ContactEntity> receivers) {
+	this.receivers = receivers;
     }
 
     public String getSubject() {
@@ -52,7 +78,7 @@ public class EmailEntity extends Entity {
     }
 
     public String toString() {
-	return "email:: [id: " + id + ", contactIdSender: " + contactIdSender + ", subject: " + subject + "text: "
-		+ text + "sendData: " + sendDate + "]";
+	return "email:: [id: " + getId() + ", contactIdSender: " + contactIdSender + ", subject: " + subject
+		+ ", text: " + getValue() + ", sendData: " + sendDate + "]";
     }
 }

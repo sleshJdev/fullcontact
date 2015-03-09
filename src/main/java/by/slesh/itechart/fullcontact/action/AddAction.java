@@ -3,7 +3,6 @@ package by.slesh.itechart.fullcontact.action;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +14,8 @@ import org.slf4j.LoggerFactory;
 import by.slesh.itechart.fullcontact.dao.ContactDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
+import by.slesh.itechart.fullcontact.db.local.Database;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
-import by.slesh.itechart.fullcontact.domain.FamilyStatusEntity;
-import by.slesh.itechart.fullcontact.domain.NationalityEntity;
-import by.slesh.itechart.fullcontact.domain.SexEntity;
 import by.slesh.itechart.fullcontact.util.HttpProcessUtil;
 
 import com.mysql.jdbc.StringUtils;
@@ -36,7 +33,7 @@ public class AddAction extends AbstractAction {
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
 
-	getRequest().setAttribute("status", "Success statuc from " + getClass().getSimpleName() + "!");
+	getRequest().setAttribute("status", "You Can Add A New Contact");
 
 	if (!StringUtils.isEmptyOrWhitespaceOnly(action) && action.equals("add")) {// add
 	    try {
@@ -46,23 +43,16 @@ public class AddAction extends AbstractAction {
 		e.printStackTrace();
 		throw new ServletException(e);
 	    }
+	    
 	    LOGGER.info("redirect to show page");
+	    
 	    getResponse().sendRedirect("show");
-	}
-
-	if (StringUtils.isEmptyOrWhitespaceOnly(action)) {// open page add
+	} else {// open page add
 	    LOGGER.info("go add page");
-	    try {
-		List<NationalityEntity> list1 = DaoFactory.getNationalityDao(true, true).getAll();
-		List<FamilyStatusEntity> list2 = DaoFactory.getFamilyStatusDao(true, true).getAll();
-		List<SexEntity> list3 = DaoFactory.getSexDao(true, true).getAll();
-		getRequest().setAttribute("nationalitiesList", list1);
-		getRequest().setAttribute("familyStatusesList", list2);
-		getRequest().setAttribute("sexesList", list3);
-	    } catch (ClassNotFoundException | SQLException e) {
-		e.printStackTrace();
-		throw new ServletException(e);
-	    }
+
+	    getRequest().setAttribute("nationalitiesList", Database.getNationalities());
+	    getRequest().setAttribute("familyStatusesList", Database.getFamilyStatuses());
+	    getRequest().setAttribute("sexesList", Database.getSexes());
 	    getRequest().setAttribute("content", "add-contact-form-content.jsp");
 	    getRequest().setAttribute("title", "Add Contact Page");
 	    getDispatcher().forward(getRequest(), getResponse());
@@ -76,6 +66,6 @@ public class AddAction extends AbstractAction {
 	super.init(request, response);
 	action = request.getParameter("x");// action kind
 
-	LOGGER.info("x : {}", action);
+	LOGGER.info("action(x) : {}", action);
     }
 }

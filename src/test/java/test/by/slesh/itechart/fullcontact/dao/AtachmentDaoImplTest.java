@@ -1,6 +1,6 @@
 package test.by.slesh.itechart.fullcontact.dao;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -18,6 +18,20 @@ import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
 public class AtachmentDaoImplTest {
+    @Test
+    public void testGetAll() throws ClassNotFoundException, IOException, SQLException {
+	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	List<AtachmentEntity> atachment = atachmentDao.getAll();
+	assertNotNull(atachment);
+    }
+
+    @Test
+    public void testGetById() throws ClassNotFoundException, IOException, SQLException {
+	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	AtachmentEntity atachment = atachmentDao.get(1);
+	assertNotNull(atachment);
+    }
+
     @Test
     public void testAdd() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
@@ -53,11 +67,9 @@ public class AtachmentDaoImplTest {
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
-	final long contactId = 2;
-	contactDao.delete(contactId);
-	final long[] ids = new long[] { -2 };
-	final long expectedQuantityUpdate = -1;
+	final long contactId = 1;
+	final long[] ids = new long[] { 17, 18, 19 };
+	final long expectedQuantityUpdate = ids.length;
 	long actualQuantityDelete = atachmentDao.deleteRange(contactId, ids);
 
 	assertEquals("Not equals quantity UPDATE rows and actual entity", expectedQuantityUpdate, actualQuantityDelete);

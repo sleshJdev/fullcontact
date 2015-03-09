@@ -12,6 +12,10 @@ import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 8, 2015
+ *
+ */
 public class ShowAction extends AbstractAction {
     private static final int LIMIT_ROWS_PER_PAGE = 10;
     private int page = 1;
@@ -19,17 +23,16 @@ public class ShowAction extends AbstractAction {
     @Override
     public void execute() throws ServletException, IOException {
 	List<ContactEntity> contacts = null;
-	int quantityPages = 0;
 	try {
 	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
 	    contacts = contactDao.getLimit(LIMIT_ROWS_PER_PAGE * page, LIMIT_ROWS_PER_PAGE);
 	    long quantityContacts = contactDao.count();
-	    quantityPages = (int) (quantityContacts / LIMIT_ROWS_PER_PAGE);
+	    int quantityPages = (int) (quantityContacts / LIMIT_ROWS_PER_PAGE);
 	    int quantityRestPages = (int) (quantityContacts % LIMIT_ROWS_PER_PAGE);
 	    if (quantityRestPages > 0) {
 		++quantityPages;
 	    }
-	    getRequest().setAttribute("status", "Success statuc from " + getClass().getSimpleName() + "!");
+	    getRequest().setAttribute("status", String.format("Your Contacts. Total %d", quantityContacts));
 	    getRequest().setAttribute("begin", LIMIT_ROWS_PER_PAGE * page);
 	    getRequest().setAttribute("pages", quantityPages);
 	    getRequest().setAttribute("contacts", contacts);

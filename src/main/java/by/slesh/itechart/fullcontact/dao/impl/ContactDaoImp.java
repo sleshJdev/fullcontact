@@ -12,9 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import by.slesh.itechart.fullcontact.dao.AtachmentDao;
 import by.slesh.itechart.fullcontact.dao.ContactDao;
-import by.slesh.itechart.fullcontact.dao.DaoReader;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.PhoneDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReader;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.Entity;
 
@@ -29,10 +30,10 @@ import com.mysql.jdbc.StringUtils;
 public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDao {
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactDaoImp.class);
 
-    private static final String ORDER_BY = 
+    public static final String ORDER_BY = 
 	    "\n\t ORDER BY contacts.contact_id ASC ";
     
-    private static final String GET_QUERY = 
+    public static final String GET_QUERY = 
 	      "\n\t SELECT "
 	    + "\n\t\t contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth,web_site, email_address, current_employment, country, city, street, house, block, apartment, city_index, "
 	    + "\n\t\t sexes.sex_id, sexes.sex_value, "
@@ -48,24 +49,37 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
             + "\n\t LEFT JOIN phones_types  	ON phones.phone_type_id 	= phones_types.phone_type_id "
             + "\n\t LEFT JOIN atachments 	ON contacts.contact_id		= atachments.contact_id ";
   
-  private static final String GET_LIMIT_QUERY = 
-	      "\n\t SELECT contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth, "
-	    + "\n\t\t current_employment, country, city, street, house, block, apartment, city_index "
-	    + "\n\t FROM contacts " 
-	    + "\n\t " + ORDER_BY
+    
+    public static final String GET_LIMIT_QUERY_BODY = 
+	    "\n\t SELECT contacts.contact_id, first_name, last_name, middle_name, avatar_path, date_of_birth, "
+            + "\n\t\t current_employment, country, city, street, house, block, apartment, city_index "
+	    + "\n\t FROM contacts ";
+    
+    public static final String GET_CONTACT_BY_ID = 
+	    GET_LIMIT_QUERY_BODY
+	 + "\n\t WHERE contacts.contact_id = ?"; 
+    
+    public static final String GET_LIMIT_QUERY = 
+	      GET_LIMIT_QUERY_BODY
+	    + ORDER_BY
 	    + "\n\t LIMIT ?, ? ";
 
-    private static final String GET_BY_ID_QUERY = 
+    public static final String GET_BY_ID_QUERY = 
 	    GET_QUERY
           + " \n\t WHERE contacts.contact_id = ? \n " 
           + ORDER_BY;
     
-    private static final String COUNT_QUERY = 
+    public static final String COUNT_QUERY = 
 	    "\t SELECT COUNT(*) FROM contacts";
     
-    private static final String DELETE_QUERY = 
+    public static final String DELETE_QUERY = 
 	      "\n\t DELETE FROM contacts "
 	    + "\n\t WHERE contact_id = ?";
+    
+    public static final String GET_ID_QUERY =
+	    "\n\t SELECT contacts.contact_id "
+	  + "\n\t FROM contacts "
+	  + "\n\t WHERE contacts.email_address = ? ";  
     
     public ContactDaoImp() {
 	this(true, true);
@@ -77,8 +91,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	setCountQuery(COUNT_QUERY);
 	setGetLimitQuery(GET_LIMIT_QUERY);
 	setGetAllQuery(GET_QUERY);
-	setGetQuery(GET_BY_ID_QUERY);
-	setReader(Readers.LIMIT_CONTACT_READER);
+	setGetByIdQuery(GET_BY_ID_QUERY);
+	setGetIdQuery(GET_ID_QUERY);
+	setReader(DaoReadersContainer.LIMIT_CONTACT_READER);
     }
     
     @Override
@@ -87,20 +102,30 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
     
     @Override
+    public ContactEntity getContact(long id) throws ClassNotFoundException, IOException, SQLException {
+	setReader(DaoReadersContainer.LIMIT_CONTACT_READER);
+	setGetByIdQuery(GET_CONTACT_BY_ID);
+	return super.get(id);
+    }
+    
+    @Override
     public ContactEntity get(long id) throws ClassNotFoundException, IOException, SQLException {
-	setReader(Readers.FULL_CONTACT_READER);
+	setReader(DaoReadersContainer.FULL_CONTACT_READER);
+	setGetByIdQuery(GET_BY_ID_QUERY);
 	return super.get(id);
     }
 
     @Override
     public List<ContactEntity> getLimit(long start, long size) throws ClassNotFoundException, IOException, SQLException {
-	setReader(Readers.LIMIT_CONTACT_READER);
+	setReader(DaoReadersContainer.LIMIT_CONTACT_READER);
+	setGetLimitQuery(GET_LIMIT_QUERY);
 	return super.getLimit(start, size);
     }
 
     @Override
     public List<ContactEntity> getAll() throws ClassNotFoundException, IOException, SQLException {
-	setReader(Readers.FULL_CONTACT_READER);
+	setReader(DaoReadersContainer.FULL_CONTACT_READER);
+	setGetAllQuery(GET_QUERY);
 	return super.getAll();
     }
 
@@ -154,6 +179,37 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	LOGGER.info("END");
 	
 	return path;
+    }
+    
+    public static final String GET_NAME_BY_EMAIL = 
+	    "\n\t SELECT contacts.first_name "
+	  + "\n\t FROM contacts "
+          + "\n\t WHERE contacts.email_address = ? ";
+    
+    @Override
+    public String getName(String email) throws ClassNotFoundException, IOException, SQLException {
+	LOGGER.info("BEGIN");
+	LOGGER.info("email  = {}", email);
+
+	String name = null;
+	try {
+	    connect();
+	    preparedStatement = getPrepareStatement(GET_NAME_BY_EMAIL);
+	    preparedStatement.setString(1, email);
+	    resultSet = preparedStatement.executeQuery();
+	    while (resultSet.next()) {
+		name = resultSet.getString(1);
+	    }
+
+	    LOGGER.info("query: {}", preparedStatement );
+	} finally {
+	    closeResources();
+	}
+
+	LOGGER.info("name: {}", name);
+	LOGGER.info("END");
+
+	return name;
     }
 
     private static final String GET_EMAIL_QUERY = 
@@ -244,7 +300,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	            GET_QUERY
 	       + " \n\t WHERE \n\t ( ";
 	    		
-    private static final String SEARCH_LIKE_TEMPLATE = 
+    private static final String SEARCH_LIKE_STRING_TEMPLATE = 
 	    	"\n\t\t %s LIKE ? AND ";
 
     private static final String SEARCH_COMPARE_DATE_TEMPLATE = 
@@ -290,72 +346,72 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	String query = SEARCH_QUERY_TEMPLATE;// when statement
 	
 	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getFirstName())) {
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.first_name"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.first_name"));
 	    setters.add(setterFactory.getSetterForString(contact.getFirstName()));
 	}
 	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getMiddleName())) {
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.middle_name"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.middle_name"));
 	    setters.add(setterFactory.getSetterForString(contact.getMiddleName()));
 	}
 	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getLastName())) {
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.last_name"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.last_name"));
 	    setters.add(setterFactory.getSetterForString(contact.getLastName()));
 	}
 	if (contact.getDateOfBirth() != null) {
-	    String s = isLess ? "<" : ">";
-	    query = query.concat(String.format(SEARCH_COMPARE_DATE_TEMPLATE, "contacts.date_of_birth", s));
+	    String sign = isLess ? "<" : ">";
+	    query = query.concat(String.format(SEARCH_COMPARE_DATE_TEMPLATE, "contacts.date_of_birth", sign));
 	    setters.add(setterFactory.getSetterForDate(contact.getDateOfBirth()));
 	}
 	if (!StringUtils.isEmptyOrWhitespaceOnly(contact.getWebSite())) {
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.web_site"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.web_site"));
 	    setters.add(setterFactory.getSetterForString(contact.getWebSite()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getEmailAddress())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.email_address"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.email_address"));
 	    setters.add(setterFactory.getSetterForString(contact.getEmailAddress()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCurrentEmployment())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.current_employment"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.current_employment"));
 	    setters.add(setterFactory.getSetterForString(contact.getCurrentEmployment()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCountry())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.country"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.country"));
 	    setters.add(setterFactory.getSetterForString(contact.getCountry()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCity())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.city"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.city"));
 	    setters.add(setterFactory.getSetterForString(contact.getCity()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getStreet())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.street"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.street"));
 	    setters.add(setterFactory.getSetterForString(contact.getStreet()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getHouse())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.house"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.house"));
 	    setters.add(setterFactory.getSetterForString(contact.getHouse()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getBlock())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.block"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.block"));
 	    setters.add(setterFactory.getSetterForString(contact.getBlock()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getApartment())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.apartment"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.apartment"));
 	    setters.add(setterFactory.getSetterForString(contact.getApartment()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getCityIndex())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "contacts.city_index"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "contacts.city_index"));
 	    setters.add(setterFactory.getSetterForString(contact.getCityIndex()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getSex())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "sexes.sex_value"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "sexes.sex_value"));
 	    setters.add(setterFactory.getSetterForString(contact.getSex()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getNationality())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "nationalities.nationality_value"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "nationalities.nationality_value"));
 	    setters.add(setterFactory.getSetterForString(contact.getNationality()));
 	}
 	if(!StringUtils.isEmptyOrWhitespaceOnly(contact.getFamilyStatus())){
-	    query = query.concat(String.format(SEARCH_LIKE_TEMPLATE, "family_status.family_status_value"));
+	    query = query.concat(String.format(SEARCH_LIKE_STRING_TEMPLATE, "family_status.family_status_value"));
 	    setters.add(setterFactory.getSetterForString(contact.getFamilyStatus()));
 	}
 	 
@@ -372,7 +428,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    
 	    LOGGER.info("query: {}", preparedStatement);
 	    
-	    DaoReader<Entity> reader = Readers.FULL_CONTACT_READER;
+	    DaoReader<Entity> reader = DaoReadersContainer.FULL_CONTACT_READER;
 	    contacts = new ArrayList<ContactEntity>();
 	    ContactEntity contactEntity = null;
 	    while ((contactEntity = (ContactEntity) reader.read(resultSet)) != null) {

@@ -75,23 +75,52 @@ function init() {
 /*
  * Stub listener
  */
-function clickListener(e, div) {
-	var PATTERN = /^.{0,100}$/;
-	var value = "weqweqweqweqwe";
-	if (!PATTERN.test(value)) {
-		alert("Atachment Comment. Max Length 100 characters.");
-	}else{
-		alert("Ok!");
-	}
-//	var PATTERN = /.{0, 100}/;
-//	var value = "weqweqweqweqwe";
+function clickListener() {
+	console.log("validatePhone() BEGIN");
+
+	var PATTERN;
+	var value;
+	
+//	PATTERN = /^[\w!?\s,.]{1,30}$/;
+//	value = "Some gratulation!";
 //	if (!PATTERN.test(value)) {
-//		alert("Atachment Comment. Max Length 100 characters.");
-//	}else{
-//		alert("Ok!");
+//		alert("Email subject must be more 1 and less 50. Use only characters and digits.");
+//		return false;
 //	}
-//	copyData();
+//	
+//	console.log("\t email subject: " + value + " is valid!");
+
+	PATTERN = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	value = "email1@mail.com; email2@mail.com; em#ail3@mail.com ";
+	var tokens = value.split(';');
+	for(var i = 0; i < tokens.length; ++i){
+		var token = tokens[i].trim();
+		if (!PATTERN.test(token)) {
+			alert(token + " incorrect");
+		}
+	}
+	
+	
+//	if (!PATTERN.test(value)) {
+//		alert("Phone Number. Format: NNN NN NN. Can be used only digits.");
+//		return false;
+//	}
+	
+	console.log("\t emails: " + value + " is valid!");
+
+//	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;]+$/;
+//	value = "asdasdasd1212  sad a dqw 1 2! a das )) d## 2";
+//	if (!PATTERN.test(value)) {
+//		alert("Text contains illegal characters");
+//		return false;
+//	}
+//
+//	console.log("\t message: " + value + " is valid!");
+	console.log("validatePhone() END");
+	return true;
 }
+
+
 
 
 /*

@@ -7,13 +7,18 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Eugene Putsykovich(slesh) Mar 5, 2015
  *
  */
 public final class JdbcConnector {
+    private final static Logger LOGGER = LoggerFactory.getLogger(JdbcConnector.class);
     private static final String DEFAULT_PROPERTY_FILE_NAME = "jdbc.properties";
     private static Connection connection;
 
@@ -58,13 +63,23 @@ public final class JdbcConnector {
     }
 
     public static void close() throws SQLException {
-	close(connection);
+	closeResource(connection);
     }
 
-    public static void close(Connection connection) throws SQLException {
-	if (connection != null) {
-	    connection.close();
-	    connection = null;
+    public static void closeResource(Connection connection, Statement... statements) {
+	try {
+	    if (connection != null) {
+		connection.close();
+		connection = null;
+	    }
+	    for (Statement statement : statements) {
+		if (statement != null) {
+		    statement.close();
+		    statement = null;
+		}
+	    }
+	} catch (SQLException e) {
+	    LOGGER.error("error occured during release resources: {}", e.getMessage());
 	}
     }
 }

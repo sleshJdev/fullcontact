@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.SexDao;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.SexEntity;
 
 /**
@@ -38,7 +39,7 @@ public class SexDaoImpl extends EntityDao<SexEntity> implements SexDao {
 	setGetIdQuery(GET_SEX_ID_BY_VALUE_QUERY);
 	setGetAllQuery(GET_ALL_QUERY);
 	setGetLimitQuery(GET_LIMIT_QUERY);
-	setReader(Readers.ENTITY_READER);
+	setReader(DaoReadersContainer.ENTITY_READER);
     }
     
     @Override

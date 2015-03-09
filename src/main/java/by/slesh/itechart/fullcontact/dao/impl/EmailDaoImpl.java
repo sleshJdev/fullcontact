@@ -9,17 +9,34 @@ import org.apache.log4j.Logger;
 
 import by.slesh.itechart.fullcontact.dao.EmailDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
-import by.slesh.itechart.fullcontact.domain.ContactEntity;
+import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.EmailEntity;
 
 public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
     private final static Logger LOGGER = Logger.getLogger(EmailDaoImpl.class);
 
-    public EmailDaoImpl() {
-    }
+    private static final String DELETE_QUERY = 
+	    "\n\t DELETE FROM emails "
+	  + "\n\t WHERE email_id IN ( %s ) AND contact_id_sender = ?";
+    
+    private static final String GET_QUERY = 
+	    "\n\t SELECT emails.email_id, emails.contact_id_sender, emails.email_subject, emails.email_text, emails.email_date_send "
+          + "\n\t FROM emails ";
 
+    private static final String GET_BY_ID_QUERY = 
+	       GET_QUERY 
+	    + "\n\t WHERE email_id = ?";
+    
+    public EmailDaoImpl() {
+	this(true, true);
+    }
+    
     public EmailDaoImpl(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	super(isUseCurrentConnection, isCloseConnectionAfterWork);
+	setDeleteQuery(DELETE_QUERY);
+	setGetByIdQuery(GET_BY_ID_QUERY);
+	setGetAllQuery(GET_QUERY);
+	setReader(DaoReadersContainer.EMAIL_READER);
     }
     
     @Override
@@ -27,6 +44,23 @@ public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
 	throw new SQLException("not supported this operation!");
     }
     
+    private static final String GET_EMAILS_OF_CONTACT = 
+	    GET_QUERY
+	 + "\n\t WHERE emails.contact_id_sender = %s";
+    
+    
+    @Override
+    public List<EmailEntity> getEmailsOfContact(long contactId) throws ClassNotFoundException, IOException, SQLException {
+	LOGGER.info("BEGIN");
+	
+	setGetAllQuery(String.format(GET_EMAILS_OF_CONTACT, contactId));
+	List<EmailEntity> emails = super.getAll();
+	setGetAllQuery(GET_QUERY);
+	
+	LOGGER.info("END");
+	return emails;
+    }
+
     private static final String ADD_EMAIL_QUERY = 
 	    "\n INSERT INTO emails "
 	  + "\n\t (contact_id_sender, email_subject, email_text, email_date_send) "
@@ -59,13 +93,8 @@ public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
     }
 
     @Override
-    public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
+    public long update(EmailEntity email) throws ClassNotFoundException, IOException, SQLException {
 	// TODO
 	return 0;
-    }
-
-    public List<EmailEntity> gets(long contactId) throws ClassNotFoundException, IOException, SQLException {
-	// TODO
-	return null;
     }
 }

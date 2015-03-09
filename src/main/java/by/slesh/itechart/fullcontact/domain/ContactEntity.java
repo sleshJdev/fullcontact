@@ -239,19 +239,19 @@ public class ContactEntity extends Entity {
     @Override
     public String toString() {
 	StringBuilder sb = new StringBuilder("\n\t***Contact id={ " + id + " }***");
-	sb.append("\n\t\tfirst name: ");
+	sb.append("\n\t first name: ");
 	sb.append(getFirstName());
-	sb.append("\n\t\tlast name: ");
+	sb.append("\n\t last name: ");
 	sb.append(lastName);
-	sb.append("\n\t\tmiddle name: ");
+	sb.append("\n\t middle name: ");
 	sb.append(middleName);
-	sb.append("\n\t\tdate of birth: ");
+	sb.append("\n\t date of birth: ");
 	sb.append(dateOfBirth);
-	sb.append("\n\tsex: ");
+	sb.append("\n\t sex: ");
 	sb.append(sex);
-	sb.append("\n\tnationality: ");
+	sb.append("\n\t nationality: ");
 	sb.append(nationality);
-	sb.append("\n\tavatart path: ");
+	sb.append("\n\t avatart path: ");
 	sb.append(avatarPath);
 
 	if (phones != null) {
@@ -268,25 +268,27 @@ public class ContactEntity extends Entity {
 	    }
 	}
 
-	sb.append("\n\tfamily_status: ");
+	sb.append("\n\t family_status: ");
 	sb.append(familyStatus);
-	sb.append("\n\twebSite: ");
+	sb.append("\n\t webSite: ");
 	sb.append(webSite);
-	sb.append("\n\tcurrentEmlpoyment: ");
+	sb.append("\n\t emailAddress: ");
+	sb.append(emailAddress);
+	sb.append("\n\t currentEmlpoyment: ");
 	sb.append(currentEmployment);
-	sb.append("\n\tcountry: ");
+	sb.append("\n\t country: ");
 	sb.append(country);
-	sb.append("\n\tcity: ");
+	sb.append("\n\t city: ");
 	sb.append(city);
-	sb.append("\n\tstreet: ");
+	sb.append("\n\t street: ");
 	sb.append(street);
-	sb.append("\n\thouse: ");
+	sb.append("\n\t house: ");
 	sb.append(house);
-	sb.append("\n\tblock: ");
+	sb.append("\n\t block: ");
 	sb.append(block);
-	sb.append("\n\tapartment: ");
+	sb.append("\n\t apartment: ");
 	sb.append(apartment);
-	sb.append("\n\tindex: ");
+	sb.append("\n\t index: ");
 	sb.append(cityIndex);
 
 	return sb.toString();

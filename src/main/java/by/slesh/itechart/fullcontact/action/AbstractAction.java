@@ -4,6 +4,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.slesh.itechart.fullcontact.db.local.Database;
+
 /**
  * @author Eugene Putsykovich(slesh) Mar 4, 2015
  *
@@ -20,6 +22,7 @@ public abstract class AbstractAction implements Action {
 	setRequest(request);
 	setResponse(response);
 	dispatcher = request.getRequestDispatcher(TEMPLATE_PATH);
+	request.setAttribute("quantity", Database.getBirthdayMans().size());
     }
 
     public RequestDispatcher getDispatcher() {

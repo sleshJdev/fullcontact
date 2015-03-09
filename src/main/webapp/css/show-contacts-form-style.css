@@ -37,10 +37,15 @@
 	width: 100px;
 	margin: 0 auto;	
 	position:relative;
-	right:-121px;
+	right: -200px;
 	top:-28px;
 }
 
 .hidden-link{
 	visibility: hidden;
+}
+
+.menu {
+	float: left;
+	width: 55px;
 }

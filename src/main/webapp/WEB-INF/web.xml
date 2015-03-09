@@ -48,7 +48,7 @@
 	</context-param>
 
 	<listener>
-		<listener-class>by.slesh.itechart.fullcontact.servlet.listener.FileLocationListener</listener-class>
+		<listener-class>by.slesh.itechart.fullcontact.servlet.listener.ApplicationListener</listener-class>
 	</listener>
 
 	<filter>

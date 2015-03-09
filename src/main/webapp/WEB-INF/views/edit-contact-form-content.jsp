@@ -22,7 +22,7 @@
 		<input type="hidden" id="hidden-deleting-atachment-ids" name="deleting-atachmet-ids" >
 		<input type="file" id="hidden-pick-avatart" name="hidden-avatar-file" class="hidden">	<!--class="avatart-file"  -->	
 		
-		<input id="for-test" type="button" value="Click me">
+		<input id="for-test" type="button" class="hidden" value="Click me">
 <!-- 		<div id="test-div-1"> -->
 <!-- 			<div class="div1">qweqwqweqwe111</div> -->
 <!-- 		</div> -->

@@ -1,4 +1,4 @@
-package by.slesh.itechart.fullcontact.dao.impl;
+package by.slesh.itechart.fullcontact.dao.reader;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,18 +6,51 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.slesh.itechart.fullcontact.dao.DaoReader;
 import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
+import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.domain.Entity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 
-public final class Readers {
-//    private final static Logger LOGGER = LoggerFactory.getLogger(Readers.class);
+public final class DaoReadersContainer {
+//     private final static Logger LOGGER = LoggerFactory.getLogger(DaoReadersContainer.class);
     
+    public static final DaoReader<Entity> EMAIL_READER = new DaoReader<Entity>() {
+	@Override
+	public Entity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read email");
+	    
+	    if (resultSet.isBeforeFirst()) {
+		resultSet.next();
+	    }
+	    if (resultSet.isAfterLast()) {
+		return null;
+	    }
+	    EmailEntity email = new EmailEntity();
+	    long emailId = resultSet.getLong("email_id");
+	    do {
+		long id = resultSet.getLong("email_id");
+		if (emailId == id) {
+		    email.setId(resultSet.getLong("email_id"));
+		    email.setContactIdSender(resultSet.getLong("contact_id_sender"));
+		    email.setSubject(resultSet.getString("email_subject"));
+		    email.setText(resultSet.getString("email_text"));
+		    email.setSendDate(resultSet.getDate("email_date_send"));
+		} else {
+		    break;
+		}
+	    } while (resultSet.next());
+
+//	    LOGGER.info("END: read email");
+	    return email;
+	}
+    };
+
     public static final DaoReader<Entity> FULL_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read full contact ");
+	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -54,6 +87,7 @@ public final class Readers {
 	    contact.setPhones(new ArrayList<PhoneEntity>(phonesId.values()));
 	    contact.setAtachments(new ArrayList<AtachmentEntity>(atachmentsId.values()));
 
+//	    LOGGER.info("END: read full contact ");
 	    return contact;
 	}
     };
@@ -61,6 +95,8 @@ public final class Readers {
     public static final DaoReader<Entity> LIMIT_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read limit contact ");
+	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -78,6 +114,7 @@ public final class Readers {
 		}
 	    } while (resultSet.next());
 
+//	    LOGGER.info("END: read limit contact ");
 	    return contact;
 	}
     };
@@ -85,13 +122,16 @@ public final class Readers {
     public static final DaoReader<Entity> ENTITY_READER = new DaoReader<Entity>() {
 	@Override
 	public Entity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read entity ");
+	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
 	    if (resultSet.isAfterLast()) {
 		return null;
 	    }
-	    Entity entity = new Entity();
+	    Entity entity = new Entity() {
+	    };
 	    long familyStatusId = resultSet.getLong(1);
 	    do {
 		long id = resultSet.getLong(1);
@@ -103,13 +143,16 @@ public final class Readers {
 		}
 	    } while (resultSet.next());
 
+//	    LOGGER.info("END: read entity ");
 	    return entity;
 	}
     };
-    
+
     public static final DaoReader<Entity> ATACHMENTS_READER = new DaoReader<Entity>() {
 	@Override
 	public Entity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read atachment ");
+	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -118,6 +161,7 @@ public final class Readers {
 	    }
 	    AtachmentEntity atachment = new AtachmentEntity();
 	    long atachmentId = resultSet.getLong(1);
+	    
 	    do {
 		long id = resultSet.getLong(1);
 		if (atachmentId == id) {
@@ -127,8 +171,34 @@ public final class Readers {
 		}
 	    } while (resultSet.next());
 
+//	    LOGGER.info("END: read atachment ");
 	    return atachment;
+	}
+    };
+    
+    public static final DaoReader<Entity> PHONES_READER = new DaoReader<Entity>() {
+	@Override
+	public Entity read(ResultSet resultSet) throws SQLException {
+//	    LOGGER.info("BEGIN: read phone ");
+	    if (resultSet.isBeforeFirst()) {
+		resultSet.next();
+	    }
+	    if (resultSet.isAfterLast()) {
+		return null;
+	    }
+	    PhoneEntity phone = new PhoneEntity();
+	    long phoneId = resultSet.getLong(1);
+	    do {
+		long id = resultSet.getLong(1);
+		if (phoneId == id) {
+		    readTo(resultSet, phone);
+		} else {
+		    break;
+		}
+	    } while (resultSet.next());
 
+//	    LOGGER.info("END: read phone ");
+	    return phone;
 	}
     };
 
@@ -161,7 +231,7 @@ public final class Readers {
 
     private static void readTo(ResultSet resultSet, PhoneEntity phone) throws SQLException {
 	phone.setId(resultSet.getLong("phones.phone_id"));
-	phone.setContactId(resultSet.getLong("contacts.contact_id"));
+	phone.setContactId(resultSet.getLong("contact_id"));
 	phone.setValue(resultSet.getString("phones.phone_value"));
 	phone.setComment(resultSet.getString("phones.phone_comment"));
 	phone.setCountryCode(resultSet.getString("phones.phone_country_code"));

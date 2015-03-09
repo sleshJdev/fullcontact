@@ -1,65 +1,67 @@
 package test.by.slesh.itechart.fullcontact.dao;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.List;
 
 import org.junit.Test;
 
-public class EmailDaoImplTest {
+import by.slesh.itechart.fullcontact.dao.EmailDao;
+import by.slesh.itechart.fullcontact.dao.EntityDao;
+import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
+import by.slesh.itechart.fullcontact.domain.EmailEntity;
+import by.slesh.itechart.fullcontact.settings.G;
+import by.slesh.itechart.fullcontact.util.DateUtil;
 
+public class EmailDaoImplTest {
     @Test
-    public void testAdd() throws ClassNotFoundException, IOException, SQLException {
-	// Contact contact = new Contact();
-	// contact.setId(1);
-	//
-	// Email email1 = new Email();
-	// email1.setContactId(contact.getId());
-	// email1.setValue("test11@mail.com");
-	//
-	// Email email2 = new Email();
-	// email2.setContactId(contact.getId());
-	// email2.setValue("test22@mail.com");
-	//
-	// List<Email> emails = new ArrayList<Email>();
-	// emails.add(email1);
-	// emails.add(email2);
-	// long expectedQuantityInsert = emails.size();
-	//
-	// contact.setEmails(emails);
-	//
-	// EmailDao emailDao = new EmailDaoImpl();
-	// long actualQuantityInsert = emailDao.add(contact);
-	//
-	// assertEquals("Not equals quantity INSERT rows and actual entity",
-	// expectedQuantityInsert, actualQuantityInsert);
+    public void testGetEmailOfContact() throws ClassNotFoundException, IOException, SQLException {
+	final long contactId = 1;
+	List<EmailEntity> emails = ((EmailDao) DaoFactory.getEmailDao(true, true)).getEmailsOfContact(contactId);
+	assertNotNull(emails);
     }
 
     @Test
-    public void testUpdate() throws ClassNotFoundException, IOException, SQLException {
-	// Contact contact = new Contact();
-	// contact.setId(1);
-	//
-	// Email email1 = new Email();
-	// email1.setId(5);
-	// email1.setContactId(contact.getId());
-	// email1.setValue("test51@mail.com");
-	//
-	// Email email2 = new Email();
-	// email2.setId(4);
-	// email2.setContactId(contact.getId());
-	// email2.setValue("test41@mail.com");
-	//
-	// List<Email> emails = new ArrayList<Email>();
-	// emails.add(email1);
-	// emails.add(email2);
-	// long checkQuantitu = emails.size();
-	//
-	// contact.setEmails(emails);
-	//
-	// EmailDao emailDao = new EmailDaoImpl();
-	// long rowsAdded = emailDao.update(contact);
-	//
-	// assertEquals("Not equals quantity UPDATED rows and actual entity",
-	// checkQuantitu, rowsAdded);
+    public void testGetAll() throws ClassNotFoundException, IOException, SQLException {
+	List<EmailEntity> emails = null;
+	emails = DaoFactory.getEmailDao(true, true).getAll();
+	assertNotNull(emails);
+    }
+
+    @Test
+    public void testGetById() throws ClassNotFoundException, IOException, SQLException {
+	EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, true);
+	EmailEntity email = emailDao.get(2);
+	assertNotNull(email);
+    }
+
+    @Test
+    public void testAdd() throws ClassNotFoundException, IOException, SQLException, ParseException {
+	EmailEntity email = new EmailEntity();
+	email.setContactIdSender(G.MY_ID);
+	email.setSubject("Test Subject 1");
+	email.setText("Test Block Text 1");
+	email.setSendDate(DateUtil.getSqlDate());
+
+	EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, true);
+	long id = ((EmailDao) emailDao).add(email);
+
+	assertNotNull(id);
+    }
+
+    @Test
+    public void testUpdate() throws ClassNotFoundException, IOException, SQLException, ParseException {
+	EmailEntity email = new EmailEntity();
+	email.setId(1);
+	email.setSubject("Update Subject 1");
+	email.setText("Update Block Text 1");
+	email.setSendDate(DateUtil.getSqlDate());
+
+	EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, true);
+	long id = ((EmailDao) emailDao).update(email);
+	assertNotNull(id);
     }
 }

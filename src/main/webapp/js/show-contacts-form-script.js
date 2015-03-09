@@ -6,12 +6,22 @@ window.onload = function() {
 
 	// Change action attribute
 	var sendEmailLink = document.getElementById("send-email-link");
-	sendEmailLink.onclick = function() {
-		alert(this.innerHTML);
-		var form = document.getElementById("show-contacts-form");
-		form.action = "send";
-		form.submit();
+	sendEmailLink.onclick = sendMailClickListener;
+}
+
+function sendMailClickListener() {
+	var checkboxes = checkable.getElementsByTagName("input");
+	for (var i = 0; i < checkboxes.length; i++) {
+		if (checkboxes[i].getAttribute("type") == "checkbox") {
+			if (checkboxes[i].checked) {
+				var form = document.getElementById("show-contacts-form");
+				form.action = "send";
+				form.submit();
+				return;
+			}
+		}
 	}
+	alert("Select contact to send mail!");
 }
 
 function selectAllListener(checked) {
@@ -23,10 +33,10 @@ function selectAllListener(checked) {
 		}
 	}
 	if (checked) {
-		selectAllContactsButton.setAttribute("onclick", "selectAllListener(false);");
+		selectAllContactsButton.setAttribute("onclick",
+				"selectAllListener(false);");
 	} else {
-		selectAllContactsButton.setAttribute("onclick", "selectAllListener(true);");
+		selectAllContactsButton.setAttribute("onclick",
+				"selectAllListener(true);");
 	}
 }
-
-
