@@ -80,6 +80,7 @@ public abstract class AbstractDao {
     }
 
     protected void closeResource(Connection connection, Statement... statements) {
+
 	try {
 	    if (isCloseConnectionAfterWork) {
 		if (connection != null) {
@@ -87,14 +88,18 @@ public abstract class AbstractDao {
 		    connection = null;
 		}
 	    }
-	    for (Statement statement : statements) {
+	} catch (SQLException e) {
+	    LOGGER.error("error occured release resources: {}", e.getMessage());
+	}
+	for (Statement statement : statements) {
+	    try {
 		if (statement != null) {
 		    statement.close();
 		    statement = null;
 		}
+	    } catch (SQLException e) {
+		LOGGER.error("error occured release resources: {}", e.getMessage());
 	    }
-	} catch (SQLException e) {
-	    LOGGER.error("error occured release resources: {}", e.getMessage());
 	}
     }
 }
