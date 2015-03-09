@@ -95,19 +95,19 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	setGetIdQuery(GET_ID_QUERY);
 	setReader(DaoReadersContainer.LIMIT_CONTACT_READER);
     }
-    
+
     @Override
     public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
 	throw new SQLException("not supported this operation!");
     }
-    
+
     @Override
     public ContactEntity getContact(long id) throws ClassNotFoundException, IOException, SQLException {
 	setReader(DaoReadersContainer.LIMIT_CONTACT_READER);
 	setGetByIdQuery(GET_CONTACT_BY_ID);
 	return super.get(id);
     }
-    
+
     @Override
     public ContactEntity get(long id) throws ClassNotFoundException, IOException, SQLException {
 	setReader(DaoReadersContainer.FULL_CONTACT_READER);
@@ -177,7 +177,6 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	
 	LOGGER.info("path: {}", path);
 	LOGGER.info("END");
-	
 	return path;
     }
     
@@ -208,7 +207,6 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 
 	LOGGER.info("name: {}", name);
 	LOGGER.info("END");
-
 	return name;
     }
 
@@ -239,7 +237,6 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 
 	LOGGER.info("email address: {}", emailAdress);
 	LOGGER.info("END");
-
 	return emailAdress;
     }
 
@@ -316,7 +313,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     private final class SetterFactory {
 	private int counter = 0;
 
-	public final Setter getSetterForString(String value) {
+	public final Setter getSetterForString(final String value) {
 
 	    return new Setter() {
 		@Override
@@ -326,7 +323,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    };
 	}
 
-	public final Setter getSetterForDate(java.sql.Date date) {
+	public final Setter getSetterForDate(final java.sql.Date date) {
 
 	    return new Setter() {
 		@Override

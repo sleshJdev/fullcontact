@@ -12,14 +12,14 @@ import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.domain.Entity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public final class DaoReadersContainer {
-//     private final static Logger LOGGER = LoggerFactory.getLogger(DaoReadersContainer.class);
-    
     public static final DaoReader<Entity> EMAIL_READER = new DaoReader<Entity>() {
 	@Override
 	public Entity read(ResultSet resultSet) throws SQLException {
-//	    LOGGER.info("BEGIN: read email");
-	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -40,8 +40,6 @@ public final class DaoReadersContainer {
 		    break;
 		}
 	    } while (resultSet.next());
-
-//	    LOGGER.info("END: read email");
 	    return email;
 	}
     };
@@ -49,8 +47,6 @@ public final class DaoReadersContainer {
     public static final DaoReader<Entity> FULL_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
-//	    LOGGER.info("BEGIN: read full contact ");
-	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -86,8 +82,7 @@ public final class DaoReadersContainer {
 
 	    contact.setPhones(new ArrayList<PhoneEntity>(phonesId.values()));
 	    contact.setAtachments(new ArrayList<AtachmentEntity>(atachmentsId.values()));
-
-//	    LOGGER.info("END: read full contact ");
+	    
 	    return contact;
 	}
     };
@@ -95,7 +90,6 @@ public final class DaoReadersContainer {
     public static final DaoReader<Entity> LIMIT_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
-//	    LOGGER.info("BEGIN: read limit contact ");
 	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
@@ -114,7 +108,6 @@ public final class DaoReadersContainer {
 		}
 	    } while (resultSet.next());
 
-//	    LOGGER.info("END: read limit contact ");
 	    return contact;
 	}
     };
@@ -143,7 +136,6 @@ public final class DaoReadersContainer {
 		}
 	    } while (resultSet.next());
 
-//	    LOGGER.info("END: read entity ");
 	    return entity;
 	}
     };
@@ -151,8 +143,6 @@ public final class DaoReadersContainer {
     public static final DaoReader<Entity> ATACHMENTS_READER = new DaoReader<Entity>() {
 	@Override
 	public Entity read(ResultSet resultSet) throws SQLException {
-//	    LOGGER.info("BEGIN: read atachment ");
-	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -171,7 +161,6 @@ public final class DaoReadersContainer {
 		}
 	    } while (resultSet.next());
 
-//	    LOGGER.info("END: read atachment ");
 	    return atachment;
 	}
     };
@@ -179,7 +168,6 @@ public final class DaoReadersContainer {
     public static final DaoReader<Entity> PHONES_READER = new DaoReader<Entity>() {
 	@Override
 	public Entity read(ResultSet resultSet) throws SQLException {
-//	    LOGGER.info("BEGIN: read phone ");
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -197,7 +185,6 @@ public final class DaoReadersContainer {
 		}
 	    } while (resultSet.next());
 
-//	    LOGGER.info("END: read phone ");
 	    return phone;
 	}
     };

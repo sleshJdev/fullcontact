@@ -17,6 +17,10 @@ import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
     private final static Logger LOGGER = LoggerFactory.getLogger(PhoneDaoImpl.class);
 
@@ -49,13 +53,13 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	    + "\n\t VALUES (?, ?, ?, ?, ?, ?)";
     
     @Override
-    public long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
+    public Long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 
 	List<PhoneEntity> phones = contact.getPhones();
 	if (phones == null || phones.size() == 0) {
 	    LOGGER.info("RETURN: no phones for add");
-	    return 0;
+	    return null;
 	}
 	long rowsAddeds = 0;
 	try {
@@ -65,7 +69,7 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	    long id = contact.getId();
 	    while (iterator.hasNext()) {
 		PhoneEntity phone = iterator.next();
-		if (phone.getId() == -1) {// if -1 then need add. Is new entity
+		if (phone.getId() == null) {// if -1 then need add. Is new entity
 		    preparedStatement = getPrepareStatement(ADD_PHONE_TEMPLATE, Statement.RETURN_GENERATED_KEYS);
 		    preparedStatement.setLong(1, id);
 		    preparedStatement.setString(2, phone.getValue());
@@ -106,13 +110,13 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	    + "\n\t WHERE phone_id = ?";
 
     @Override
-    public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
+    public Long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 
 	List<PhoneEntity> phones = contact.getPhones();
 	if (phones == null || phones.size() == 0) {
 	    LOGGER.info("RETURN: not phones for update");
-	    return 0;
+	    return null;
 	}
 	long rowsUpdated = 0;
 	try {
@@ -121,8 +125,8 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 	    Iterator<PhoneEntity> iterator = phones.iterator();
 	    while (iterator.hasNext()) {
 		PhoneEntity phone = iterator.next();
-		long id = phone.getId();
-		if (id != -1) {
+		Long id = phone.getId();
+		if (id != null) {
 		    preparedStatement = getPrepareStatement(UPDATE_PHONE_QUERY);
 		    preparedStatement.setString(1, phone.getValue());
 		    preparedStatement.setLong(2, phoneTypeDao.getId(phone.getType()));

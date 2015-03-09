@@ -46,7 +46,7 @@ import com.mysql.jdbc.StringUtils;
  */
 public class SendAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(SendAction.class);
-    
+
     private String action;
 
     @Override
@@ -75,35 +75,22 @@ public class SendAction extends AbstractAction {
 	LOGGER.info("BEGIN");
 
 	super.init(request, response);
-	action = request.getParameter("x");// action kind
+	action = request.getParameter("x");
 	request.setAttribute("status", "");
 
 	LOGGER.info("x: {}", action);
 	LOGGER.info("END");
     }
-    
-    
-//    private void buildEmail(String message){
-//	String root = PathUtil.getResourceFile("templates").getPath();
-//	StringTemplateGroup group = new StringTemplateGroup(null, root, DefaultTemplateLexer.class);
-//	StringTemplate template = group.getInstanceOf("congratulation");
-//	template.setAttribute("TITLE", "Congratulation" : );
-//	template.setAttribute("NAME", parameters.getName());
-//	template.setAttribute("MESSAGE_BODY", parameters.getMessageBody());
-//	template.setAttribute("US_FULL_NAME", parameters.getUsFullName());
-//	template.setAttribute("US_PHONE", parameters.getUsPhone());
-//	template.setAttribute("US_EMAIL", parameters.getUsEmail());
-//    }
-
-    private void sendAction() throws IOException, ServletException, ClassNotFoundException, ParseException, SQLException {
+    private void sendAction() throws IOException, ServletException, ClassNotFoundException, ParseException,
+	    SQLException {
 	final String destination = (String) getRequest().getServletContext().getAttribute("upload-directory-path");
 
 	LOGGER.info("destination: {}", destination);
-	
+
 	String[] to = getRequest().getParameter("email-address").trim().replaceAll("\\s+", "").split(";");
 	String subject = getRequest().getParameter("email-subject");
 	String message = getRequest().getParameter("email-message");
-	
+
 	Collection<Part> parts = getRequest().getParts();
 	List<File> files = new ArrayList<File>();
 
@@ -119,18 +106,21 @@ public class SendAction extends AbstractAction {
     }
 
     private void performeMailing(String[] to, String subject, String message, List<File> files) throws ParseException,
-	    ClassNotFoundException, IOException, SQLException {
+	    ClassNotFoundException, IOException, SQLException, ServletException {
 	try {
 	    List<Long> atachmentsId = new ArrayList<Long>();
-	    AtachmentDao atachmentDao = (AtachmentDao) DaoFactory.getAtachmentDao(true, false);// not close after work!
+	    // not close connection after work
+	    AtachmentDao atachmentDao = (AtachmentDao) DaoFactory.getAtachmentDao(true, false); 
 	    for (File file : files) {
-		AtachmentEntity atachmentEntity = new AtachmentEntity(-1, G.MY_ID, file.getName(), null, DateUtil.getSqlDate(), null);
+		AtachmentEntity atachmentEntity = new AtachmentEntity(null, G.MY_ID, file.getName(), null, DateUtil.getSqlDate(), null);
 		long atachmentId = atachmentDao.add(atachmentEntity);
 		atachmentsId.add(atachmentId);
 	    }
 	    Sender sender = Sender.createSender(Sender.SSL);
-	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false);// not close after work!
-	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false);//not close after work!
+	    // not close connection after work
+	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false); 
+	    // not close connection after work
+	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false); 
 	    for (int t = 0; t < to.length; ++t) {
 		StringTemplate template = new StringTemplate(message, DefaultTemplateLexer.class);
 		String name = ((ContactDao) contactDao).getName(to[t]);
@@ -139,7 +129,7 @@ public class SendAction extends AbstractAction {
 		template.setAttribute("US_PHONE", "2030327");
 		template.setAttribute("US_EMAIL", "slesh@gmail.com");
 		String body = template.toString();
-		
+
 		Email email = sender.createEmail();
 		email.setTo(new String[] { to[t] });
 		email.setSubject(subject);
@@ -150,21 +140,23 @@ public class SendAction extends AbstractAction {
 		    }
 		}
 		sender.send(email);
-		
-		EmailEntity emailEntity = new EmailEntity(-1, G.MY_ID, subject, body, DateUtil.getSqlDate());
+
+		EmailEntity emailEntity = new EmailEntity(null, G.MY_ID, subject, body, DateUtil.getSqlDate());
 		long emailId = ((EmailDao) emailDao).add(emailEntity);
 		emailEntity.setId(emailId);
 
 		for (int i = 0; i < to.length; ++i) {
 		    long contactId = contactDao.getId(to[i]);
-		    ManyToManyDao.getInstance(true, false).doLinkEmailContact(emailId, contactId);// not close connection  after  work
+		    // not close connection after work
+		    ManyToManyDao.getInstance(true, false).doLinkEmailContact(emailId, contactId); 
 		}
 		for (Long atachmentId : atachmentsId) {
+		    // not close connection after work
 		    ManyToManyDao.getInstance(true, false).doLinkEmailAtachment(emailId, atachmentId);
 		}
 	    }
 	} finally {
-	    JdbcConnector.close();//close current opened connection
+	    JdbcConnector.close();// close current opened connection
 	}
     }
 
@@ -199,18 +191,16 @@ public class SendAction extends AbstractAction {
 
 	String fileName = getFileName(part);
 	if (StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
-	    LOGGER.info("RETURN: file name is null. return.");
+	    LOGGER.info("RETURN: file name is null or empty.");
 	    return null;
 	}
-	
 	fileName = String.format("%s_%s", UUID.randomUUID().toString(), fileName);
-
 	OutputStream out = null;
 	InputStream fileContent = null;
 	File file = null;
-
 	try {
 	    file = new File(destination + File.separator + fileName);
+	    
 	    LOGGER.info("file name: {}", fileName);
 
 	    out = new FileOutputStream(file);
@@ -231,8 +221,7 @@ public class SendAction extends AbstractAction {
 	    }
 	}
 
-	LOGGER.info("END. file: {} uploaded successful!", fileName);
-
+	LOGGER.info("END. file {} uploaded successful!", fileName);
 	return file;
     }
 
@@ -242,13 +231,11 @@ public class SendAction extends AbstractAction {
 	for (String content : part.getHeader("content-disposition").split(";")) {
 	    if (content.trim().startsWith("filename")) {
 		String name = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
-		LOGGER.info("END return {}", name);
 		return name;
 	    }
 	}
 
 	LOGGER.info("END return null");
-
 	return null;
     }
 }

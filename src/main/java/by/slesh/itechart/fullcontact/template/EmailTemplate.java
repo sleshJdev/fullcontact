@@ -45,7 +45,7 @@ public class EmailTemplate {
 	contact.setBlock("Block1");
 	contact.setApartment("Apa12321");
 	contact.setCityIndex("123490");
-	
+
 	EmailTemplate template = new EmailTemplate();
 	EmailTemplate.Parameters parameters = template.new Parameters();
 	parameters.setMessageBody("I have notify, that you noob!");
@@ -54,13 +54,13 @@ public class EmailTemplate {
 	parameters.setUsFullName(String.format("%s %s %s", "Some", "Blah", "Todo"));
 	parameters.setUsEmail("slesh.eee");
 	parameters.setUsPhone("12312312312312");
-	
+
 	String root = PathUtil.getResourceFile("templates").getPath();
 	String name = "congratulation";
 	EmailTemplate.build(parameters, root, name);
     }
-    
-    public  class Parameters {
+
+    public class Parameters {
 	private String title;
 	private String name;
 	private String messageBody;

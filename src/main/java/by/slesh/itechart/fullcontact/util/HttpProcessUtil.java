@@ -130,7 +130,7 @@ public class HttpProcessUtil {
 		continue;
 	    }
 	    PhoneEntity phone = new PhoneEntity();
-	    phone.setId(Long.parseLong(phonesId[i]));
+	    phone.setId("null".equals(id) ? null : Long.parseLong(id));
 	    phone.setContactId(targetContact.getId());
 	    phone.setValue(phonesValue[i].trim());
 	    phone.setType(phonesType[i].trim());
@@ -144,6 +144,13 @@ public class HttpProcessUtil {
 	return quantity;
     }
     
+    public static void main(String[] args) {
+	String id = null;
+	LOGGER.info("VALUE: {}    IS NULL {}", id, StringUtils.isEmptyOrWhitespaceOnly(id));
+	LOGGER.info("VALUE: {}    IS NULL {}", id, StringUtils.isNullOrEmpty(id));
+	LOGGER.info("VALUE: {}    IS NULL {}", id, id == null);
+    }
+    
     private static long fetchAtachments(HttpServletRequest request, ContactEntity targetContact) {
 	String[] atachmentsId = request.getParameterValues("atachment-id");
 	String[] atachmentsName = request.getParameterValues("atachment-name");
@@ -151,12 +158,13 @@ public class HttpProcessUtil {
 	String[] atachmentsSaltName = request.getParameterValues("atachment-name-salt");
 	String[] atachmentsComment = request.getParameterValues("atachment-comment");
 
+	
 	if (atachmentsId == null || atachmentsName == null || atachmentsChangedName == null
 		|| atachmentsSaltName == null || atachmentsComment == null) {
 	    LOGGER.info("RETURN: all atachments attributes is null");
 	    return 0;
 	}
-
+	
 	LOGGER.info("atachmentsId({}): {}", atachmentsId.length, Arrays.toString(atachmentsId));
 	LOGGER.info("atachmentsName({}): {}",atachmentsName.length,  Arrays.toString(atachmentsName));
 	LOGGER.info("atachmentsChangeName({}): {}",atachmentsChangedName.length,  Arrays.toString(atachmentsChangedName));
@@ -170,8 +178,9 @@ public class HttpProcessUtil {
 	    if (StringUtils.isEmptyOrWhitespaceOnly(id)) {
 		continue;
 	    }
+	    
 	    AtachmentEntity atachment = new AtachmentEntity();
-	    atachment.setId(Long.parseLong(atachmentsId[i]));
+	    atachment.setId("null".equals(id) ? null : Long.parseLong(id));
 	    atachment.setContactId(targetContact.getId());
 	    atachment.setName(atachmentsName[i].trim());
 	    atachment.setChangedName(atachmentsChangedName[i]);

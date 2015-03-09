@@ -14,6 +14,10 @@ import by.slesh.itechart.fullcontact.action.Action;
 import by.slesh.itechart.fullcontact.action.ActionFactory;
 import by.slesh.itechart.fullcontact.util.PathUtil;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class FrontController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final static Logger LOGGER = LoggerFactory.getLogger(PathUtil.class);

@@ -141,8 +141,8 @@ function createPhoneRow() {
 			break;
 		}
 	}
-	phoneId.setAttribute("value", "-1");
-	console.log("set -1 id value");
+	phoneId.setAttribute("value", null);
+	console.log("set 'null' id value");
 	
 	addedRow.getElementsByClassName("edit-phone")[0].setAttribute("id", "edit-phone-icon" + nextNumber);
 	addedRow.getElementsByClassName("edit-phone")[0].setAttribute("onclick", "phoneEditPopupShow('edit', " + nextNumber + ");");

@@ -33,11 +33,11 @@ public class ApplicationListener implements ServletContextListener {
 	ServletContext context = servletContextEvent.getServletContext();
 	fileLocationSetup(context);
 
-	if(notifier == null){
+	if (notifier == null) {
 	    notifier = new BirthdayNotifier(5, TimeUnit.MINUTES);
 	    notifier.startNotify();
 	}
-	
+
 	try {
 	    Database.setNationalities(DaoFactory.getNationalityDao(true, true).getAll());
 	    Database.setFamilyStatuses(DaoFactory.getFamilyStatusDao(true, true).getAll());
@@ -46,7 +46,7 @@ public class ApplicationListener implements ServletContextListener {
 	} catch (ClassNotFoundException | IOException | SQLException e) {
 	    LOGGER.error("error occured during initializ local database: {}", e.getMessage());
 	}
-	
+
 	LOGGER.info("END");
     }
 

@@ -17,6 +17,10 @@ import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class AtachmentDaoImplTest {
     @Test
     public void testGetAll() throws ClassNotFoundException, IOException, SQLException {
@@ -35,17 +39,17 @@ public class AtachmentDaoImplTest {
     @Test
     public void testAdd() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
-	contact.setId(8);
-
+	contact.setId(new Long(8));
+	
 	AtachmentEntity atachment1 = new AtachmentEntity();
-	atachment1.setId(-1);
+	atachment1.setId(null);
 	atachment1.setContactId(contact.getId());
 	atachment1.setName("addname1.txt");
 	atachment1.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment1.setComment("add comment 1");
 
 	AtachmentEntity atachment2 = new AtachmentEntity();
-	atachment2.setId(-1);
+	atachment2.setId(null);
 	atachment2.setContactId(contact.getId());
 	atachment2.setName("addname2.txt");
 	atachment2.setUploadDate((new Date(new java.util.Date().getTime())));
@@ -67,8 +71,8 @@ public class AtachmentDaoImplTest {
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	final long contactId = 1;
-	final long[] ids = new long[] { 17, 18, 19 };
+	final long contactId = 15;
+	final long[] ids = new long[] { 22, 23, 24, 25, 26 };
 	final long expectedQuantityUpdate = ids.length;
 	long actualQuantityDelete = atachmentDao.deleteRange(contactId, ids);
 
@@ -78,17 +82,17 @@ public class AtachmentDaoImplTest {
     @Test
     public void testUpdate() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
-	contact.setId(1);
+	contact.setId(new Long(1));
 
 	AtachmentEntity atachment1 = new AtachmentEntity();
 	atachment1.setContactId(contact.getId());
-	atachment1.setId(1);
+	atachment1.setId(new Long(1));
 	atachment1.setName("updatename1.txt");
 	atachment1.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment1.setComment("update comment 1");
 
 	AtachmentEntity atachment2 = new AtachmentEntity();
-	atachment2.setId(2);
+	atachment2.setId(new Long(2));
 	atachment2.setContactId(contact.getId());
 	atachment2.setName("updatename2.txt");
 	atachment2.setUploadDate((new Date(new java.util.Date().getTime())));

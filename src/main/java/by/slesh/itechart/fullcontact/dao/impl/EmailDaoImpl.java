@@ -12,6 +12,10 @@ import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.EmailEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
     private final static Logger LOGGER = Logger.getLogger(EmailDaoImpl.class);
 

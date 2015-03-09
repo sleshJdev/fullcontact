@@ -29,15 +29,15 @@ public class ManyToManyDaoTest {
 
     @Test
     public void testGetAtachmentsOfEmail() throws ClassNotFoundException, SQLException, IOException {
-	final long emailId = 20;
+	final long emailId = 1;
 	List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, true).getAtachmentsOfEmail(emailId);
 	assertNotNull(atachments);
     }
 
     @Test
     public void testGetReceiversOfEmail() throws ClassNotFoundException, SQLException, IOException {
-	final long emailId = 20;
-	List<ContactEntity> atachments = ManyToManyDao.getInstance(true, true).getReceiversOfEmail(emailId);
-	assertNotNull(atachments);
+	final long emailId = 1;
+	List<ContactEntity> receivers = ManyToManyDao.getInstance(true, true).getReceiversOfEmail(emailId);
+	assertNotNull(receivers);
     }
 }

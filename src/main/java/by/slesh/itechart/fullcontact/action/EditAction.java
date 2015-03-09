@@ -169,9 +169,6 @@ public class EditAction extends AbstractAction {
 
 	for (Part part : parts) {
 	    String name = valueOf(part, "name");// name of input field from
-
-	    // LOGGER.info("part name: {}", name);
-
 	    if (!StringUtils.isEmptyOrWhitespaceOnly(name)) {
 		String fileName = valueOf(part, "filename");// name of file
 		if (StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
@@ -182,21 +179,13 @@ public class EditAction extends AbstractAction {
 
 		switch (name) {
 		case "hidden-avatar-file":
-		    file = processPart(part, publicDirectory, fileName);// saved
-									// file
+		    file = processPart(part, publicDirectory, fileName);// saved file
 		    pathSave = file.getPath().substring(root.length());// "/'path-to-target-folder'/'file-name'"
-		    String pathAvatar = dao.getAvatar(contactId);// same as
-								 // pathSave,
-								 // but from db
-
+		    String pathAvatar = dao.getAvatar(contactId);// same as pathSave, but from db 
 		    LOGGER.info("path save avatar: {}", pathSave);
 
 		    if (!StringUtils.isEmptyOrWhitespaceOnly(pathAvatar)) {
-			String fullPath = String.format("%s%s", root, pathAvatar);// absolute
-										  // path
-										  // to
-										  // current
-										  // avatar
+			String fullPath = String.format("%s%s", root, pathAvatar);// absolute path to current avatar
 			File avatar = new File(fullPath);
 			if (avatar.delete()) {
 
@@ -248,8 +237,8 @@ public class EditAction extends AbstractAction {
 	LOGGER.info("update atachments names....");
 
 	/*
-	 * 1. Rename according file on disc 2. Update names atachments: 'simple
-	 * name' -> 'salt + changed name'
+	 * 1. Rename according file on disc 
+	 * 2. Update names atachments: 'simple name' -> 'salt + changed name'
 	 */
 	for (AtachmentEntity atachment : contact.getAtachments()) {
 	    String name = atachment.getName();

@@ -8,6 +8,10 @@ import by.slesh.itechart.fullcontact.domain.NationalityEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 import by.slesh.itechart.fullcontact.domain.SexEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public final class Database {
     private static List<ContactEntity> birthdayMans;
     private static List<NationalityEntity> nationalities;

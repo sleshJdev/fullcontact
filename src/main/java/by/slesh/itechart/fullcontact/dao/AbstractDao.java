@@ -25,7 +25,7 @@ public abstract class AbstractDao {
 
     public AbstractDao() {
     }
-    
+
     public AbstractDao(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	this.isUseCurrentConnection = isUseCurrentConnection;
 	this.isCloseConnectionAfterWork = isCloseConnectionAfterWork;
@@ -50,7 +50,7 @@ public abstract class AbstractDao {
     protected void connect() throws ClassNotFoundException, IOException, SQLException {
 	connection = isUseCurrentConnection ? JdbcConnector.getCurrentConnection() : JdbcConnector.openConnection();
     }
-    
+
     private void checkConnection() throws SQLException {
 	if (connection == null || connection.isClosed()) {
 	    throw new SQLException("connection is null or closed");
@@ -68,7 +68,7 @@ public abstract class AbstractDao {
 
 	return connection.prepareStatement(sql);
     }
-    
+
     protected PreparedStatement getPrepareStatement(String sql, int autoGenerateKeys) throws SQLException {
 	checkConnection();
 
@@ -80,7 +80,6 @@ public abstract class AbstractDao {
     }
 
     protected void closeResource(Connection connection, Statement... statements) {
-
 	try {
 	    if (isCloseConnectionAfterWork) {
 		if (connection != null) {

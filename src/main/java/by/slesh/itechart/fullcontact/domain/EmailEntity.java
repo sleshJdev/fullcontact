@@ -3,8 +3,12 @@ package by.slesh.itechart.fullcontact.domain;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class EmailEntity extends Entity {
-    private long contactIdSender;
+    private Long contactIdSender;
     private ContactEntity sender;
     private List<AtachmentEntity> atachments;
     private List<ContactEntity> receivers;
@@ -14,18 +18,18 @@ public class EmailEntity extends Entity {
     public EmailEntity() {
     }
 
-    public EmailEntity(long id, long contactIdSender, String subject, String text, Date sendDate) {
+    public EmailEntity(Long id, Long contactIdSender, String subject, String text, Date sendDate) {
 	super(id, text);
 	this.contactIdSender = contactIdSender;
 	this.subject = subject;
 	this.sendDate = sendDate;
     }
 
-    public long getContactIdSender() {
+    public Long getContactIdSender() {
 	return contactIdSender;
     }
 
-    public void setContactIdSender(long contactIdSender) {
+    public void setContactIdSender(Long contactIdSender) {
 	this.contactIdSender = contactIdSender;
     }
 

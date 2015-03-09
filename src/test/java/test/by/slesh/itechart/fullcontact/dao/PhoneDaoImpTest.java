@@ -26,10 +26,10 @@ public class PhoneDaoImpTest {
     @Test
     public void testAdd() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
-	contact.setId(8);
+	contact.setId(new Long(8));
 
 	PhoneEntity phone1 = new PhoneEntity();
-	phone1.setId(-1);
+	phone1.setId(null);
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
@@ -37,7 +37,7 @@ public class PhoneDaoImpTest {
 	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
-	phone2.setId(-1);
+	phone2.setId(null);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("add comment 2");
@@ -70,10 +70,10 @@ public class PhoneDaoImpTest {
     @Test
     public void testUpdate() throws ClassNotFoundException, IOException, SQLException {
 	ContactEntity contact = new ContactEntity();
-	contact.setId(1);
+	contact.setId(new Long(1));
 
 	PhoneEntity phone1 = new PhoneEntity();
-	phone1.setId(1);
+	phone1.setId(new Long(1));
 	phone1.setContactId(contact.getId());
 	phone1.setValue("12-21-12-21");
 	phone1.setType("Mobile");
@@ -82,7 +82,7 @@ public class PhoneDaoImpTest {
 	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
-	phone2.setId(2);
+	phone2.setId(new Long(2));
 	phone2.setContactId(contact.getId());
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");

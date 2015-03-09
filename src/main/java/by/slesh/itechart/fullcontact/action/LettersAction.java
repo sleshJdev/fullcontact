@@ -28,31 +28,33 @@ import by.slesh.itechart.fullcontact.settings.G;
  * @author Eugene Putsykovich(slesh) Mar 9, 2015
  *
  */
-public class LettersAction extends AbstractAction{
+public class LettersAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactDaoImp.class);
     private final String SUCCESS = "Your Letters. Today %s";
     private final String PROBLEM = "Some Problem Occured During Fetch Your Emails !";
-    
+
     @Override
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
-	
+
 	try {
-	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false);//no close connection after work!
+	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false);
 	    ContactEntity sender = ((ContactDao) contactDao).getContact(G.MY_ID);
 
-	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false);//no close connection after work!
+	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false);
 	    List<EmailEntity> emails = ((EmailDao) emailDao).getEmailsOfContact(G.MY_ID);
-	    
+
 	    for (EmailEntity email : emails) {
-		List<ContactEntity> receivers = ManyToManyDao.getInstance(true, false).getReceiversOfEmail(email.getId());//no close connection after work!
-		List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail(email.getId());//no close connection after work!
+		// no close connection after work!
+		List<ContactEntity> receivers = ManyToManyDao.getInstance(true, false).getReceiversOfEmail(email.getId());
+		// no close connection after work!
+		List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail(email.getId());
 		email.setContactIdSender(sender.getId());
 		email.setSender(sender);
-		if(receivers != null){
+		if (receivers != null) {
 		    email.setReceivers(receivers);
 		}
-		if(atachments != null){
+		if (atachments != null) {
 		    email.setAtachments(atachments);
 		}
 	    }
@@ -73,10 +75,10 @@ public class LettersAction extends AbstractAction{
 	getRequest().setAttribute("content", "letters-content.jsp");
 	getRequest().setAttribute("title", "Notifications Page");
 	getDispatcher().forward(getRequest(), getResponse());
-	
+
 	LOGGER.info("END");
     }
-    
+
     @Override
     public void init(HttpServletRequest request, HttpServletResponse response) {
 	super.init(request, response);

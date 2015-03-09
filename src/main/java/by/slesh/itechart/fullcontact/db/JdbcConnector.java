@@ -28,8 +28,6 @@ public final class JdbcConnector {
     private static File getDefaultPropertyFile() {
 	ClassLoader classLoader = JdbcConnector.class.getClassLoader();
 	String propertyPath = classLoader.getResource(DEFAULT_PROPERTY_FILE_NAME).getFile();
-	// String propertyPath = PathResolverUtil.goToWebInf().getPath();
-	// propertyPath += File.separator + DEFAULT_PROPERTY_FILE_NAME;
 	return new File(propertyPath);
     }
 
@@ -72,14 +70,19 @@ public final class JdbcConnector {
 		connection.close();
 		connection = null;
 	    }
-	    for (Statement statement : statements) {
+	} catch (SQLException e) {
+	    LOGGER.error("error occured during release resources: {}", e.getMessage());
+	}
+
+	for (Statement statement : statements) {
+	    try {
 		if (statement != null) {
 		    statement.close();
 		    statement = null;
 		}
+	    } catch (SQLException e) {
+		LOGGER.error("error occured during release resources: {}", e.getMessage());
 	    }
-	} catch (SQLException e) {
-	    LOGGER.error("error occured during release resources: {}", e.getMessage());
 	}
     }
 }

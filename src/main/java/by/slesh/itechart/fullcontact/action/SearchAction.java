@@ -38,6 +38,7 @@ public class SearchAction extends AbstractAction {
     @Override
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
+
 	try {
 	    if (StringUtils.isEmptyOrWhitespaceOnly(action)) {
 		LOGGER.info("go search page");
@@ -63,8 +64,9 @@ public class SearchAction extends AbstractAction {
 	    getDispatcher().forward(getRequest(), getResponse());
 	} catch (ClassNotFoundException | SQLException | ParseException e) {
 	    getRequest().setAttribute("status", PROBLEM);
-	    throw new ServletException(PROBLEM);
+	    throw new ServletException(e);
 	}
+
 	LOGGER.info("END");
     }
 
@@ -77,8 +79,7 @@ public class SearchAction extends AbstractAction {
 	page = request.getParameter("page");
 	begin = 0;
 
-	LOGGER.info("action(x): " + action);
-	LOGGER.info("page: " + page);
+	LOGGER.info("action(x): {}, page: {}", action, page);
 	LOGGER.info("END");
     }
 

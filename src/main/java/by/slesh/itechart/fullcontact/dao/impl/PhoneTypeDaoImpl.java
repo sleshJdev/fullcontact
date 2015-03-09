@@ -5,6 +5,10 @@ import by.slesh.itechart.fullcontact.dao.PhoneTypeDao;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class PhoneTypeDaoImpl extends EntityDao<PhoneTypeEntity> implements PhoneTypeDao {
     private static final String ORDER_BY = 
 	    "ORDER BY phone_type_id ASC ";

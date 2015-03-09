@@ -13,6 +13,7 @@ import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import javax.servlet.ServletException;
 
 public class Email {
     private Message message;
@@ -28,7 +29,7 @@ public class Email {
 	return message;
     }
 
-    public void setTo(String[] to) {
+    public void setTo(String[] to) throws ServletException {
 	try {
 	    Address[] address = new Address[to.length];
 	    for (int i = 0; i < to.length; i++) {
@@ -36,29 +37,29 @@ public class Email {
 	    }
 	    message.setRecipients(Message.RecipientType.TO, address);
 	} catch (MessagingException e) {
-	    e.printStackTrace();
+	    throw new ServletException(e);
 	}
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(String subject) throws ServletException {
 	try {
 	    message.setSubject(subject);
 	} catch (MessagingException e) {
-	    e.printStackTrace();
+	    throw new ServletException(e);
 	}
     }
 
-    public void setBody(String body) {
+    public void setBody(String body) throws ServletException {
 	try {
 	    BodyPart messageBodyPart = new MimeBodyPart();
 	    messageBodyPart.setText(body);
 	    multipart.addBodyPart(messageBodyPart);
 	} catch (MessagingException e) {
-	    e.printStackTrace();
+	    throw new ServletException(e);
 	}
     }
 
-    public void addAttachment(File file) {
+    public void addAttachment(File file) throws ServletException {
 	try {
 	    DataSource source = new FileDataSource(file);
 	    BodyPart messageBodyPart = new MimeBodyPart();
@@ -66,7 +67,7 @@ public class Email {
 	    messageBodyPart.setFileName(file.getName());
 	    multipart.addBodyPart(messageBodyPart);
 	} catch (MessagingException e) {
-	    e.printStackTrace();
+	    throw new ServletException(e);
 	}
     }
 }

@@ -47,16 +47,6 @@ public class BirthdayNotifier extends TimerTask implements Notifier {
     public void setPeriod(long period) {
 	this.period = period;
     }
-    public static void main(String[] args) throws ParseException {
-	Notifier notifier = new BirthdayNotifier(10, TimeUnit.SECONDS);
-	notifier.startNotify();
-	try {
-	    Thread.sleep(30_000);
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	}
-	notifier.stopNotify();
-    }
 
     @Override
     public void run() {

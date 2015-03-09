@@ -250,8 +250,8 @@ function createAtachmentRow() {
 			break;
 		}
 	}
-	atachmentId.setAttribute("value", "-1");
-	console.log("\tset -1 id value");
+	atachmentId.setAttribute("value", null);
+	console.log("\tset 'null' id value");
 	
 	addedRow.getElementsByClassName("edit-atachment")[0].setAttribute("id", "edit-atachment-icon" + nextNumber);
 	addedRow.getElementsByClassName("edit-atachment")[0].setAttribute("onclick", "atachmentEditPopupShow('edit', " + nextNumber + ");");

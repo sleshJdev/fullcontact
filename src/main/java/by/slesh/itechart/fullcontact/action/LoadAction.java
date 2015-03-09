@@ -28,8 +28,7 @@ public class LoadAction extends AbstractAction {
     @Override
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
-	LOGGER.info("referer: {}", getRequest().getHeader("referer"));
-
+	
 	if (!StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
 	    InputStream in = null;
 	    ServletOutputStream out = null;
@@ -39,9 +38,6 @@ public class LoadAction extends AbstractAction {
 		if (!file.exists()) {
 		    throw new ServletException(String.format("file %s not found on server", file.getPath()));
 		}
-		
-		LOGGER.info("destination file to dowload: {}", file.getPath());
-		
 		in = new FileInputStream(file.getPath());
 		String mimeType = getRequest().getServletContext().getMimeType(file.getPath());
 		int length = (int) file.length();
@@ -54,11 +50,7 @@ public class LoadAction extends AbstractAction {
 		while ((read = in.read(buffer)) != -1) {
 		    out.write(buffer, 0, read);
 		}
-		
-		LOGGER.info("full path: {}", file.getPath());
-		LOGGER.info("mime type: {}", mimeType);
-		LOGGER.info("length: {}", length);
-	    } catch(Exception e){
+	    } catch (Exception e) {
 		throw new ServletException(String.format("error dowload file %s. reason: maybe file not found on server", file));
 	    } finally {
 		if (in != null) {
@@ -71,7 +63,9 @@ public class LoadAction extends AbstractAction {
 		    out = null;
 		}
 	    }
+	    
 	    LOGGER.info("file {} dowload at client successfull!", file);
+	    
 	} else {
 	    throw new ServletException(String.format("%s - bad name format", fileName));
 	}

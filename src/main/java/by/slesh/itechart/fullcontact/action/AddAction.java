@@ -49,7 +49,7 @@ public class AddAction extends AbstractAction {
 	    getResponse().sendRedirect("show");
 	} else {// open page add
 	    LOGGER.info("go add page");
-
+	    
 	    getRequest().setAttribute("nationalitiesList", Database.getNationalities());
 	    getRequest().setAttribute("familyStatusesList", Database.getFamilyStatuses());
 	    getRequest().setAttribute("sexesList", Database.getSexes());

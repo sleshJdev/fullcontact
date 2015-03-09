@@ -16,6 +16,10 @@ import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.settings.G;
 import by.slesh.itechart.fullcontact.util.DateUtil;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class EmailDaoImplTest {
     @Test
     public void testGetEmailOfContact() throws ClassNotFoundException, IOException, SQLException {
@@ -55,7 +59,7 @@ public class EmailDaoImplTest {
     @Test
     public void testUpdate() throws ClassNotFoundException, IOException, SQLException, ParseException {
 	EmailEntity email = new EmailEntity();
-	email.setId(1);
+	email.setId(new Long(1));
 	email.setSubject("Update Subject 1");
 	email.setText("Update Block Text 1");
 	email.setSendDate(DateUtil.getSqlDate());

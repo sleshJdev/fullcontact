@@ -8,6 +8,10 @@ import by.slesh.itechart.fullcontact.dao.NationalityDao;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
 import by.slesh.itechart.fullcontact.domain.NationalityEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class NationalityDaoImpl extends EntityDao<NationalityEntity> implements NationalityDao {
     private static final String ORDER_BY = 
 	    "ORDER BY nationality_id ASC ";

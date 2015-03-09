@@ -11,9 +11,9 @@ import by.slesh.itechart.fullcontact.domain.ContactEntity;
  *
  */
 public interface AtachmentDao {
-    public long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
+    public Long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
 
-    public long add(AtachmentEntity atachmentEntity) throws ClassNotFoundException, IOException, SQLException;
+    public Long add(AtachmentEntity atachmentEntity) throws ClassNotFoundException, IOException, SQLException;
 
-    public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
+    public Long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
 }

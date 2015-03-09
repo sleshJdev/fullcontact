@@ -1,5 +1,9 @@
 package by.slesh.itechart.fullcontact.servlet.handler;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class Error {
     private String header;
     private Integer statusCode;

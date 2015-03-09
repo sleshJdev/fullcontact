@@ -16,6 +16,10 @@ import by.slesh.itechart.fullcontact.domain.Entity;
 
 import com.mysql.jdbc.StringUtils;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public abstract class EntityDao<T extends Entity> extends AbstractDao implements Getable<T>, Countable, Deletable {
     private final static Logger LOGGER = LoggerFactory.getLogger(EntityDao.class);
 
@@ -85,7 +89,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     @Override
     public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
-	LOGGER.info("ids: {}", Arrays.toString(ids));
+	LOGGER.info("contactId: {}, ids: {}", contactId, Arrays.toString(ids));
 
 	if (ids == null || ids.length == 0) {
 	    LOGGER.info("RETURN: not entities for delete");
@@ -211,12 +215,10 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    connect();
 	    preparedStatement = getPrepareStatement(getByIdQuery);
 	    preparedStatement.setLong(1, id);
-
-	    LOGGER.info("query: {}", preparedStatement);
-
 	    ResultSet resultSet = preparedStatement.executeQuery();
 	    item = reader.read(resultSet);
 
+	    LOGGER.info("query: {}", preparedStatement);
 	    LOGGER.info("entity with id {}: {}", id, item);
 	} finally {
 	    closeResources();
@@ -228,7 +230,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     @Override
     public List<T> getLimit(long start, long size) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
-
+	LOGGER.info("start: {}, size: {}", start, size);
+	
 	if (StringUtils.isEmptyOrWhitespaceOnly(getLimitQuery) || reader == null) {
 	    throw new SQLException("'get limit' sql query is not found. maybe this method not supported or 'reader' is null");
 	}
@@ -265,7 +268,6 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	}
 
 	LOGGER.info("END");
-
 	return list;
     }
 

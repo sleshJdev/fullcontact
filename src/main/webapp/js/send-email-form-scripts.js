@@ -11,10 +11,11 @@ function setTamplate(e) {
 	if (e.value.indexOf("congratulation") != -1) {
 		document.getElementById("message").value = 
 		   "Hello, $NAME$ \n\n"
+		 + "your message here \n\n"
 		 + "Thanks & Regards, $US_FULL_NAME$ \n\n"
 		 + "Contact Info:\n"
 		 + "Phone: $US_PHONE$\n"
-		 + "Email: $US_EMAIL$>";
+		 + "Email: $US_EMAIL$";
 	} else {
 		document.getElementById("message").value = "";
 	}

@@ -95,42 +95,4 @@ public class Sender {
 	    throw new RuntimeException(e);
 	}
     }
-
-    // public static void main(String[] args) {
-    //
-    // String[] ss =
-    // "studentbntu@mail.ru; studentbntu@mail.ru".replaceAll("\\s+",
-    // "").split(";");
-    // for (String string : ss) {
-    // System.out.println(string);
-    // }
-    //
-    // Sender sender = Sender.createSender(Sender.SSL);
-    // Email email = sender.createEmail();
-    // email.setTo("studentbntu@mail.ru; studentbntu@mail.ru".replaceAll("\\s+",
-    // "").split(";"));
-    // email.setSubject("Hello, i work!");
-    // email.setBody("Bla blah blah");
-    // email.addAttachment(new
-    // File("/mnt/windows/Documents/Files/Template.txt"));
-    // sender.send(email);
-    // }
-
-    // public void send(String subject, String text, String to) {
-    // try {
-    // Session session = Session.getDefaultInstance(properties,
-    // new GMailAuthenticator(username, password));
-    //
-    // Message message = new MimeMessage(session);
-    // message.setFrom(new InternetAddress(from));
-    // message.setRecipients(Message.RecipientType.TO,
-    // InternetAddress.parse(to));
-    // message.setSubject(subject);
-    // message.setText(text);
-    //
-    // Transport.send(message);
-    // } catch (MessagingException e) {
-    // throw new RuntimeException(e);
-    // }
-    // }
 }

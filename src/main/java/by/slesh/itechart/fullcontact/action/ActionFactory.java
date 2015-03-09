@@ -2,15 +2,11 @@ package by.slesh.itechart.fullcontact.action;
 
 import javax.servlet.ServletException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Eugene Putsykovich(slesh) Mar 4, 2015
  *
  */
 public class ActionFactory {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ActionFactory.class);
     private static final String PACKAGE = "by.slesh.itechart.fullcontact.action.";
     private static final String SUFFIX = "Action";
 
@@ -31,8 +27,6 @@ public class ActionFactory {
 		className += makeUppercaseFirstChar(token.trim());
 	    }
 	    String name = String.format("%s%s%s", PACKAGE, className, SUFFIX);
-	    LOGGER.info("full controller name = {}", name);
-
 	    return getControllerByClass(Class.forName(name));
 	} catch (ClassNotFoundException e) {
 	    e.printStackTrace();

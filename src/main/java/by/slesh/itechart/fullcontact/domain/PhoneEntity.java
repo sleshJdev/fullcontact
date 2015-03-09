@@ -1,7 +1,7 @@
 package by.slesh.itechart.fullcontact.domain;
 
 public class PhoneEntity extends Entity {
-    private long contactId;
+    private Long contactId;
     private String countryCode;
     private String operatorCode;
     private String type;
@@ -10,7 +10,7 @@ public class PhoneEntity extends Entity {
     public PhoneEntity() {
     }
 
-    public PhoneEntity(long id, long contactId, String countryCode,
+    public PhoneEntity(Long id, Long contactId, String countryCode,
 	    String operatorCode, String value, String type, String comment) {
 	super(id, value);
 	this.contactId = contactId;
@@ -20,11 +20,11 @@ public class PhoneEntity extends Entity {
 	this.operatorCode = operatorCode;
     }
 
-    public long getContactId() {
+    public Long getContactId() {
 	return contactId;
     }
 
-    public void setContactId(long contactId) {
+    public void setContactId(Long contactId) {
 	this.contactId = contactId;
     }
 

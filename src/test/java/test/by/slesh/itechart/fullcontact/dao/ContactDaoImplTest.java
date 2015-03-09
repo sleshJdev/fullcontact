@@ -21,6 +21,10 @@ import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 import by.slesh.itechart.fullcontact.settings.G;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public class ContactDaoImplTest {
     @Test
     public void testGetNameByEmail() throws ClassNotFoundException, IOException, SQLException{
@@ -70,17 +74,17 @@ public class ContactDaoImplTest {
     }
 
     @Test
-    public void testAdd() throws ClassNotFoundException, IOException, SQLException {
+    public void testAdd(){
 	PhoneEntity phone1 = new PhoneEntity();
-	phone1.setId(-1);
-	phone1.setValue("12-21-12-21");
+	phone1.setId(null);
+	phone1.setValue("12-21null2-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
 	phone1.setCountryCode("acc1");
 	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
-	phone2.setId(-1);
+	phone2.setId(null);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("add comment 2");
@@ -92,13 +96,13 @@ public class ContactDaoImplTest {
 	phones.add(phone2);
 
 	AtachmentEntity atachment1 = new AtachmentEntity();
-	atachment1.setId(-1);
+	atachment1.setId(null);
 	atachment1.setName("addname1.txt");
 	atachment1.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment1.setComment("add comment 1");
 
 	AtachmentEntity atachment2 = new AtachmentEntity();
-	atachment2.setId(-1);
+	atachment2.setId(null);
 	atachment2.setName("addname2.txt");
 	atachment2.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment2.setComment("add comment 2");
@@ -129,21 +133,26 @@ public class ContactDaoImplTest {
 	contact.setCityIndex("123490");
 
 	ContactDao contactDao = (ContactDao) DaoFactory.getContactDao(true, true);
-	contactDao.add(contact);
+	try {
+	    contactDao.add(contact);
+	} catch (ClassNotFoundException | IOException | SQLException e) {
+	    // TODO
+	    e.printStackTrace();
+	}
     }
 
     @Test
     public void testUpdate() throws ClassNotFoundException, IOException, SQLException {
 	PhoneEntity phone1 = new PhoneEntity();
-	phone1.setId(-1);
-	phone1.setValue("12-21-12-21");
+	phone1.setId(null);
+	phone1.setValue("12-21null2-21");
 	phone1.setType("Mobile");
 	phone1.setComment("add comment 1");
 	phone1.setCountryCode("cc1");
 	phone1.setOperatorCode("oc1");
 
 	PhoneEntity phone2 = new PhoneEntity();
-	phone2.setId(-1);
+	phone2.setId(null);
 	phone2.setValue("34-43-34-43");
 	phone2.setType("Home");
 	phone2.setComment("update comment 2");
@@ -155,13 +164,13 @@ public class ContactDaoImplTest {
 	phones.add(phone2);
 
 	AtachmentEntity atachment1 = new AtachmentEntity();
-	atachment1.setId(-1);
+	atachment1.setId(null);
 	atachment1.setName("updatename1.txt");
 	atachment1.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment1.setComment("update comment 1");
 
 	AtachmentEntity atachment2 = new AtachmentEntity();
-	atachment2.setId(-1);
+	atachment2.setId(null);
 	atachment2.setName("updatename2.txt");
 	atachment2.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment2.setComment("update comment 2");
@@ -171,7 +180,7 @@ public class ContactDaoImplTest {
 	atachments.add(atachment2);
 	
 	ContactEntity contact = new ContactEntity();
-	contact.setId(17);
+	contact.setId(new Long(17));
 	contact.setFirstName("UpdateFirst");
 	contact.setLastName("UpdateLast");
 	contact.setMiddleName("UpdateMiddle");

@@ -10,6 +10,10 @@ import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneTypeEntity;
 import by.slesh.itechart.fullcontact.domain.SexEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public final class DaoFactory {
     public static EntityDao<SexEntity> getSexDao(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	return new SexDaoImpl(isUseCurrentConnection, isCloseConnectionAfterWork);

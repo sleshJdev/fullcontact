@@ -7,7 +7,7 @@ import java.sql.Date;
  *
  */
 public class AtachmentEntity extends Entity {
-    private long contactId;
+    private Long contactId;
     private String path;
     private String changedName;
     private String salt;
@@ -17,7 +17,7 @@ public class AtachmentEntity extends Entity {
     public AtachmentEntity() {
     }
 
-    public AtachmentEntity(long id, long contactId, String name, String path, Date uploadDate, String comment) {
+    public AtachmentEntity(Long id, Long contactId, String name, String path, Date uploadDate, String comment) {
 	super(id, name);// value == name
 	this.contactId = contactId;
 	this.path = path;
@@ -25,11 +25,11 @@ public class AtachmentEntity extends Entity {
 	this.comment = comment;
     }
 
-    public long getContactId() {
+    public Long getContactId() {
 	return contactId;
     }
 
-    public void setContactId(long contactId) {
+    public void setContactId(Long contactId) {
 	this.contactId = contactId;
     }
 

@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Eugene Putsykovich(slesh) Feb 14, 2015
- *		
+ *
  *         Exceptino handling
  */
 @WebServlet("/ExceptionHandlerServlet")
 public class ExceptionHandler extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	processError(request, response);
     }

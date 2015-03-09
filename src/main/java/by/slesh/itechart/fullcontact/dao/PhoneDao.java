@@ -5,8 +5,12 @@ import java.sql.SQLException;
 
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
+/**
+ * @author Eugene Putsykovich(slesh) Mar 9, 2015
+ *
+ */
 public interface PhoneDao {
-    public long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
+    public Long add(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
 
-    public long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
+    public Long update(ContactEntity contact) throws ClassNotFoundException, IOException, SQLException;
 }

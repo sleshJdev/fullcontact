@@ -2,22 +2,22 @@ package by.slesh.itechart.fullcontact.domain;
 
 
 public abstract class Entity {
-    protected long id = -1;
+    protected Long id;
     protected String value;
 
     public Entity() {
     }
 
-    public Entity(long id, String value) {
+    public Entity(Long id, String value) {
 	this.id = id;
 	this.value = value;
     }
 
-    public long getId() {
+    public Long getId() {
 	return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 	this.id = id;
     }
 

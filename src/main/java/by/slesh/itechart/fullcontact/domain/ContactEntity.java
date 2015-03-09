@@ -33,7 +33,7 @@ public class ContactEntity extends Entity {
     public ContactEntity() {
     }
 
-    public ContactEntity(long id, String firstName, String lastName, String middleName, Date dateOfBirth,
+    public ContactEntity(Long id, String firstName, String lastName, String middleName, Date dateOfBirth,
 	    String avatarPath, String sex, String nationality, String familyStatus, String webSite,
 	    String emailAddress, String currentEmployment, String country, String city, String street, String house,
 	    String block, String apartment, String cityIndex, List<PhoneEntity> phones, List<AtachmentEntity> atachments) {
