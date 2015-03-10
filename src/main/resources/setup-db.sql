@@ -140,16 +140,16 @@ VALUES
     (1, 'Admin', 'Admin', 'Admin', '1999-06-06', 1, 3, 4,
         'fullcontact.com', 'pankaj1@mail.com', 'iTechArt',  'Belarus', 'Minsk', 'Surganova', '37', '2', '505', '6666'),
 
-    (2, 'PankajFirst', 'PankajLast', 'PankajMidle', now(), 1, 1, 1,
+    (2, 'PankajFirst', 'PankajLast', 'PankajMidle', '2015-03-10', 1, 1, 1,
         'pankaj.com', 'shorin-roman@yandex.by', 'devcorp', 'India', 'Bangladesh', 'street1', 'house1', 'block1', 'apnt1', '1111'),
 
-    (3, 'student', 'student', 'student', now(), 1, 2, 2,
+    (3, 'student', 'student', 'student', '2015-03-10', 1, 2, 2,
         'student.com', 'studentbntu@mail.ru',  'devcorpstudent', 'Indiastudent', 'Bangladeshstudent', 'street2', 'house2', 'block2', 'apart2', '2222'),    
 
     (4, 'LisaFirst', 'LisaLast', 'LisaMidle', '2007-12-4', 2, 3, 3,
         'Lisa.com', 'Lisa1@mail.com', 'devcorpLisa', 'IndiaLisa', 'BangladeshLisa', 'street3', 'house3', 'block3', 'apart3', '33333'),
 
-    (5, 'JackFirst', 'JackLast', 'JackMidle', now(), 1, 4, 4,
+    (5, 'JackFirst', 'JackLast', 'JackMidle', '2015-03-10', 1, 4, 4,
         'Jack.com', 'Jack1@mail.com', 'devcorpJack', 'IndiaJack', 'BangladeshJack', 'street4', 'house4', 'block4', 'apar4', '4444'),
         
     (6, 'RomaFirst', 'RomajLast', 'PankajMidle', '2010-12-4', 1, 4, 1,
@@ -303,8 +303,7 @@ VALUES
   (2, 'Home');
  
  
-INSERT INTO `phones` (`phone_id`, `contact_id`, `phone_value`, `phone_type_id`, `phone_comment`,
-		      `phone_country_code`, `phone_operator_code`)
+INSERT INTO `phones` (`phone_id`, `contact_id`, `phone_value`, `phone_type_id`, `phone_comment`, `phone_country_code`, `phone_operator_code`)		      
 VALUES
   (1, 1, '1111111', 1, 'comment1', '111', '123'),
   (2, 2, '2222222', 1, 'comment2', '222', '123'),
