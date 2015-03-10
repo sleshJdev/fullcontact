@@ -81,7 +81,6 @@ public class BirthdayNotifier extends TimerTask implements Notifier {
 	    }
 	} catch (ClassNotFoundException | IOException | SQLException | ParseException e) {
 	    LOGGER.error("error occured during notify: {}", e.getMessage());
-	    e.printStackTrace();
 	} finally {
 	    JdbcConnector.closeResource(connection, preparedStatement);
 	}

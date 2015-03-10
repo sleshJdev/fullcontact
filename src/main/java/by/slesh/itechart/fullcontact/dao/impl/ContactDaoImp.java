@@ -322,7 +322,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 		}
 	    };
 	}
-
+	
 	public final Setter getSetterForDate(final java.sql.Date date) {
 
 	    return new Setter() {

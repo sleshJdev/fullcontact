@@ -18,7 +18,7 @@ import com.mysql.jdbc.StringUtils;
  * @author Eugene Putsykovich(slesh) Mar 4, 2015
  *
  */
-public class HttpProcessUtil {
+public final class HttpProcessUtil {
     private final static Logger LOGGER = LoggerFactory.getLogger(HttpProcessUtil.class);
 
     public static Long[] checkForDeletingPhones(HttpServletRequest request) {

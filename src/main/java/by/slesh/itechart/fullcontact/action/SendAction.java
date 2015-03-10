@@ -121,9 +121,9 @@ public class SendAction extends AbstractAction {
 	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false); 
 	    // not close connection after work
 	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false); 
-	    for (int t = 0; t < to.length; ++t) {
+	    for (String t : to) {
 		StringTemplate template = new StringTemplate(message, DefaultTemplateLexer.class);
-		String name = ((ContactDao) contactDao).getName(to[t]);
+		String name = ((ContactDao) contactDao).getName(t);
 		template.setAttribute("NAME", name);
 		template.setAttribute("US_FULL_NAME", "Putsykovich Eugene");
 		template.setAttribute("US_PHONE", "2030327");
@@ -131,7 +131,7 @@ public class SendAction extends AbstractAction {
 		String body = template.toString();
 
 		Email email = sender.createEmail();
-		email.setTo(new String[] { to[t] });
+		email.setTo(new String[] { t });
 		email.setSubject(subject);
 		email.setBody(body);
 		if (files != null && files.size() > 0) {
@@ -159,7 +159,7 @@ public class SendAction extends AbstractAction {
 	    JdbcConnector.close();// close current opened connection
 	}
     }
-
+    
     private void defaultAction() throws IOException, ClassNotFoundException, SQLException {
 	String[] contactsId = getRequest().getParameterValues("id");
 	List<String> emails = new ArrayList<String>(contactsId.length);
@@ -171,7 +171,7 @@ public class SendAction extends AbstractAction {
 	}
 	getRequest().setAttribute("emails", emails);
     }
-
+    
     private static List<File> processParts(Collection<Part> parts, final String destination) throws IOException {
 	List<File> files = new ArrayList<File>();
 	for (Part part : parts) {

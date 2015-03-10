@@ -217,7 +217,7 @@ function getCheckBoxesFromTable(table){
 	var checkboxes = [];
 	var inputs = table.getElementsByTagName("input");
 	for (var i = 0; i < inputs.length; ++i) {
-		if (inputs[i].getAttribute("type") == "checkbox") {
+		if (inputs[i].getAttribute("type") === "checkbox") {
 			 checkboxes[counter++] = inputs[i];
 		}
 	}

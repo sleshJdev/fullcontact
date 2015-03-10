@@ -65,23 +65,25 @@ public final class JdbcConnector {
     }
 
     public static void closeResource(Connection connection, Statement... statements) {
-	try {
-	    if (connection != null) {
+	if (connection != null) {
+	    try {
 		connection.close();
 		connection = null;
+	    } catch (SQLException e) {
+		LOGGER.error("error occured during release resources: {}", e);
 	    }
-	} catch (SQLException e) {
-	    LOGGER.error("error occured during release resources: {}", e.getMessage());
 	}
 
-	for (Statement statement : statements) {
-	    try {
+	if (statements != null) {
+	    for (Statement statement : statements) {
 		if (statement != null) {
-		    statement.close();
-		    statement = null;
+		    try {
+			statement.close();
+			statement = null;
+		    } catch (SQLException e) {
+			LOGGER.error("error occured during release resources: {}", e);
+		    }
 		}
-	    } catch (SQLException e) {
-		LOGGER.error("error occured during release resources: {}", e.getMessage());
 	    }
 	}
     }

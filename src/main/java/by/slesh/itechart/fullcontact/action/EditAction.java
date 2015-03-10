@@ -217,8 +217,7 @@ public class EditAction extends AbstractAction {
 		    file = processPart(part, uploadDirectory, fileName);
 		    pathSave = file.getPath().substring(root.length());// /'path-to-target-folder'/'file-name'
 
-		    LOGGER.info("atachment file obtained: {}", file);
-		    LOGGER.info("path to save: {}", pathSave);
+		    LOGGER.info("atachment file obtained: {}, path to save: {}", file, pathSave);
 
 		    atachment.setName(file.getName());
 		    atachment.setChangedName(file.getName());
