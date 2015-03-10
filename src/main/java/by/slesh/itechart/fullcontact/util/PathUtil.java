@@ -18,13 +18,13 @@ public final class PathUtil {
 	
 	return new File(propertyPath);
     }
-
+    
     /**
      * @return Path to ''classes' directory. E.g. we get path such as
      *         .../'application-name'/WEB-INF/classes/
      */
     public static final String goToClasses() {
-	return Thread.currentThread().getContextClassLoader().getResource("/").getPath();
+	return PathUtil.class.getClassLoader().getResource("/").getPath();
     }
 
     /**
