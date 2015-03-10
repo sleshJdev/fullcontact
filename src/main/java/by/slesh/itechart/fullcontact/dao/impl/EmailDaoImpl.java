@@ -54,8 +54,12 @@ public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
     
     
     @Override
-    public List<EmailEntity> getEmailsOfContact(long contactId) throws ClassNotFoundException, IOException, SQLException {
+    public List<EmailEntity> getEmailsOfContact(Long contactId) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
+	
+	if(contactId == null){
+	    return null;
+	}
 	
 	setGetAllQuery(String.format(GET_EMAILS_OF_CONTACT, contactId));
 	List<EmailEntity> emails = super.getAll();

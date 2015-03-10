@@ -44,22 +44,24 @@ public class LettersAction extends AbstractAction {
 	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false);
 	    List<EmailEntity> emails = ((EmailDao) emailDao).getEmailsOfContact(G.MY_ID);
 
-	    for (EmailEntity email : emails) {
-		// no close connection after work!
-		List<ContactEntity> receivers = ManyToManyDao.getInstance(true, false).getReceiversOfEmail(email.getId());
-		// no close connection after work!
-		List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail(email.getId());
-		email.setContactIdSender(sender.getId());
-		email.setSender(sender);
-		if (receivers != null) {
-		    email.setReceivers(receivers);
-		}
-		if (atachments != null) {
-		    email.setAtachments(atachments);
+	    if (emails != null) {
+		for (EmailEntity email : emails) {
+		    // no close connection after work!
+		    List<ContactEntity> receivers = ManyToManyDao.getInstance(true, false).getReceiversOfEmail( email.getId());
+		    // no close connection after work!
+		    List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail( email.getId());
+		    email.setContactIdSender(sender.getId());
+		    email.setSender(sender);
+		    if (receivers != null) {
+			email.setReceivers(receivers);
+		    }
+		    if (atachments != null) {
+			email.setAtachments(atachments);
+		    }
 		}
 	    }
 	    getRequest().setAttribute("emails", emails);
-	    getRequest().setAttribute("status", String.format(SUCCESS, emails.size()));
+	    getRequest().setAttribute("status", String.format(SUCCESS, emails == null ? 0 : emails.size()));
 	} catch (ClassNotFoundException | SQLException e) {
 	    getRequest().setAttribute("status", PROBLEM);
 	    throw new ServletException(e);

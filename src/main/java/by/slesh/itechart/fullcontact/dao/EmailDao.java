@@ -11,5 +11,5 @@ public interface EmailDao {
     
     public long update(EmailEntity email) throws ClassNotFoundException, IOException, SQLException;
     
-    public List<EmailEntity> getEmailsOfContact(long contactId) throws ClassNotFoundException, IOException, SQLException;
+    public List<EmailEntity> getEmailsOfContact(Long contactId) throws ClassNotFoundException, IOException, SQLException;
 }
