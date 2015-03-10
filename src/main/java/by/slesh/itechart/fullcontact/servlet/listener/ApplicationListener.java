@@ -34,7 +34,7 @@ public class ApplicationListener implements ServletContextListener {
 	fileLocationSetup(context);
 
 	if (notifier == null) {
-	    notifier = new BirthdayNotifier(5, TimeUnit.MINUTES);
+	    notifier = new BirthdayNotifier(1, TimeUnit.MINUTES);
 	    notifier.startNotify();
 	}
 
