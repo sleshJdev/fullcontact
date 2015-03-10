@@ -24,9 +24,10 @@ public final class PathUtil {
      *         .../'application-name'/WEB-INF/classes/
      */
     public static final String goToClasses() {
-	return PathUtil.class.getClassLoader().getResource("/").getPath();
+	File f = new File(PathUtil.class.getClassLoader().getResource("web.properties").getPath());
+	return f.getParent();
     }
-
+    
     /**
      * @return Path to root folder of application. E.g. we get path such as
      *         .../'application-name'
