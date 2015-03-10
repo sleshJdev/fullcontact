@@ -9,11 +9,11 @@ import java.util.List;
  *
  */
 public interface Getable<T> {
-    public T get(long id) throws ClassNotFoundException, IOException, SQLException;
+    public T get(Long id) throws ClassNotFoundException, IOException, SQLException;
 
     public List<T> getAll() throws ClassNotFoundException, IOException, SQLException;
 
     public List<T> getLimit(long start, long size) throws ClassNotFoundException, IOException, SQLException;
 
-    public long getId(String fieldValue) throws ClassNotFoundException, IOException, SQLException;
+    public Long getId(String fieldValue) throws ClassNotFoundException, IOException, SQLException;
 }

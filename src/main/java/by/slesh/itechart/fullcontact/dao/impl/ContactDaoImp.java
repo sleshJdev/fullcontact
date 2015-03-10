@@ -97,7 +97,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     @Override
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
+    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException {
 	throw new SQLException("not supported this operation!");
     }
 
@@ -109,7 +109,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     }
 
     @Override
-    public ContactEntity get(long id) throws ClassNotFoundException, IOException, SQLException {
+    public ContactEntity get(Long id) throws ClassNotFoundException, IOException, SQLException {
 	setReader(DaoReadersContainer.FULL_CONTACT_READER);
 	setGetByIdQuery(GET_BY_ID_QUERY);
 	return super.get(id);

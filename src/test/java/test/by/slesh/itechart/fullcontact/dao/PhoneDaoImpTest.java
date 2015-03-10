@@ -19,7 +19,7 @@ public class PhoneDaoImpTest {
     @Test
     public void testGetById() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<PhoneEntity> phoneDao = DaoFactory.getPhoneDao(true, true);
-	PhoneEntity phone = phoneDao.get(1);
+	PhoneEntity phone = phoneDao.get(new Long(1));
 	assertNotNull(phone);
     }
 
@@ -61,9 +61,9 @@ public class PhoneDaoImpTest {
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<PhoneEntity> phoneDao = DaoFactory.getPhoneDao(true, true);
-	final long[] ids = new long[] { 17, 18, 19 };
+	final Long[] ids = new Long[] { new Long(17), new Long(18), new Long(19) };
 	final long expectedQuantityUpdate = ids.length;
-	long actualQuantityDelete = phoneDao.deleteRange(1, ids);
+	long actualQuantityDelete = phoneDao.deleteRange(new Long(1), ids);
 	assertEquals("Not equals quantity DELETE rows and actual entity", expectedQuantityUpdate, actualQuantityDelete);
     }
 

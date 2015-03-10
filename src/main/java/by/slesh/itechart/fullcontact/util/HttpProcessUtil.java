@@ -21,15 +21,15 @@ import com.mysql.jdbc.StringUtils;
 public class HttpProcessUtil {
     private final static Logger LOGGER = LoggerFactory.getLogger(HttpProcessUtil.class);
 
-    public static long[] checkForDeletingPhones(HttpServletRequest request) {
+    public static Long[] checkForDeletingPhones(HttpServletRequest request) {
 	return checkDeletingIdFor(request, "deleting-phone-ids");
     }
 
-    public static long[] checkForDeletingAtachments(HttpServletRequest request) {
+    public static Long[] checkForDeletingAtachments(HttpServletRequest request) {
 	return checkDeletingIdFor(request, "deleting-atachmet-ids");
     }
 
-    private static long[] checkDeletingIdFor(HttpServletRequest request, String parameterName) {
+    private static Long[] checkDeletingIdFor(HttpServletRequest request, String parameterName) {
 	LOGGER.info("BEGIN");
 	LOGGER.info("check deleting for {}", parameterName);
 	
@@ -41,7 +41,7 @@ public class HttpProcessUtil {
 	    LOGGER.info("{} null or empty", parameterId);
 	    return null;
 	}
-	String token = parameterId.replaceAll("-1", "");
+	String token = parameterId.replaceAll("null", "");
 	if (StringUtils.isEmptyOrWhitespaceOnly(token)) {
 	    LOGGER.info("{} null or empty", parameterName);
 	    return null;
@@ -50,11 +50,11 @@ public class HttpProcessUtil {
 
 	LOGGER.info("parameter id: |{}|", Arrays.toString(tokensId));
 
-	long[] ids = new long[tokensId.length];
+	Long[] ids = new Long[tokensId.length];
 
 	try {
 	    for (int i = 0; i < ids.length; i++) {
-		ids[i] = Long.parseLong(tokensId[i]);
+		ids[i] = "null".equals(tokensId[i]) ? null : Long.parseLong(tokensId[i]);
 	    }
 	} catch (NumberFormatException e) {
 	    e.printStackTrace();
@@ -70,7 +70,7 @@ public class HttpProcessUtil {
 
 	String idParameter = request.getParameter("contact-id");
 
-	long contactId = idParameter == null ? -1 : Long.parseLong(idParameter);
+	Long contactId = idParameter == null ? null : Long.parseLong(idParameter);
 
 	contact.setId(contactId);
 	contact.setFirstName(request.getParameter("first-name").trim());

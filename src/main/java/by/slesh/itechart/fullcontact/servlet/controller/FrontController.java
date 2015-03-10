@@ -33,6 +33,7 @@ public class FrontController extends HttpServlet {
 
 	try {
 	    response.setContentType("text/html;charset=UTF-8");
+	    request.setCharacterEncoding("utf-8");
 
 	    StringBuffer url = request.getRequestURL();
 	    String actionName = url.substring(url.lastIndexOf("/") + 1, url.length());

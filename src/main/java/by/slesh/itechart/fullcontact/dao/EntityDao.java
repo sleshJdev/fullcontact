@@ -87,7 +87,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     }
     
     @Override
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
+    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("contactId: {}, ids: {}", contactId, Arrays.toString(ids));
 
@@ -121,7 +121,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     }
 
     @Override
-    public void delete(long id) throws ClassNotFoundException, IOException, SQLException {
+    public void delete(Long id) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("id: {}", id);
 
@@ -172,7 +172,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     }
 
     @Override
-    public long getId(String value) throws ClassNotFoundException, IOException, SQLException {
+    public Long getId(String value) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("value: {}", value);
 
@@ -202,7 +202,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
     }
 
     @Override
-    public T get(long id) throws ClassNotFoundException, IOException, SQLException {
+    public T get(Long id) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
 	LOGGER.info("id: {}", id);
 

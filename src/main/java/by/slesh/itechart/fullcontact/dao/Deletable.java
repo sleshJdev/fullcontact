@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public interface Deletable {
-    public void delete(long id) throws ClassNotFoundException, IOException, SQLException;
+    public void delete(Long id) throws ClassNotFoundException, IOException, SQLException;
 
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException;
+    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException;
 }

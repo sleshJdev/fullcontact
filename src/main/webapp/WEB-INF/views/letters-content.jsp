@@ -12,24 +12,25 @@
 					<td></td>
 					<td>FROM</td>
 					<td>TO</td>
+					<td>DATE</td>
 					<td>SUBJECT</td>
 					<td>MESSAGE</td>
 					<td>ATACHMENTS</td>
 				</tr>
 				<c:forEach var="email" items="${emails}" varStatus="loop">
 					<c:set var="s" value="${email.sender }"/>
-					<c:set var="as" value="${email.atachments }"/>
+					<c:set var="as" value="${email.atachments }"/> 
 					<c:set var="rs" value="${email.receivers }"/>
 					<tr>
 						<td>${loop.index + 1}</td>
-						<td><a href="edit?&id=${s.id}">${s.firstName} ${s.middleName} ${s.lastName}</a></td>
+						<td><a href="edit?&id=${s.id}">${s.firstName}</a></td>
 						<td>
 							<c:choose>
 								<c:when test="${not empty rs }">
 									<ul>
 										<c:forEach var="r" items="${rs }">
 											<li>
-												<a href="edit?id=${r.id }">${r.firstName} ${r.middleName} ${r.lastName}</a>
+												<a href="edit?id=${r.id }">${r.firstName}</a>
 											</li>
 										</c:forEach>
 									</ul>
@@ -39,6 +40,7 @@
 								</c:otherwise>								
 							</c:choose>
 						</td>
+						<td>${email.sendDate}</td>
 						<td>${email.subject}</td>
 						<td>${email.text}</td>
 						<td>

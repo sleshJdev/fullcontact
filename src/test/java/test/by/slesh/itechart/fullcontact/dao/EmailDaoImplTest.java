@@ -38,7 +38,7 @@ public class EmailDaoImplTest {
     @Test
     public void testGetById() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, true);
-	EmailEntity email = emailDao.get(2);
+	EmailEntity email = emailDao.get(new Long(2));
 	assertNotNull(email);
     }
 

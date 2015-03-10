@@ -117,7 +117,7 @@ public class EditAction extends AbstractAction {
 
 	((ContactDao) DaoFactory.getContactDao(true, true)).update(contact);
 
-	long[] ids = null;
+	Long[] ids = null;
 
 	if ((ids = HttpProcessUtil.checkForDeletingAtachments(getRequest())) != null) {
 	    final String uploadDirectory = getRequest().getServletContext().getAttribute("upload-directory-path")

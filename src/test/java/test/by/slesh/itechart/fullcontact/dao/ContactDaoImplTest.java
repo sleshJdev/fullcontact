@@ -28,7 +28,7 @@ import by.slesh.itechart.fullcontact.settings.G;
 public class ContactDaoImplTest {
     @Test
     public void testGetNameByEmail() throws ClassNotFoundException, IOException, SQLException{
-	final String name = "Admin";
+	final String name = "PankajFirst";
 	final String email = "shorin-roman@yandex.by";
 	ContactDao contactDao = (ContactDao) DaoFactory.getContactDao(true, true);
 	String result = contactDao.getName(email);
@@ -68,7 +68,7 @@ public class ContactDaoImplTest {
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
 	long quantityBefore = contactDao.count();
-	contactDao.delete(16);
+	contactDao.delete(new Long(16));
 	long quantityAfter = contactDao.count();
 	assertEquals("Incorrent quantity rows", 1, (quantityBefore - quantityAfter));
     }

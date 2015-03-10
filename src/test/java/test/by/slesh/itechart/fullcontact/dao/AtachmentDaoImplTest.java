@@ -32,7 +32,7 @@ public class AtachmentDaoImplTest {
     @Test
     public void testGetById() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	AtachmentEntity atachment = atachmentDao.get(1);
+	AtachmentEntity atachment = atachmentDao.get(new Long(1));
 	assertNotNull(atachment);
     }
 
@@ -71,8 +71,8 @@ public class AtachmentDaoImplTest {
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
 	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	final long contactId = 15;
-	final long[] ids = new long[] { 22, 23, 24, 25, 26 };
+	final Long contactId = new Long(15);
+	final Long[] ids = new Long[] { new Long(22), new Long(23), new Long(24), new Long(25), new Long(26) };
 	final long expectedQuantityUpdate = ids.length;
 	long actualQuantityDelete = atachmentDao.deleteRange(contactId, ids);
 

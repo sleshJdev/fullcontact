@@ -42,7 +42,7 @@ public class FamilyStatusDaoImpl extends EntityDao<FamilyStatusEntity> implement
     }
     
     @Override
-    public long deleteRange(long contactId, long[] ids) throws ClassNotFoundException, IOException, SQLException {
+    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException {
 	throw new SQLException("not supported this operation!");
     }
 }
