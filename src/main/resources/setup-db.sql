@@ -141,52 +141,52 @@ VALUES
         'fullcontact.com', 'pankaj1@mail.com', 'iTechArt',  'Belarus', 'Minsk', 'Surganova', '37', '2', '505', '6666'),
 
     (2, 'PankajFirst', 'PankajLast', 'PankajMidle', now(), 1, 1, 1,
-        'pankaj.com', 'shorin-roman@yandex.by', 'devcorp', 'India', 'Bangladesh', 'street1', 'house1', 'block1', 'apartment1', '1111'),
+        'pankaj.com', 'shorin-roman@yandex.by', 'devcorp', 'India', 'Bangladesh', 'street1', 'house1', 'block1', 'apnt1', '1111'),
 
     (3, 'student', 'student', 'student', now(), 1, 2, 2,
-        'student.com', 'studentbntu@mail.ru',  'devcorpstudent', 'Indiastudent', 'Bangladeshstudent', 'street2', 'house2', 'block2', 'apartment2', '2222'),    
+        'student.com', 'studentbntu@mail.ru',  'devcorpstudent', 'Indiastudent', 'Bangladeshstudent', 'street2', 'house2', 'block2', 'apart2', '2222'),    
 
     (4, 'LisaFirst', 'LisaLast', 'LisaMidle', '2007-12-4', 2, 3, 3,
-        'Lisa.com', 'Lisa1@mail.com', 'devcorpLisa', 'IndiaLisa', 'BangladeshLisa', 'street3', 'house3', 'block3', 'apartment3', '33333'),
+        'Lisa.com', 'Lisa1@mail.com', 'devcorpLisa', 'IndiaLisa', 'BangladeshLisa', 'street3', 'house3', 'block3', 'apart3', '33333'),
 
     (5, 'JackFirst', 'JackLast', 'JackMidle', now(), 1, 4, 4,
-        'Jack.com', 'Jack1@mail.com', 'devcorpJack', 'IndiaJack', 'BangladeshJack', 'street4', 'house4', 'block4', 'apartment4', '4444'),
+        'Jack.com', 'Jack1@mail.com', 'devcorpJack', 'IndiaJack', 'BangladeshJack', 'street4', 'house4', 'block4', 'apar4', '4444'),
         
     (6, 'RomaFirst', 'RomajLast', 'PankajMidle', '2010-12-4', 1, 4, 1,
-        'Roma.com', 'Roma1@mail.com','devcorpRoma', 'IndiaRoma', 'BangladeshRoma', 'street5', 'house5', 'block5', 'apartment5', '55555'), 
+        'Roma.com', 'Roma1@mail.com','devcorpRoma', 'IndiaRoma', 'BangladeshRoma', 'street5', 'house5', 'block5', 'apment5', '55555'), 
 
     (7, 'RomaFirst', 'BobjLast', 'PankajMidle', '2015-12-4', 2, 4, 4,
-        'Bob.com', 'Bob1@mail.com', 'devcorpBob', 'IndiaBob', 'BangladeshBob', 'street8', 'house6', 'block6', 'apartment6', '66666'),
+        'Bob.com', 'Bob1@mail.com', 'devcorpBob', 'IndiaBob', 'BangladeshBob', 'street8', 'house6', 'block6', 'apant6', '66666'),
     
     (8, 'NeoFirst', 'PankajLast', 'PankajMidle', '2015-12-4', 2, 4, 3,
-        'Neo.com', 'Neo1@mail.com', 'devcorpNeo', 'IndiaNeo', 'BangladeshNeo', 'street7', 'house7', 'block7', 'apartment7', '7777'),
+        'Neo.com', 'Neo1@mail.com', 'devcorpNeo', 'IndiaNeo', 'BangladeshNeo', 'street7', 'house7', 'block7', 'apart7', '7777'),
 
     (9, 'MorpheosFirst', 'MorpheosLast', 'MorpheosMidle', '2015-12-4', 1, 2, 2,
-        'Morpheos.com', 'Morpheos1@mail.com', 'devcorpMorpheos', 'IndiaMorpheos', 'BangladeshMorpheos', 'street8', 'house8', 'block8', 'apartment8', '88888'),
+        'Morpheos.com', 'Morpheos1@mail.com', 'devcorpMorpheos', 'IndiaMorpheos', 'BangladeshMorpheos', 'street8', 'house8', 'block8', 'apant8', '88888'),
 
     (10, 'TrinitiFirst', 'TrinitiLast', 'TrinitiMidle', '2015-12-4', 2, 3, 1,
-        'Triniti.com', 'Triniti1@mail.com', 'devcorpTriniti', 'IndiaTriniti', 'BangladeshTriniti', 'street9', 'house9', 'block9', 'apartment9', '99999'),
+        'Triniti.com', 'Triniti1@mail.com', 'devcorpTriniti', 'IndiaTriniti', 'BangladeshTriniti', 'street9', 'house9', 'block9', 'apartt9', '99999'),
 
     (11, 'TuckFirst', 'TuckLast', 'TuckMidle', '2015-12-4', 1, 4, 3,
-        'Tuck.com', 'Tuck1@mail.com', 'devcorpTuck', 'IndiaTuck', 'BangladeshTuck', 'street10', 'house10', 'block10', 'apartment10', '10000'),
+        'Tuck.com', 'Tuck1@mail.com', 'devcorpTuck', 'IndiaTuck', 'BangladeshTuck', 'street10', 'house10', 'block10', 'apart10', '10000'),
 
     (12, 'GendolfFirst', 'GendolfLast', 'GendolfMidle', '2015-12-4', 2, 1, 4,
-        'Gendolf.com','Gendolf1@mail.com', 'devcorpGendolf', 'IndiaGendolf', 'BangladeshGendolf', 'street11', 'house11', 'block11', 'apartment11', '111111'),
+        'Gendolf.com','Gendolf1@mail.com', 'devcorpGendolf', 'IndiaGendolf', 'BangladeshGendolf', 'street11', 'house11', 'block11', 'apent11', '111111'),
 
     (13, 'AragornFirst', 'AragornLast', 'AragornMidle', '2015-12-4', 1, 4, 2,
-        'Aragorn.com', 'Aragorn1@mail.com', 'devcorpAragorn', 'IndiaAragorn', 'BangladeshAragorn', 'street12', 'house12', 'block12', 'apartment12', '122222'), 
+        'Aragorn.com', 'Aragorn1@mail.com', 'devcorpAragorn', 'IndiaAragorn', 'BangladeshAragorn', 'street12', 'house12', 'block12', 'apent12', '122222'), 
 
     (14, 'BoramirFirst', 'BoramirLast', 'BoramirMidle', '2015-12-4', 1, 3, 3,
-        'Boramir.com', 'Boramir1@mail.com', 'devcorpBoramir', 'IndiaBoramir', 'BangladeshBoramir', 'street13', 'house13', 'block13', 'apartment13', '133333'),
+        'Boramir.com', 'Boramir1@mail.com', 'devcorpBoramir', 'IndiaBoramir', 'BangladeshBoramir', 'street13', 'house13', 'block13', 'apaent13', '133333'),
 
     (15, 'SamFirst', 'SamLast', 'SamMidle', '2015-12-4', 2, 4, 3,
-        'Sam.com', 'Sam1@mail.com', 'devcorpSam', 'IndiaSam', 'BangladeshSam', 'street14', 'house14', 'block14', 'apartment14', '1444'),  
+        'Sam.com', 'Sam1@mail.com', 'devcorpSam', 'IndiaSam', 'BangladeshSam', 'street14', 'house14', 'block14', 'apent14', '1444'),  
 
     (16, 'KolyaFirst', 'KolyaLast', 'KolyaMidle', '2015-12-4', 1, 3, 4,
-        'Kolya.com', 'Kolya1@mail.com',  'devcorpKolya', 'IndiaKolya', 'BangladeshKolya', 'street15', 'house15', 'block15', 'apartment15', '15555'),
+        'Kolya.com', 'Kolya1@mail.com',  'devcorpKolya', 'IndiaKolya', 'BangladeshKolya', 'street15', 'house15', 'block15', 'aparnt15', '15555'),
     
     (17, 'KolyaFirst17', 'KolyaLast17', 'KolyaMidle17', '2015-12-4', 1, 3, 4,
-      'Kolya17.com', 'Kolya117@mail.com',  'devcorpKolya17', 'IndiaKolya17', 'BangladeshKolya', 'street15', 'house15', 'block15', 'apartment15', '15555'); 
+      'Kolya17.com', 'Kolya117@mail.com',  'devcorpKolya17', 'IndiaKolya17', 'BangladeshKolya', 'street15', 'house15', 'block15', 'apartt15', '15555'); 
         
 
     
@@ -277,24 +277,24 @@ VALUES
   
    
    
--- INSERT INTO `emails_atachments` (`id`, `email_id`, `atachment_id`)
--- VALUES
---   (1, 1, 2),
---   (2, 2, 2),
---   (3, 3, 3),
---   (4, 4, 4),
---   (5, 5, 5),
---   (6, 6, 6),
---   (7, 7, 7),
---   (8, 8, 8),
---   (9, 9, 9),
---   (10, 10, 10),
---   (11, 11, 11),
---   (12, 16, 17),
---   (13, 17, 16),
---   (14, 17, 15),
---   (15, 19, 20),
---   (16, 19, 21);
+INSERT INTO `emails_atachments` (`id`, `email_id`, `atachment_id`)
+VALUES
+  (1, 1, 2),
+  (2, 2, 2),
+  (3, 3, 3),
+  (4, 4, 4),
+  (5, 5, 5),
+  (6, 6, 6),
+  (7, 7, 7),
+  (8, 8, 8),
+  (9, 9, 9),
+  (10, 10, 10),
+  (11, 11, 11),
+  (12, 16, 17),
+  (13, 17, 16),
+  (14, 17, 15),
+  (15, 19, 20),
+  (16, 19, 21);
    
  
 INSERT INTO phones_types (`phone_type_id`, `phone_type_value`)
