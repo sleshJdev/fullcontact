@@ -138,10 +138,10 @@ INSERT INTO `contacts` (`contact_id`, `first_name`, `last_name`, `middle_name`, 
 VALUES
 
     (1, 'Admin', 'Admin', 'Admin', '1999-06-06', 1, 3, 4,
-        'fullcontact.com', 'shorin-roman@yandex.by', 'iTechArt',  'Belarus', 'Minsk', 'Surganova', '37', '2', '505', '6666'),
+        'fullcontact.com', 'pankaj1@mail.com', 'iTechArt',  'Belarus', 'Minsk', 'Surganova', '37', '2', '505', '6666'),
 
     (2, 'PankajFirst', 'PankajLast', 'PankajMidle', now(), 1, 1, 1,
-        'pankaj.com', 'pankaj1@mail.com', 'devcorp', 'India', 'Bangladesh', 'street1', 'house1', 'block1', 'apartment1', '1111'),
+        'pankaj.com', 'shorin-roman@yandex.by', 'devcorp', 'India', 'Bangladesh', 'street1', 'house1', 'block1', 'apartment1', '1111'),
 
     (3, 'student', 'student', 'student', now(), 1, 2, 2,
         'student.com', 'studentbntu@mail.ru',  'devcorpstudent', 'Indiastudent', 'Bangladeshstudent', 'street2', 'house2', 'block2', 'apartment2', '2222'),    
@@ -241,7 +241,12 @@ VALUES
   (18, 1, 'cddf6628-4116-4e91-931f-771e8d6dc9c4_2.jpeg', now(), 'atachment_comment15'),
   (19, 1, '0f0579c5-27c3-4d79-9ad9-33d8b84f1fe7_3.jpeg', now(), 'atachment_comment15'),
   (20, 1, 'e4e94005-c34a-4f14-827c-66ebb0379936_4.jpeg', now(), 'atachment_comment15'),
-  (21, 1, 'ae8fe9e1-379c-455f-aefe-31f06ffa0d94_5.jpeg', now(), 'atachment_comment15');
+  (21, 1, 'ae8fe9e1-379c-455f-aefe-31f06ffa0d94_5.jpeg', now(), 'atachment_comment15'),
+  (22, 15, 'atachment_name26666', now(), 'atachment_comment15'),
+  (23, 15, 'atachment_name26666', now(), 'atachment_comment15'),
+  (24, 15, 'atachment_name26666', now(), 'atachment_comment15'),
+  (25, 15, 'atachment_name26666', now(), 'atachment_comment15'),
+  (26, 15, 'atachment_name26666', now(), 'atachment_comment15');
    
    
 INSERT INTO `emails_receivers` (`id`, `email_id`, `contact_id`)
@@ -272,24 +277,24 @@ VALUES
   
    
    
-INSERT INTO `emails_atachments` (`id`, `email_id`, `atachment_id`)
-VALUES
-  (1, 1, 2),
-  (2, 2, 2),
-  (3, 3, 3),
-  (4, 4, 4),
-  (5, 5, 5),
-  (6, 6, 6),
-  (7, 7, 7),
-  (8, 8, 8),
-  (9, 9, 9),
-  (10, 10, 10),
-  (11, 11, 11),
-  (12, 16, 17),
-  (13, 17, 16),
-  (14, 17, 15),
-  (15, 19, 20),
-  (16, 19, 21);
+-- INSERT INTO `emails_atachments` (`id`, `email_id`, `atachment_id`)
+-- VALUES
+--   (1, 1, 2),
+--   (2, 2, 2),
+--   (3, 3, 3),
+--   (4, 4, 4),
+--   (5, 5, 5),
+--   (6, 6, 6),
+--   (7, 7, 7),
+--   (8, 8, 8),
+--   (9, 9, 9),
+--   (10, 10, 10),
+--   (11, 11, 11),
+--   (12, 16, 17),
+--   (13, 17, 16),
+--   (14, 17, 15),
+--   (15, 19, 20),
+--   (16, 19, 21);
    
  
 INSERT INTO phones_types (`phone_type_id`, `phone_type_value`)
