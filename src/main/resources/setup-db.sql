@@ -1,16 +1,16 @@
-DROP DATABASE IF EXISTS fullcontact;
-CREATE DATABASE IF NOT EXISTS fullcontact;
-USE fullcontact;
-
-DROP TABLE IF EXISTS `email_contacts_atachments`;
-DROP TABLE IF EXISTS `atachments`;
-DROP TABLE IF EXISTS `emails`;
-DROP TABLE IF EXISTS `phones`;
-DROP TABLE IF EXISTS `contacts`;
-DROP TABLE IF EXISTS `nationalities`;
-DROP TABLE IF EXISTS `sexes`;
-DROP TABLE IF EXISTS `family_status`;
-DROP TABLE IF EXISTS `phones_types`;
+-- DROP DATABASE IF EXISTS fullcontact;
+-- CREATE DATABASE IF NOT EXISTS fullcontact;
+-- USE fullcontact;
+-- 
+-- DROP TABLE IF EXISTS `email_contacts_atachments`;
+-- DROP TABLE IF EXISTS `atachments`;
+-- DROP TABLE IF EXISTS `emails`;
+-- DROP TABLE IF EXISTS `phones`;
+-- DROP TABLE IF EXISTS `contacts`;
+-- DROP TABLE IF EXISTS `nationalities`;
+-- DROP TABLE IF EXISTS `sexes`;
+-- DROP TABLE IF EXISTS `family_status`;
+-- DROP TABLE IF EXISTS `phones_types`;
 
 CREATE TABLE `nationalities` (
   `nationality_id` INT(2) UNSIGNED NOT NULL AUTO_INCREMENT,
