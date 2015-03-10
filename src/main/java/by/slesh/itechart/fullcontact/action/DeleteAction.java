@@ -34,7 +34,7 @@ public class DeleteAction extends AbstractAction {
 		}
 	    }
 	}
-	getRequest().setAttribute("status", "Success statuc from " + getClass().getSimpleName() + "!");
+	getRequest().setAttribute("status", "Success Delted!");
 	getResponse().sendRedirect("show");
     }
 
