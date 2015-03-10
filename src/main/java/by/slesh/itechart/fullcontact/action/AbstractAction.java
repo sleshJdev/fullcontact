@@ -22,7 +22,8 @@ public abstract class AbstractAction implements Action {
 	setRequest(request);
 	setResponse(response);
 	dispatcher = request.getRequestDispatcher(TEMPLATE_PATH);
-	request.setAttribute("quantity", Database.getBirthdayMans().size());
+	int size = Database.getBirthdayMans() != null ? Database.getBirthdayMans().size() : 0;
+	request.setAttribute("quantity", size);
     }
 
     public RequestDispatcher getDispatcher() {

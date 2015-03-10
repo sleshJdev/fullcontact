@@ -27,9 +27,9 @@ public final class DaoReadersContainer {
 		return null;
 	    }
 	    EmailEntity email = new EmailEntity();
-	    long emailId = resultSet.getLong("email_id");
+	    Long emailId = resultSet.getLong("email_id");
 	    do {
-		long id = resultSet.getLong("email_id");
+		Long id = resultSet.getLong("email_id");
 		if (emailId == id) {
 		    email.setId(resultSet.getLong("email_id"));
 		    email.setContactIdSender(resultSet.getLong("contact_id_sender"));
@@ -56,9 +56,9 @@ public final class DaoReadersContainer {
 	    Map<Long, PhoneEntity> phonesId = new HashMap<Long, PhoneEntity>();
 	    Map<Long, AtachmentEntity> atachmentsId = new HashMap<Long, AtachmentEntity>();
 	    ContactEntity contact = new ContactEntity();
-	    long contactId = resultSet.getLong("contacts.contact_id");
+	    Long contactId = resultSet.getLong("contacts.contact_id");
 	    do {
-		long id = resultSet.getLong("contacts.contact_id");
+		Long id = resultSet.getLong("contacts.contact_id");
 		if ((contactId == id)) {
 		    readMostPartTo(resultSet, contact);
 		    readSmallPartTo(resultSet, contact);
@@ -98,9 +98,9 @@ public final class DaoReadersContainer {
 		return null;
 	    }
 	    ContactEntity contact = new ContactEntity();
-	    long contactId = resultSet.getLong("contacts.contact_id");
+	    Long contactId = resultSet.getLong("contacts.contact_id");
 	    do {
-		long id = resultSet.getLong("contacts.contact_id");
+		Long id = resultSet.getLong("contacts.contact_id");
 		if (contactId == id) {
 		    readMostPartTo(resultSet, contact);
 		} else {
@@ -125,9 +125,9 @@ public final class DaoReadersContainer {
 	    }
 	    Entity entity = new Entity() {
 	    };
-	    long familyStatusId = resultSet.getLong(1);
+	    Long familyStatusId = resultSet.getLong(1);
 	    do {
-		long id = resultSet.getLong(1);
+		Long id = resultSet.getLong(1);
 		if (familyStatusId == id) {
 		    entity.setId(resultSet.getLong(1));
 		    entity.setValue(resultSet.getString(2));
@@ -150,10 +150,10 @@ public final class DaoReadersContainer {
 		return null;
 	    }
 	    AtachmentEntity atachment = new AtachmentEntity();
-	    long atachmentId = resultSet.getLong(1);
+	    Long atachmentId = resultSet.getLong(1);
 	    
 	    do {
-		long id = resultSet.getLong(1);
+		Long id = resultSet.getLong(1);
 		if (atachmentId == id) {
 		    readTo(resultSet, atachment);
 		} else {
@@ -175,9 +175,9 @@ public final class DaoReadersContainer {
 		return null;
 	    }
 	    PhoneEntity phone = new PhoneEntity();
-	    long phoneId = resultSet.getLong(1);
+	    Long phoneId = resultSet.getLong(1);
 	    do {
-		long id = resultSet.getLong(1);
+		Long id = resultSet.getLong(1);
 		if (phoneId == id) {
 		    readTo(resultSet, phone);
 		} else {

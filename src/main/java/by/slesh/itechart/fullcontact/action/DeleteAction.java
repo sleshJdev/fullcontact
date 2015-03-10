@@ -30,7 +30,6 @@ public class DeleteAction extends AbstractAction {
 		    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, true);
 		    contactDao.delete(id);
 		} catch (ClassNotFoundException | SQLException e) {
-		    e.printStackTrace();
 		    throw new ServletException(e);
 		}
 	    }

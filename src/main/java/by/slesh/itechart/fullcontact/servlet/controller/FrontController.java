@@ -51,7 +51,7 @@ public class FrontController extends HttpServlet {
 
 	LOGGER.info("END\n\n\n\n\n\n\n");
     }
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	processRequest(request, response);

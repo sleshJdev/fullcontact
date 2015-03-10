@@ -160,8 +160,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 		quantity = resultSet.getLong(1);
 	    }
 
-	    LOGGER.info("quantity: " + quantity + " contacts");
-	    LOGGER.info("query: " + statement);
+	    LOGGER.info("quantity: {} contacts", quantity);
+	    LOGGER.info("query: {}", statement);
 	} finally {
 	    closeResources();
 	}
@@ -278,6 +278,11 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	try {
 	    connect();
 	    resultSet = statement.executeQuery();
+	    
+	    if(!resultSet.next()){
+		return null;
+	    }
+	    
 	    while ((item = reader.read(resultSet)) != null) {
 		list.add(item);
 	    }
