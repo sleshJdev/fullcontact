@@ -31,7 +31,7 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
           + "\n\t LEFT JOIN phones_types ON phones.phone_type_id = phones_types.phone_type_id "
     	  + "\n\t WHERE phones.phone_id = ? ";
     
-    private static final String DELETE_PHONE_QUERY_TEMPLATE = 
+    private static final String DELETE_RANGE_PHONE_QUERY_TEMPLATE = 
 	      "\n\t DELETE FROM phones " 
 	    + "\n\t WHERE phone_id IN ( %s ) AND contact_id = ?";
     
@@ -41,7 +41,7 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 
     public PhoneDaoImpl(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	super(isUseCurrentConnection, isCloseConnectionAfterWork);
-	setDeleteRangeQuery(DELETE_PHONE_QUERY_TEMPLATE);
+	setDeleteRangeQuery(DELETE_RANGE_PHONE_QUERY_TEMPLATE);
 	setGetByIdQuery(GET_BY_ID_QUERY);
 	setReader(DaoReadersContainer.PHONES_READER);
     }

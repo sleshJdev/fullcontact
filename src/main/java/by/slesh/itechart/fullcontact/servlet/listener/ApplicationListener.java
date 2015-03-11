@@ -1,14 +1,18 @@
 package by.slesh.itechart.fullcontact.servlet.listener;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +20,13 @@ import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.db.local.Database;
 import by.slesh.itechart.fullcontact.notify.BirthdayNotifier;
 import by.slesh.itechart.fullcontact.notify.Notifier;
+import by.slesh.itechart.fullcontact.settings.G;
 import by.slesh.itechart.fullcontact.util.PathUtil;
 
 /**
  * @author Eugene Putsykovich(slesh) Mar 4, 2015
+ * 
+ *         Main listener. Make set up application path and other settings
  *
  */
 public class ApplicationListener implements ServletContextListener {
@@ -30,24 +37,24 @@ public class ApplicationListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 	LOGGER.info("BEGIN");
 
-	ServletContext context = servletContextEvent.getServletContext();
-	fileLocationSetup(context);
-
-	if (notifier == null) {
-	    notifier = new BirthdayNotifier(1, TimeUnit.MINUTES);
-	    notifier.startNotify();
-	}
-
 	try {
+	    ServletContext context = servletContextEvent.getServletContext();
+	    fileLocationSetup(context);
+
+	    if (notifier == null) {
+		notifier = new BirthdayNotifier(1, TimeUnit.MINUTES);
+		notifier.startNotify();
+	    }
+
 	    Database.setNationalities(DaoFactory.getNationalityDao(true, true).getAll());
 	    Database.setFamilyStatuses(DaoFactory.getFamilyStatusDao(true, true).getAll());
 	    Database.setSexes(DaoFactory.getSexDao(true, true).getAll());
 	    Database.setPhoneTypes(DaoFactory.getPhoneTypeDao(true, true).getAll());
 	} catch (ClassNotFoundException | IOException | SQLException e) {
-	    LOGGER.error("error occured during initializ local database: {}", e.getMessage());
+	    LOGGER.error("error occured during initialize local database: {}", e);
 	}
 
-	LOGGER.info("END");
+	LOGGER.info("END. servlet context initilize successful!");
     }
 
     @Override
@@ -58,32 +65,67 @@ public class ApplicationListener implements ServletContextListener {
 	    notifier.stopNotify();
 	}
 
+	if (G.CACHE.exists()) {
+	    try {
+		FileUtils.deleteDirectory(G.CACHE);
+	    } catch (IOException e) {
+		LOGGER.error("cannot delete cache directory: {}", G.CACHE);
+	    }
+	}
+
 	LOGGER.info("END");
     }
 
-    private void fileLocationSetup(ServletContext context) {
-	String webInfPath = PathUtil.goToWebInf().getPath();
-	String webInfDirectory = context.getInitParameter("upload-directory");
-	File webInfFile = new File(String.format("%s%s%s", webInfPath, File.separator, webInfDirectory));
-	if (!webInfFile.exists()) {
-	    webInfFile.mkdirs();
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+	Properties p = new Properties();
+	p.load(new FileInputStream(PathUtil.getResourceFile("us.properties")));
+	System.out.println(p.toString());
+    }
+
+    private void fileLocationSetup(ServletContext context) throws FileNotFoundException, IOException {
+	Properties properties = new Properties();
+	properties.load(new FileInputStream(PathUtil.getResourceFile("upload.properties")));
+
+	File attachmentsFile = new File(properties.getProperty("attachments_directory"));
+	if (!attachmentsFile.exists()) {
+	    attachmentsFile.mkdirs();
 	}
 
-	String publicPath = PathUtil.goToRoot().getPath();
-	String publicDirectory = context.getInitParameter("public-directory");
-	File publicFile = new File(String.format("%s%s%s", publicPath, File.separator, publicDirectory));
-	if (!publicFile.exists()) {
-	    publicFile.mkdirs();
+	File avatarsFile = new File(properties.getProperty("avatarts_directory"));
+	if (!avatarsFile.exists()) {
+	    avatarsFile.mkdirs();
 	}
 
-	context.setAttribute("upload-directory-file", webInfFile);
-	context.setAttribute("upload-directory-path", webInfFile.getPath());
+	File files = new File(properties.getProperty("files_directory"));
+	if (!files.exists()) {
+	    files.mkdirs();
+	}
 
-	context.setAttribute("public-directory-file", publicFile);
-	context.setAttribute("public-directory-path", publicFile.getPath());
+	context.setAttribute("attachments-directory-file", attachmentsFile);
+	context.setAttribute("attachments-directory-path", attachmentsFile.getPath());
 
-	LOGGER.info("upload directory path {}", webInfFile.getPath());
-	LOGGER.info("public directory path {}", publicFile.getPath());
-	LOGGER.info("servlet context initilize successful!");
+	context.setAttribute("avatars-directory-file", avatarsFile);
+	context.setAttribute("avatars-directory-path", avatarsFile.getPath());
+
+	context.setAttribute("files-directory-file", files);
+	context.setAttribute("files-directory-path", files.getPath());
+
+	properties = new Properties();
+	properties.load(new FileInputStream(PathUtil.getResourceFile("us.properties")));
+
+	G.US_NAME = properties.getProperty("us_phone");
+	G.US_EMAIL = properties.getProperty("us_email");
+	G.US_PHONE = properties.getProperty("us_name");
+
+	G.ATTACHMENTS_DIRECTORY = attachmentsFile.getPath();
+	G.AVATARS_DIRECTORY = avatarsFile.getPath();
+	G.FILES_DIRECTORY = files.getPath();
+
+	LOGGER.info("attachments directory path {}", attachmentsFile.getPath());
+	LOGGER.info("avatars directory path {}", avatarsFile.getPath());
+	LOGGER.info("files directory path {}", avatarsFile.getPath());
+	LOGGER.info("us name {}", G.US_NAME);
+	LOGGER.info("us email {}", G.US_EMAIL);
+	LOGGER.info("us phone {}", G.US_PHONE);
     }
 }

@@ -56,6 +56,7 @@
 					<span>SEX</span>
 				</div>
 				<select name="sex">
+					<option value="" selected="selected">Not know</option>
 					<c:forEach var="item" items="${sexesList}">
 						<option value="<c:out value="${item.value }"/>">
 							<c:out value="${item.value }" />
@@ -68,6 +69,7 @@
 					<span>NATIONALITY</span>
 				</div>
 				<select name="nationality">
+					<option value="" selected="selected">Not know</option>
 					<c:forEach var="item" items="${nationalitiesList}">
 						<option value="<c:out value="${item.value }"/>">
 							<c:out value="${item.value }" />
@@ -80,6 +82,7 @@
 					<span>FAMILY STATUS</span>
 				</div>
 				<select name="family-status">
+					<option value="" selected="selected">Not know</option>
 					<c:forEach var="item" items="${familyStatusesList}">
 						<option value="<c:out value="${item.value }"/>">
 							<c:out value="${item.value }" />

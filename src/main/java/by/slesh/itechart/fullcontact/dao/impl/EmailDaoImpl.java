@@ -31,27 +31,26 @@ public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
 	       GET_QUERY 
 	    + "\n\t WHERE email_id = ?";
     
+    private static final String DELETE_RANGE_EMAILS_QUERY = 
+	      "\n\t DELETE FROM emails " 
+	    + "\n\t WHERE email_id IN ( %s ) AND contact_id_sender = ?";
+    
     public EmailDaoImpl() {
 	this(true, true);
     }
     
     public EmailDaoImpl(boolean isUseCurrentConnection, boolean isCloseConnectionAfterWork) {
 	super(isUseCurrentConnection, isCloseConnectionAfterWork);
+	setDeleteRangeQuery(DELETE_RANGE_EMAILS_QUERY);
 	setDeleteQuery(DELETE_QUERY);
 	setGetByIdQuery(GET_BY_ID_QUERY);
 	setGetAllQuery(GET_QUERY);
 	setReader(DaoReadersContainer.EMAIL_READER);
     }
     
-    @Override
-    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException {
-	throw new SQLException("not supported this operation!");
-    }
-    
     private static final String GET_EMAILS_OF_CONTACT = 
 	    GET_QUERY
 	 + "\n\t WHERE emails.contact_id_sender = %s";
-    
     
     @Override
     public List<EmailEntity> getEmailsOfContact(Long contactId) throws ClassNotFoundException, IOException, SQLException {

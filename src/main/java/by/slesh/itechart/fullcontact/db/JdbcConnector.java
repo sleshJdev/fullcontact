@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Eugene Putsykovich(slesh) Mar 5, 2015
- *
+ * 
+ *         Singleton. Manager connection to database
  */
 public final class JdbcConnector {
     private final static Logger LOGGER = LoggerFactory.getLogger(JdbcConnector.class);
@@ -50,7 +51,10 @@ public final class JdbcConnector {
 	String user = properties.getProperty("jdbc.username");
 	String password = properties.getProperty("jdbc.password");
 
-	return DriverManager.getConnection(url, user, password);
+	Connection newConnection = DriverManager.getConnection(url, user, password);
+	newConnection.setAutoCommit(false);
+
+	return newConnection;
     }
 
     public static Connection getCurrentConnection() throws ClassNotFoundException, IOException, SQLException {
@@ -65,12 +69,35 @@ public final class JdbcConnector {
     }
 
     public static void closeResource(Connection connection, Statement... statements) {
+	LOGGER.info("BEGIN closeResource....");
+	
 	if (connection != null) {
 	    try {
-		connection.close();
-		connection = null;
+		if (!connection.isClosed()) {
+		    connection.commit();
+		    LOGGER.info("commit int try block successfull!");
+		}
 	    } catch (SQLException e) {
-		LOGGER.error("error occured during release resources: {}", e);
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    LOGGER.error("rollback in catch block exeption {}", e1);
+		}
+		LOGGER.error("error occured release resources: {}", e);
+	    } finally {
+		try {
+		    if (!connection.isClosed()) {
+			try {
+			    connection.close();
+			    connection = null;
+			    LOGGER.info("close in finnaly block successfull!");
+			} catch (SQLException e) {
+			    LOGGER.info("close connetion error: {}", e);
+			}
+		    }
+		} catch (SQLException e) {
+		    LOGGER.error("check is close connection error: {}", e);
+		}
 	    }
 	}
 
@@ -81,10 +108,12 @@ public final class JdbcConnector {
 			statement.close();
 			statement = null;
 		    } catch (SQLException e) {
-			LOGGER.error("error occured during release resources: {}", e);
+			LOGGER.error("error occured release resources: {}", e);
 		    }
 		}
 	    }
 	}
+	
+	LOGGER.info("END closeResource");
     }
 }

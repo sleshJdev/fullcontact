@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +28,9 @@ import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.db.JdbcConnector;
 import by.slesh.itechart.fullcontact.db.local.Database;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
+import by.slesh.itechart.fullcontact.settings.G;
 import by.slesh.itechart.fullcontact.util.HttpProcessUtil;
 import by.slesh.itechart.fullcontact.util.PathUtil;
 
@@ -35,6 +39,7 @@ import com.mysql.jdbc.StringUtils;
 /**
  * @author Eugene Putsykovich(slesh) Mar 4, 2015
  *
+ *         Edit contact and save
  */
 public class EditAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(EditAction.class);
@@ -43,6 +48,9 @@ public class EditAction extends AbstractAction {
 
     private String action;
     private String idParameter;
+    
+    private String avatarsDirectory;
+    private String attachmentsDirectory;
 
     @Override
     public void execute() throws ServletException, IOException {
@@ -71,37 +79,53 @@ public class EditAction extends AbstractAction {
 	LOGGER.info("BEGIN");
 
 	super.init(request, response);
+	ServletContext context = getRequest().getServletContext();
+	avatarsDirectory = context.getAttribute("avatars-directory-path").toString();
+	attachmentsDirectory = context.getAttribute("attachments-directory-path").toString();
 	action = getRequest().getParameter("x");
 	idParameter = getRequest().getParameter("id");
-
-	LOGGER.info("action: " + action + ", id: " + idParameter);
-	LOGGER.info("END");
+	
+	LOGGER.info("END. action: {}, id: {}", action, idParameter);
     }
 
-    private void editing() throws IOException, ServletException {
+    private void editing() throws IOException, ServletException, ClassNotFoundException, SQLException {
 	LOGGER.info("BEGIN");
 
-	long id = Long.parseLong(idParameter);
+	Long id = Long.parseLong(idParameter);
 
-	try {
-	    ContactEntity contact = DaoFactory.getContactDao(true, true).get(id);
-	    File avatar = new File(String.format("%s%s", PathUtil.goToRoot(), contact.getAvatarPath()));
-	    if (!avatar.exists()) {
-		contact.setAvatarPath(null);
-	    }
-	    getRequest().setAttribute("nationalitiesList", Database.getNationalities());
-	    getRequest().setAttribute("familyStatusesList", Database.getFamilyStatuses());
-	    getRequest().setAttribute("sexesList", Database.getSexes());
-	    getRequest().setAttribute("phonesTypesList", Database.getPhoneTypes());
-	    getRequest().setAttribute("contact", contact);
-	} catch (ClassNotFoundException | SQLException e) {
-	    throw new ServletException(e);
+	if (id == null) {
+	    throw new ServletException("the user with such name isn't found");
 	}
-
+	
+	if (!G.CACHE.exists()) {
+	    G.CACHE.mkdirs();
+	}
+	if(G.CACHE.list().length > 2){
+	    FileUtils.deleteDirectory(G.CACHE);
+	    G.CACHE.mkdirs();
+	}
+	
+	ContactEntity contact = DaoFactory.getContactDao(true, true).get(id);
+	File avatar = new File(String.format("%s%s%s", avatarsDirectory, File.separator, contact.getAvatarPath()));
+	if (!avatar.exists()) {
+	    contact.setAvatarPath(null);
+	}else{
+	    File cachedFile = new File(String.format("%s%s%s", G.CACHE.getPath(), File.separator, avatar.getName()));
+	    if(!cachedFile.exists()){
+		Files.copy(avatar.toPath(), cachedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    }
+	    contact.setAvatarPath(cachedFile.getPath().substring(PathUtil.goToRoot().getPath().length()));
+	}
+	
+	getRequest().setAttribute("nationalitiesList", Database.getNationalities());
+	getRequest().setAttribute("familyStatusesList", Database.getFamilyStatuses());
+	getRequest().setAttribute("sexesList", Database.getSexes());
+	getRequest().setAttribute("phonesTypesList", Database.getPhoneTypes());
+	getRequest().setAttribute("contact", contact);
 	getRequest().setAttribute("content", "edit-contact-form-content.jsp");
 	getRequest().setAttribute("title", "Edit Contact Page");
 	getDispatcher().forward(getRequest(), getResponse());
-
+	
 	LOGGER.info("END");
     }
 
@@ -120,24 +144,18 @@ public class EditAction extends AbstractAction {
 	Long[] ids = null;
 
 	if ((ids = HttpProcessUtil.checkForDeletingAtachments(getRequest())) != null) {
-	    final String uploadDirectory = getRequest().getServletContext().getAttribute("upload-directory-path")
-		    .toString();
-	    EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);// open
-											      // connection
+	    // open connection
+	    EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);
 	    for (long id : ids) {
-		AtachmentEntity atachment = atachmentDao.get(id);
+		AttachmentEntity atachment = atachmentDao.get(id);
 
 		LOGGER.info("emtity is null? - {}", (atachment == null));
 
-		File file = new File(String.format("%s%s%s", uploadDirectory, File.separator, atachment.getName()));
+		File file = new File(String.format("%s%s%s", attachmentsDirectory, File.separator, atachment.getName()));
 		if (file.delete()) {
-
 		    LOGGER.info("atachment by path {} deleted successful", file.getPath());
-
 		} else {
-
 		    LOGGER.info("atachment by path {} not found or not exists", file.getPath());
-
 		}
 	    }
 	    JdbcConnector.close();// close connection
@@ -157,20 +175,20 @@ public class EditAction extends AbstractAction {
 	LOGGER.info("BEGIN");
 	LOGGER.info("parts quantity: {}", parts == null ? null : parts.size());
 
-	ContactDao dao = (ContactDao) DaoFactory.getContactDao(true, true);
-	ServletContext context = getRequest().getServletContext();
-	final long contactId = Long.parseLong(idParameter);
-	final String publicDirectory = context.getAttribute("public-directory-path").toString();
-	final String uploadDirectory = context.getAttribute("upload-directory-path").toString();
-	final String root = PathUtil.goToRoot().getPath();// .../'application-name'
-	List<File> files = null;
-	File file = null;
-	String pathSave = null;
+	final Long contactId = Long.parseLong(idParameter);
 
+	ContactDao dao = (ContactDao) DaoFactory.getContactDao(true, true);
+	
+	List<File> files = null;
+	
 	for (Part part : parts) {
-	    String name = valueOf(part, "name");// name of input field from
+	    // name of input field from
+	    String name = valueOf(part, "name");
+	
 	    if (!StringUtils.isEmptyOrWhitespaceOnly(name)) {
-		String fileName = valueOf(part, "filename");// name of file
+		
+		// name of file
+		String fileName = valueOf(part, "filename");
 		if (StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
 		    continue;
 		}
@@ -179,32 +197,39 @@ public class EditAction extends AbstractAction {
 
 		switch (name) {
 		case "hidden-avatar-file":
-		    file = processPart(part, publicDirectory, fileName);// saved file
-		    pathSave = file.getPath().substring(root.length());// "/'path-to-target-folder'/'file-name'"
-		    String pathAvatar = dao.getAvatar(contactId);// same as pathSave, but from db 
-		    LOGGER.info("path save avatar: {}", pathSave);
-
-		    if (!StringUtils.isEmptyOrWhitespaceOnly(pathAvatar)) {
-			String fullPath = String.format("%s%s", root, pathAvatar);// absolute path to current avatar
-			File avatar = new File(fullPath);
+		    LOGGER.info("hidden avatar file process...");
+		    
+		    // save avatar and get file
+		    File avatarFile = processPart(part, avatarsDirectory, fileName);
+		    
+		    String newAvatarName = avatarFile.getName();
+		    String currentAvatarName = dao.getAvatar(contactId);
+		    
+		    LOGGER.info("current name: {}", currentAvatarName);
+		    LOGGER.info("new name: {}", newAvatarName);
+		    
+		    if (!StringUtils.isEmptyOrWhitespaceOnly(currentAvatarName)) {
+			// created file for current avatar 
+			File avatar = new File(String.format("%s%s%s", avatarsDirectory, File.separator, currentAvatarName));
+			
 			if (avatar.delete()) {
-
-			    LOGGER.info("avatar by path {} deleted successful", fullPath);
+			    LOGGER.info("avatar by path {} deleted successful", avatar);
 
 			    contact.setAvatarPath(null);
 			} else {
-
-			    LOGGER.info("avatar by path {} not found or not exists", fullPath);
-
+			    LOGGER.info("avatar by path {} not found or not exists", avatar);
 			}
 		    }
-		    dao.setAvatar(contactId, pathSave);
+		    
+		    LOGGER.info("new avatar name: {}", newAvatarName);
+		    
+		    dao.setAvatar(contactId, newAvatarName);
 		    break;
 		case "atachment-file":
 		    LOGGER.info("atachment file process...");
 
-		    AtachmentEntity atachment = null;
-		    for (AtachmentEntity item : contact.getAtachments()) {
+		    AttachmentEntity atachment = null;
+		    for (AttachmentEntity item : contact.getAtachments()) {
 			if (fileName.equals(item.getName())) {
 
 			    LOGGER.info("origin name: {}, changed name: {}", fileName, item.getChangedName());
@@ -214,19 +239,19 @@ public class EditAction extends AbstractAction {
 			}
 		    }
 
-		    file = processPart(part, uploadDirectory, fileName);
-		    pathSave = file.getPath().substring(root.length());// /'path-to-target-folder'/'file-name'
+		    File attachmentFile = processPart(part, attachmentsDirectory, fileName);
+		    String newAttachmentName = attachmentFile.getName();
 
-		    LOGGER.info("atachment file obtained: {}, path to save: {}", file, pathSave);
-
-		    atachment.setName(file.getName());
-		    atachment.setChangedName(file.getName());
-
+		    LOGGER.info("atachment file obtained., path to save: {}", attachmentFile);
+		    
+		    atachment.setName(newAttachmentName);
+		    atachment.setChangedName(newAttachmentName);
+		    
 		    if (files == null) {
 			files = new ArrayList<File>();
 		    }
 
-		    files.add(file);
+		    files.add(attachmentFile);
 
 		    break;
 		}
@@ -239,7 +264,7 @@ public class EditAction extends AbstractAction {
 	 * 1. Rename according file on disc 
 	 * 2. Update names atachments: 'simple name' -> 'salt + changed name'
 	 */
-	for (AtachmentEntity atachment : contact.getAtachments()) {
+	for (AttachmentEntity atachment : contact.getAtachments()) {
 	    String name = atachment.getName();
 	    String changedName = atachment.getChangedName();
 	    String salt = atachment.getSalt();
@@ -247,21 +272,16 @@ public class EditAction extends AbstractAction {
 	    String newName = String.format("%s%s", salt, changedName);
 
 	    LOGGER.info("id: {}, name: {}, changedName: {}, salt: {}", atachment.getId(), name, changedName, salt);
-	    LOGGER.info("new name: {}", newName);
 
 	    if (!name.equals(changedName)) {
 		// 1
-		file = new File(String.format("%s%s%s%s", uploadDirectory, File.separator, salt, name));
-
-		LOGGER.info("origin file: {}", file.getPath());
+		File file = new File(String.format("%s%s%s%s", attachmentsDirectory, File.separator, salt, name));
 
 		if (file.exists()) {
-		    File newFile = new File(String.format("%s%s%s", uploadDirectory, File.separator, newName));
+		    File newFile = new File(String.format("%s%s%s", attachmentsDirectory, File.separator, newName));
 		    file.renameTo(newFile);
 
-		    LOGGER.info("old name: {}", file.getPath());
-		    LOGGER.info("new name: {}", newFile.getPath());
-		    LOGGER.info("changed name successful!");
+		    LOGGER.info("old path: {}, new path: {}", file.getPath(), newFile.getPath());
 		}
 	    }
 	    // 2
@@ -277,9 +297,11 @@ public class EditAction extends AbstractAction {
 	LOGGER.info("BEGIN");
 
 	LOGGER.info("destination: {}", destination);
-	LOGGER.info("fileName: {}", fileName);
+	LOGGER.info("fileName without salt: {}", fileName);
 
 	fileName = String.format("%s_%s", UUID.randomUUID().toString(), fileName);
+
+	LOGGER.info("fileName with salt: {}", fileName);
 
 	OutputStream out = null;
 	InputStream fileContent = null;

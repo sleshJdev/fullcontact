@@ -11,8 +11,6 @@
 	<c:set var="emailsList" value="${emailsList} ${email};"/><%-- ${!loop.last ? '; ' : ''} --%>
 </c:forEach>
 
-
-
 <div id="content">
 	<form id="contact-form" class="smart-green" action="send?x=send" method="post" enctype="multipart/form-data">
 		<div>
@@ -23,7 +21,7 @@
 				<h3>MESSAGE BOX</h3>
 				<label>
 					<span>Subject:</span>
-					<input id="name" class="input" name="email-subject" type="text" value="" /><br />
+					<input id="subject" class="input" name="email-subject" type="text" value="" /><br />
 				</label>
 				<label>
 					<span>Email:</span>
@@ -33,7 +31,7 @@
 					<span>Template</span>
 					<select id="template-selector"  name="email-type">
 							<option value="plain" selected="selected">plain text</option>
-							<option value="congratulation">congratulation</option>
+							<option value="template">template simple message</option>
 					</select>
 				</label>
 				<label>

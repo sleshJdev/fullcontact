@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.domain.Entity;
@@ -54,7 +54,7 @@ public final class DaoReadersContainer {
 		return null;
 	    }
 	    Map<Long, PhoneEntity> phonesId = new HashMap<Long, PhoneEntity>();
-	    Map<Long, AtachmentEntity> atachmentsId = new HashMap<Long, AtachmentEntity>();
+	    Map<Long, AttachmentEntity> atachmentsId = new HashMap<Long, AttachmentEntity>();
 	    ContactEntity contact = new ContactEntity();
 	    Long contactId = resultSet.getLong("contacts.contact_id");
 	    do {
@@ -74,14 +74,14 @@ public final class DaoReadersContainer {
 
 		Long atachmentId = resultSet.getLong("atachments.atachment_id");
 		if (atachmentsId.get(atachmentId) == null && atachmentId > 0) {
-		    AtachmentEntity atachment = new AtachmentEntity();
+		    AttachmentEntity atachment = new AttachmentEntity();
 		    readTo(resultSet, atachment);
 		    atachmentsId.put(atachmentId, atachment);
 		}
 	    } while (resultSet.next());
 
 	    contact.setPhones(new ArrayList<PhoneEntity>(phonesId.values()));
-	    contact.setAtachments(new ArrayList<AtachmentEntity>(atachmentsId.values()));
+	    contact.setAtachments(new ArrayList<AttachmentEntity>(atachmentsId.values()));
 	    
 	    return contact;
 	}
@@ -90,7 +90,6 @@ public final class DaoReadersContainer {
     public static final DaoReader<Entity> LIMIT_CONTACT_READER = new DaoReader<Entity>() {
 	@Override
 	public ContactEntity read(ResultSet resultSet) throws SQLException {
-	    
 	    if (resultSet.isBeforeFirst()) {
 		resultSet.next();
 	    }
@@ -149,7 +148,7 @@ public final class DaoReadersContainer {
 	    if (resultSet.isAfterLast()) {
 		return null;
 	    }
-	    AtachmentEntity atachment = new AtachmentEntity();
+	    AttachmentEntity atachment = new AttachmentEntity();
 	    Long atachmentId = resultSet.getLong(1);
 	    
 	    do {
@@ -226,7 +225,7 @@ public final class DaoReadersContainer {
 	phone.setType(resultSet.getString("phones_types.phone_type_value"));
     }
 
-    private static void readTo(ResultSet resultSet, AtachmentEntity atachment) throws SQLException {
+    private static void readTo(ResultSet resultSet, AttachmentEntity atachment) throws SQLException {
 	atachment.setId(resultSet.getLong("atachments.atachment_id"));
 	atachment.setContactId(resultSet.getLong("atachments.contact_id"));
 	atachment.setName(resultSet.getString("atachments.atachment_name"));

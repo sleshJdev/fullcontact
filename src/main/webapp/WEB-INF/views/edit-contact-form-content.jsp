@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -22,10 +23,7 @@
 		<input type="hidden" id="hidden-deleting-atachment-ids" name="deleting-atachmet-ids" >
 		<input type="file" id="hidden-pick-avatart" name="hidden-avatar-file" class="hidden">	<!--class="avatart-file"  -->	
 		
-		<input id="for-test" type="button" class="hidden" value="Click me">
-<!-- 		<div id="test-div-1"> -->
-<!-- 			<div class="div1">qweqwqweqwe111</div> -->
-<!-- 		</div> -->
+		<input id="for-test" type="button" class="hidden"  value="Click me">
 		
 		<h1>EDIT CONTACT</h1>
 		
@@ -50,7 +48,7 @@
 						<td><span>First Name</span></td>
 						<td> 
 							<input type="text" name="first-name" value="${contact.firstName}"
-							        placeholder="Your First Name" pattern="[A-Za-z0-9]{1,50}"
+							        placeholder="Your First Name" pattern="[А-ЯЁа-яёA-Za-z0-9]{1,50}"
 							        maxlength="50" 
 							        title="First name must be from 1 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -61,7 +59,7 @@
 						<td> 
 							<input type="text" name="middle-name" value="${contact.middleName}"
 									placeholder="Your Middle Name"
-							        pattern="[A-Za-z0-9]{1,50}" 
+							        pattern="[А-ЯЁа-яёA-Za-z0-9]{1,50}" 
 							        maxlength="50" 
 							        title="Midle name must be from 1 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -73,7 +71,7 @@
 						<td> 
 							<input type="text" name="last-name" value="${contact.lastName}"
 									placeholder="Your Last Name" 
-							        pattern="[A-Za-z0-9]{1,50}" 
+							        pattern="[А-ЯЁа-яёA-Za-z0-9]{1,50}" 
 							        maxlength="50" 
 							        title="Last name must be from 1 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -159,7 +157,8 @@
 								<input type="hidden" name="phone-comment" value="${phone.comment }">
 								<span class="table-phone-comment">${phone.comment }</span>
 							</td>
-							<td><div class="center-cell">
+							<td>
+								<div class="center-cell">
 									<img 
 										alt="Edit" title="Edit" 
 										class="edit-phone"
@@ -220,7 +219,7 @@
 						<th>ATACHMENT NAME</th>
 						<th>UPLOAD DATE</th>
 						<th>COMMENT</th>
-						<th></th>
+						<th class="td-links"></th>
 					</tr>
 					<c:forEach varStatus="loop" var="atachment" items="${contact.atachments}">
 						<tr>
@@ -232,23 +231,13 @@
 									<input type="checkbox">
 								</div>
 							</td>
-							<td >
-								<a href="load?name=${atachment.name }">
-									<span class="table-atachment-name">
-										<c:set var="indexOf" value="${fn:indexOf(atachment.name, '_') }"/>
-										<c:set var="nameLength" value="${fn:length(atachment.name) }"/>
-	<%-- 										<c:forEach var="i" begin="0" end="${nameLength }"> --%>
-	<%-- 											<c:if test="${i < nameLength}"> --%>
-	<%-- 												<c:set var="c" value="${fn:substring(atachment.name, i, i + 1) }"/> --%>
-	<%-- 												<c:if test="${c == '_' }"> --%>
-	<%-- 													<c:set var="indexOf" value="${i }"/> --%>
-	<%-- 												</c:if> --%>
-	<%-- 											</c:if> --%>
-	<%-- 										</c:forEach> --%>
-											<c:set var="simpleName" value="${fn:substring(atachment.name, indexOf + 1, nameLength) }"/>
-										<c:out value="${simpleName }"/>
-									</span>
-								</a>
+							<td>
+								<span class="table-atachment-name">
+									<c:set var="indexOf" value="${fn:indexOf(atachment.name, '_') }"/>
+									<c:set var="nameLength" value="${fn:length(atachment.name) }"/>
+									<c:set var="simpleName" value="${fn:substring(atachment.name, indexOf + 1, nameLength) }"/>
+									<c:out value="${simpleName }"/>
+								</span>
 								<input type="hidden" name="changed-atachment-name" value="${simpleName }" class="hidden table-changed-atachment-name"> <!-- new atachment name -->
 								<input type="hidden" name="atachment-name" value="${simpleName }" class="hidden table-origin-atachment-name"> <!-- order important! -->
 								<input type="hidden" name="atachment-name-salt" class="hidden table-atachment-name-salt" value="<c:out value="${fn:substring(atachment.name, 0, indexOf + 1) }"/>">
@@ -262,11 +251,19 @@
 								<span class="table-atachment-comment">${atachment.comment }</span>
 							</td>
 							<td>
-								<div class="center-cell">
-									<img 
-										alt="Edit" title="Edit" class="edit-atachment"
-										id="edit-atachment-icon-${loop.index + 1}"
-										src="${pageContext.request.contextPath}/images/icons/edit.png">
+								<div class="links">
+									<a href="load?name=${atachment.name }">
+										<img alt="dowload" src="${pageContext.request.contextPath}/images/icons/dowload.png">
+									</a>
+									<a href="view?name=${atachment.name }">
+										<img alt="view" src="${pageContext.request.contextPath}/images/icons/view.png">
+									</a>
+									<div class="edit-link">
+										<img 
+											alt="Edit" title="Edit"
+											id="edit-atachment-icon-${loop.index + 1}"
+											src="${pageContext.request.contextPath}/images/icons/edit.png">
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -377,7 +374,7 @@
 					<td>
 						<input type="text" name="current-employment" value="${contact.currentEmployment}"
 									placeholder="Your Employment" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 									maxlength="50" 
 							        title="Your Current Employement. Max Length 30 characters. Can be used only letters and digits."/> 
 					</td>
@@ -387,7 +384,7 @@
 					<td>
 						<input type="text" name="country" value="${contact.country}"
 									placeholder="Your Country" 
-	        						pattern="[A-Za-z0-9]{0,30}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,30}" 
 	        						maxlength="30" 
 	        						title="Your Coutry. Max Length 30 characters. Can be used only letters and digits."/>
 					</td>
@@ -397,7 +394,7 @@
 					<td>
 						<input type="text" name="city" value="${contact.city}"
 									placeholder="Your City" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 	        						maxlength="30" 
 	        						title="Your City. Max Length 30 characters. Can be used only letters and digits."/>
 					</td>
@@ -407,7 +404,7 @@
 					<td>
 						<input type="text" name="street" value="${contact.street}" 
 									placeholder="Your Street" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 	        						maxlength="50" 
 	        						title="Your Coutry. Max Length 50 characters. Can be used only letters and digits."/>
 					</td>
@@ -417,7 +414,7 @@
 					<td>
 						<input id="house" type="text" name="house" value="${contact.house}" 
 									placeholder="Your House" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your House. Max Length 10 characters. Can be used only letters and digits."/>
 					</td>
@@ -427,7 +424,7 @@
 					<td>
 						<input type="text" name="block" value="${contact.block}" 
 									placeholder="Your Block" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your Block. Max Length 10 characters. Can be used only letters and digits."/>
 					</td>
@@ -437,7 +434,7 @@
 					<td>
 						<input id="apartment" type="text" name="apartment" value="${contact.apartment}"
 									placeholder="Your Apartment" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your Apartment. Max Length 10 characters. Can be used only letters and digits."/>
 					</td>

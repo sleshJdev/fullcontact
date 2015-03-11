@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import by.slesh.itechart.fullcontact.dao.impl.ManyToManyDao;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
 public class ManyToManyDaoTest {
@@ -30,7 +30,7 @@ public class ManyToManyDaoTest {
     @Test
     public void testGetAtachmentsOfEmail() throws ClassNotFoundException, SQLException, IOException {
 	final long emailId = 1;
-	List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, true).getAtachmentsOfEmail(emailId);
+	List<AttachmentEntity> atachments = ManyToManyDao.getInstance(true, true).getAtachmentsOfEmail(emailId);
 	assertNotNull(atachments);
     }
 

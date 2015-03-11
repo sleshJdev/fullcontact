@@ -19,7 +19,7 @@ import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.dao.impl.ManyToManyDao;
 import by.slesh.itechart.fullcontact.db.JdbcConnector;
 import by.slesh.itechart.fullcontact.db.local.Database;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.settings.G;
@@ -49,7 +49,7 @@ public class LettersAction extends AbstractAction {
 		    // no close connection after work!
 		    List<ContactEntity> receivers = ManyToManyDao.getInstance(true, false).getReceiversOfEmail( email.getId());
 		    // no close connection after work!
-		    List<AtachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail( email.getId());
+		    List<AttachmentEntity> atachments = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail( email.getId());
 		    email.setContactIdSender(sender.getId());
 		    email.setSender(sender);
 		    if (receivers != null) {

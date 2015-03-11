@@ -76,52 +76,9 @@ function init() {
  * Stub listener
  */
 function clickListener() {
-	console.log("validatePhone() BEGIN");
-
-	var PATTERN;
-	var value;
-	
-//	PATTERN = /^[\w!?\s,.]{1,30}$/;
-//	value = "Some gratulation!";
-//	if (!PATTERN.test(value)) {
-//		alert("Email subject must be more 1 and less 50. Use only characters and digits.");
-//		return false;
-//	}
-//	
-//	console.log("\t email subject: " + value + " is valid!");
-
-	PATTERN = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	value = "email1@mail.com; email2@mail.com; em#ail3@mail.com ";
-	var tokens = value.split(';');
-	for(var i = 0; i < tokens.length; ++i){
-		var token = tokens[i].trim();
-		if (!PATTERN.test(token)) {
-			alert(token + " incorrect");
-		}
-	}
-	
-	
-//	if (!PATTERN.test(value)) {
-//		alert("Phone Number. Format: NNN NN NN. Can be used only digits.");
-//		return false;
-//	}
-	
-	console.log("\t emails: " + value + " is valid!");
-
-//	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;]+$/;
-//	value = "asdasdasd1212  sad a dqw 1 2! a das )) d## 2";
-//	if (!PATTERN.test(value)) {
-//		alert("Text contains illegal characters");
-//		return false;
-//	}
-//
-//	console.log("\t message: " + value + " is valid!");
-	console.log("validatePhone() END");
-	return true;
+	alert("Ok!");
+	copyData();
 }
-
-
-
 
 /*
  * Put all updated data to 'hidden' input before submit to server.
@@ -137,7 +94,7 @@ function prepareBeforeSubmit(table, suffixName) {
 	var rows = table.getElementsByTagName("tr");
 	for (var y = 1; y < rows.length; ++y) {//skip header
 		var columns = rows[y].getElementsByTagName("td");
-		for (var x = 2; x < columns.length - 1; ++x) {//skip first 2 column(number, checkbox) and last(icon)
+		for (var x = 2; x < columns.length - 1; ++x) {//skip first 2 column(number, checkbox) and last(icons)
 			var cellValue = columns[x].getElementsByTagName("span")[0].textContent.trim();
 			var input = columns[x].getElementsByTagName("input")[0];
 			input.value = cellValue;
@@ -145,29 +102,6 @@ function prepareBeforeSubmit(table, suffixName) {
 	}
 	
 	console.log("prepareBeforeSubmit END");
-}
-
-/*
- * Special function for prepate atachment name
- * It fill 'changed-atachment-name' and 'atachment-name' field
- * For 'changed-atachment-name' execute contact 'salt' + 'changed-name(from from span[class=table-atachment-name])'
- * This need to be compare old and new name on server   
- */
-function specialPrepareAtachmentNameBeforeSubmit(){
-	console.log("prepareAtachmentNameBeforeSubmit() BEGIN")
-	
-//	var rows = atachmentTable.getElementsByTagName("tr");
-//	for(var y = 1; y < rows.length - 1; ++y){//skip header(first) and template row(last)
-//		var row = rows[y];
-//		var simpleName = row.getElementsByClassName("table-atachment-name")[0].textContent.trim();
-//		var salt = row.getElementsByClassName("table-atachment-name-salt")[0].value.trim();
-//		var changedName = row.getElementsByClassName("table-changed-atachment-name")[0];
-//		changedName.value = salt + simpleName;
-//		
-//		console.log("\tsimpleName: " + simpleName + ", salt: " + salt + ", changedName: " + changedName.value);
-//	}
-	
-	console.log("prepareAtachmentNameBeforeSubmit() END")
 }
 
 function copyData() {
@@ -213,6 +147,9 @@ function dragStartListener() {
  * Return all checkboxes in table
  */
 function getCheckBoxesFromTable(table){
+	console.log("getCheckBoxesFromTable() BEGIN");
+	console.log("table = " + table);
+	
 	var counter = 0;
 	var checkboxes = [];
 	var inputs = table.getElementsByTagName("input");
@@ -222,6 +159,7 @@ function getCheckBoxesFromTable(table){
 		}
 	}
 	
+	console.log("getCheckBoxesFromTable() END");
 	return checkboxes;
 }
 
@@ -239,19 +177,26 @@ function selectAll(table, state) {
  * Numberd rows
  */
 function numbered(table) {
-	var preffix = table == phoneTable ? "phone" : "atachment";
+	console.log("numbered() BEGIN");
+	
+	var preffix = table === phoneTable ? "phone" : "atachment";
 	var rows = table.getElementsByTagName("tr");
 	for (var i = 1; i < rows.length - 1; ++i) {// skip header(first) and template(last)
 		var row = rows[i];
 		if (row.hasAttribute("class")) {
 			continue;
 		}
+		console.log("i: " + i);
 		row.getElementsByTagName("span")[0].textContent = i;
 		
-		var iconEdit = row.getElementsByTagName("img")[0];
+		var icons = row.getElementsByTagName("img");
+		var iconEdit = icons[icons.length - 1];
+		
 		iconEdit.id = iconEdit.id.substring(0, iconEdit.id.lastIndexOf("-") + 1) + i;
 		iconEdit.setAttribute("onclick", preffix + "EditPopupShow('edit', " + i + ");");
 	}
+	
+	console.log("numbered() END");
 }
 
 

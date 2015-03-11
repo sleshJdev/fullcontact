@@ -125,7 +125,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	LOGGER.info("BEGIN");
 	LOGGER.info("id: {}", id);
 
-	if (StringUtils.isEmptyOrWhitespaceOnly(countQuery)) {
+	if (StringUtils.isEmptyOrWhitespaceOnly(deleteQuery)) {
 	    throw new SQLException("'delete' sql query is not found. maybe this method not supported");
 	}
 	
@@ -203,8 +203,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
     @Override
     public T get(Long id) throws ClassNotFoundException, IOException, SQLException {
-	LOGGER.info("BEGIN");
-	LOGGER.info("id: {}", id);
+	LOGGER.info("BEGIN id: {}", id);
 
 	if (StringUtils.isEmptyOrWhitespaceOnly(getByIdQuery) || reader == null) {
 	    throw new SQLException("'get' sql query is not found. maybe this method not supported or 'reader' is null");
@@ -229,8 +228,7 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
     @Override
     public List<T> getLimit(long start, long size) throws ClassNotFoundException, IOException, SQLException {
-	LOGGER.info("BEGIN");
-	LOGGER.info("start: {}, size: {}", start, size);
+	LOGGER.info("BEGIN start: {}, size: {}", start, size);
 	
 	if (StringUtils.isEmptyOrWhitespaceOnly(getLimitQuery) || reader == null) {
 	    throw new SQLException("'get limit' sql query is not found. maybe this method not supported or 'reader' is null");
@@ -247,7 +245,6 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	}
 
 	LOGGER.info("END");
-
 	return list;
     }
 

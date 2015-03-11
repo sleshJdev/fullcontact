@@ -8,14 +8,14 @@ window.onload = function() {
 };
 
 function setTamplate(e) {
-	if (e.value.indexOf("congratulation") != -1) {
+	if (e.value.indexOf("template") != -1) {
 		document.getElementById("message").value = 
-		   "Hello, $NAME$ \n\n"
-		 + "your message here \n\n"
-		 + "Thanks & Regards, $US_FULL_NAME$ \n\n"
-		 + "Contact Info:\n"
-		 + "Phone: $US_PHONE$\n"
-		 + "Email: $US_EMAIL$";
+				  "Hello, $NAME$ \n\n"
+				+ "your message here \n\n"
+				+ "Thanks & Regards, $US_FULL_NAME$ \n\n" 
+				+ "Contact Info:\n"
+				+ "Phone: $US_PHONE$\n" 
+				+ "Email: $US_EMAIL$";
 	} else {
 		document.getElementById("message").value = "";
 	}
@@ -53,14 +53,15 @@ function createAttachmentFieldHtml(id) {
 }
 
 function validateForm() {
-	console.log("validatePhone() BEGIN");
+	console.log("validateForm() BEGIN");
+
 	var PATTERN;
 	var value;
 
-	PATTERN = /^[\w!?\s,.]{1,30}$/;
-	value = document.getElementById("name").value;
-	if (!PATTERN.test(value)) {
-		alert("Email subject must be more 1 and less 50. Use only characters and digits. Separator - ';'");
+	PATTERN = /^[А-ЯЁа-яё\w!?\s,.]{1,30}$/;
+	value = document.getElementById("subject").value;
+	if (!PATTERN.test(value) || value.length == 0) {
+		alert("Email subject must be more 1 and less 30. Use only characters and digits.");
 		return false;
 	}
 
@@ -71,7 +72,7 @@ function validateForm() {
 	var tokens = value.split(';');
 	for (var i = 0; i < tokens.length; ++i) {
 		var token = tokens[i].trim();
-		if(token.length == 0){
+		if (token.length == 0) {
 			continue;
 		}
 		if (!PATTERN.test(token)) {
@@ -80,13 +81,7 @@ function validateForm() {
 		}
 	}
 
-//	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;\$]+$/;
-//	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;\$]{0, 100}$/;
-//	value = document.getElementById("message").value;
-//	if (!PATTERN.test(value)) {
-//		alert("Text contains illegal characters");
-//		return false;
-//	}
+	//TODO //validate message here
 
 	console.log("\t message: " + value + " is valid!");
 	console.log("validatePhone() END");

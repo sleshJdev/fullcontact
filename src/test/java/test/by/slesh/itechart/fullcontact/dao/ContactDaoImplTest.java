@@ -16,7 +16,7 @@ import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.Getable;
 import by.slesh.itechart.fullcontact.dao.impl.ContactDaoImp;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 import by.slesh.itechart.fullcontact.settings.G;
@@ -95,19 +95,19 @@ public class ContactDaoImplTest {
 	phones.add(phone1);
 	phones.add(phone2);
 
-	AtachmentEntity atachment1 = new AtachmentEntity();
+	AttachmentEntity atachment1 = new AttachmentEntity();
 	atachment1.setId(null);
 	atachment1.setName("addname1.txt");
 	atachment1.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment1.setComment("add comment 1");
 
-	AtachmentEntity atachment2 = new AtachmentEntity();
+	AttachmentEntity atachment2 = new AttachmentEntity();
 	atachment2.setId(null);
 	atachment2.setName("addname2.txt");
 	atachment2.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment2.setComment("add comment 2");
 
-	List<AtachmentEntity> atachments = new ArrayList<AtachmentEntity>();
+	List<AttachmentEntity> atachments = new ArrayList<AttachmentEntity>();
 	atachments.add(atachment1);
 	atachments.add(atachment2);
 
@@ -163,19 +163,19 @@ public class ContactDaoImplTest {
 	phones.add(phone1);
 	phones.add(phone2);
 
-	AtachmentEntity atachment1 = new AtachmentEntity();
+	AttachmentEntity atachment1 = new AttachmentEntity();
 	atachment1.setId(null);
 	atachment1.setName("updatename1.txt");
 	atachment1.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment1.setComment("update comment 1");
 
-	AtachmentEntity atachment2 = new AtachmentEntity();
+	AttachmentEntity atachment2 = new AttachmentEntity();
 	atachment2.setId(null);
 	atachment2.setName("updatename2.txt");
 	atachment2.setUploadDate(new Date(new java.util.Date().getTime()));
 	atachment2.setComment("update comment 2");
 
-	List<AtachmentEntity> atachments = new ArrayList<AtachmentEntity>();
+	List<AttachmentEntity> atachments = new ArrayList<AttachmentEntity>();
 	atachments.add(atachment1);
 	atachments.add(atachment2);
 	

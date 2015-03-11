@@ -10,7 +10,7 @@ import java.util.List;
 public class EmailEntity extends Entity {
     private Long contactIdSender;
     private ContactEntity sender;
-    private List<AtachmentEntity> atachments;
+    private List<AttachmentEntity> atachments;
     private List<ContactEntity> receivers;
     private String subject;
     private Date sendDate;
@@ -41,11 +41,11 @@ public class EmailEntity extends Entity {
 	this.sender = sender;
     }
 
-    public List<AtachmentEntity> getAtachments() {
+    public List<AttachmentEntity> getAtachments() {
 	return atachments;
     }
 
-    public void setAtachments(List<AtachmentEntity> atachments) {
+    public void setAtachments(List<AttachmentEntity> atachments) {
 	this.atachments = atachments;
     }
 

@@ -2,7 +2,8 @@ package by.slesh.itechart.fullcontact.servlet.handler;
 
 /**
  * @author Eugene Putsykovich(slesh) Mar 9, 2015
- *
+ * 
+ *         Error entity. Contains info about error.
  */
 public class Error {
     private String header;
@@ -17,7 +18,6 @@ public class Error {
 
     public Error(String header, Integer statusCode, String requestUri, String servletName, String className,
 	    String message) {
-	super();
 	this.header = header;
 	this.statusCode = statusCode;
 	this.requestUri = requestUri;

@@ -15,7 +15,8 @@ import by.slesh.itechart.fullcontact.db.local.Database;
 public class NotificationAction extends AbstractAction {
     @Override
     public void execute() throws ServletException, IOException {
-	getRequest().setAttribute("status", String.format("Your Notifications. Today %s", Database.getBirthdayMans().size()));
+	int size = Database.getBirthdayMans() == null ? 0 : Database.getBirthdayMans().size();
+	getRequest().setAttribute("status", String.format("Your Notifications. Today %s", size));
 	getRequest().setAttribute("contactsBirthdayMans", Database.getBirthdayMans());
 	getRequest().setAttribute("content", "notification-content.jsp");
 	getRequest().setAttribute("title", "Notifications Page");

@@ -6,7 +6,7 @@ import java.sql.Date;
  * @author Eugene Putsykovich(slesh) Mar 7, 2015
  *
  */
-public class AtachmentEntity extends Entity {
+public class AttachmentEntity extends Entity {
     private Long contactId;
     private String path;
     private String changedName;
@@ -14,10 +14,10 @@ public class AtachmentEntity extends Entity {
     private Date uploadDate;
     private String comment;
 
-    public AtachmentEntity() {
+    public AttachmentEntity() {
     }
 
-    public AtachmentEntity(Long id, Long contactId, String name, String path, Date uploadDate, String comment) {
+    public AttachmentEntity(Long id, Long contactId, String name, String path, Date uploadDate, String comment) {
 	super(id, name);// value == name
 	this.contactId = contactId;
 	this.path = path;

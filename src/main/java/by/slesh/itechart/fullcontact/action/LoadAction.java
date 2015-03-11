@@ -22,21 +22,26 @@ import com.mysql.jdbc.StringUtils;
 public class LoadAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(LoadAction.class);
 
-    String fileName;
-    String uploadDirectoryPath;
+    private String fileName;
+    private String attachmentsDirectory;
+    private String filesDirectory;
 
     @Override
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
-	
+
 	if (!StringUtils.isEmptyOrWhitespaceOnly(fileName)) {
 	    InputStream in = null;
 	    ServletOutputStream out = null;
 	    File file = null;
 	    try {
-		file = new File(String.format("%s%s%s", uploadDirectoryPath, File.separator, fileName));
+		file = new File(String.format("%s%s%s", attachmentsDirectory, File.separator, fileName));
 		if (!file.exists()) {
-		    throw new ServletException(String.format("file %s not found on server", file.getPath()));
+		    file = new File(String.format("%s%s%s", filesDirectory, File.separator, fileName));
+		    if (!file.exists()) {
+			getResponse().sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
+			return;
+		    }
 		}
 		in = new FileInputStream(file.getPath());
 		String mimeType = getRequest().getServletContext().getMimeType(file.getPath());
@@ -51,7 +56,8 @@ public class LoadAction extends AbstractAction {
 		    out.write(buffer, 0, read);
 		}
 	    } catch (Exception e) {
-		throw new ServletException(String.format("error dowload file %s. reason: maybe file not found on server", file));
+		throw new ServletException(String.format(
+			"error dowload file %s. reason: maybe file not found on server", file));
 	    } finally {
 		if (in != null) {
 		    in.close();
@@ -63,9 +69,9 @@ public class LoadAction extends AbstractAction {
 		    out = null;
 		}
 	    }
-	    
+
 	    LOGGER.info("file {} dowload at client successfull!", file);
-	    
+
 	} else {
 	    throw new ServletException(String.format("%s - bad name format", fileName));
 	}
@@ -79,10 +85,10 @@ public class LoadAction extends AbstractAction {
 
 	super.init(request, response);
 	fileName = getRequest().getParameter("name");
-	uploadDirectoryPath = (String) getRequest().getServletContext().getAttribute("upload-directory-path");
+	attachmentsDirectory = getRequest().getServletContext().getAttribute("attachments-directory-path").toString();
+	filesDirectory = getRequest().getServletContext().getAttribute("files-directory-path").toString();
 
 	LOGGER.info("file name to load: {}", fileName);
-	LOGGER.info("upload directory path: {}", uploadDirectoryPath);
 	LOGGER.info("END");
     }
 }

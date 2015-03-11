@@ -4,6 +4,13 @@
 	float: none;
 }
 
+.links img{
+	float: left;
+	width: 24px;
+	height: 24px;
+	margin: 0 5px;
+}
+
 .delete {
 	visibility: hidden;
 	position: absolute;
@@ -74,11 +81,6 @@
 
 .ul-inline li {
 	display: inline-block;
-}
-
-.center-cell {
-	width: 20px;
-	margin: 0 auto;
 }
 
 .h1-right {

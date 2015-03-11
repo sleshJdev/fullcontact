@@ -14,7 +14,7 @@
     	<label>
         <span>First Name<span class="required">*</span> :</span>
         <input id="first-name" type="text"  name="first-name" 
-							        placeholder="Your First Name" pattern="[A-Za-z0-9]{3,50}"
+							        placeholder="Your First Name" pattern="^[А-ЯЁа-яёA-Za-z0-9]{3,30}$"
 							        maxlength="50" 
 							        title="First name must be from 3 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -22,7 +22,7 @@
 	    <label>
 	        <span>Middle Name<span class="required">*</span> :</span>
 	        <input id="middle-name" type="text" name="middle-name" placeholder="Your Middle Name"
-							        pattern="[A-Za-z0-9]{3,50}" 
+							        pattern="[А-ЯЁа-яёA-Za-z0-9]{3,50}" 
 							        maxlength="50" 
 							        title="Midle name must be from 3 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -30,7 +30,7 @@
 	    <label>
 	        <span>Last Name<span class="required">*</span> :</span>
 	        <input id="last-name" type="text" name="last-name" placeholder="Your Last Name" 
-							        pattern="[A-Za-z0-9]{3,50}" 
+							        pattern="[А-ЯЁа-яёA-Za-z0-9]{3,50}" 
 							        maxlength="50" 
 							        title="Last name must be from 3 to 50 characters. Can be used only letters and digits." 
 							        required="required"/>
@@ -88,7 +88,7 @@
 	    <label>
 	        <span>Web Site :</span>
 	        <input id="web-site" type="text" name="web-site" placeholder="Your Web Site Address" 
-									pattern="^[a-zA-Z0-9\-\.]+\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)$" 
+									pattern="^[А-ЯЁа-яёa-zA-Z0-9\-\.]+\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)$" 
 							        maxlength="30" 
 							        title="Address of your web site incorrect format"/>
 	    </label>
@@ -101,49 +101,49 @@
 	    <label>
 	        <span>Current employment :</span>
 	        <input id="current-employment" type="text" name="current-employment" placeholder="Your Employment" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 									maxlength="50" 
 							        title="Your Current Employement. Max Length 30 characters. Can be used only letters and digits."/> 
 	    </label>
 	     <label>
 	        <span>County :</span>
 	        <input id="country" type="text" name="country" placeholder="Your Country" 
-	        						pattern="[A-Za-z0-9]{0,30}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,30}" 
 	        						maxlength="30" 
 	        						title="Your Coutry. Max Length 30 characters. Can be used only letters and digits."/>
 	    </label>    
 	     <label>
 	        <span>City :</span>
 	        <input id="city" type="text" name="city" placeholder="Your City" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 	        						maxlength="30" 
 	        						title="Your City. Max Length 30 characters. Can be used only letters and digits."/>
 	    </label>    
 	     <label>
 	        <span>Street :</span>
 	        <input id="street" type="text" name="street" placeholder="Your Street" 
-	        						pattern="[A-Za-z0-9]{0,50}" 
+	        						pattern="[А-ЯЁа-яёA-Za-z0-9]{0,50}" 
 	        						maxlength="50" 
 	        						title="Your Coutry. Max Length 50 characters. Can be used only letters and digits."/>
 	    </label>    
 	     <label>
 	        <span>House :</span>
 	        <input id="house" type="text" name="house" placeholder="Your House" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your House. Max Length 10 characters. Can be used only letters and digits."/>
 	    </label>    
 	     <label>
 	        <span>Block :</span>
 	        <input id="block" type="text" name="block" placeholder="Your Block" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your Block. Max Length 10 characters. Can be used only letters and digits."/>
 	    </label>    
 	     <label>
 	        <span>Apartment :</span>
 	        <input id="apartment" type="text" name="apartment" placeholder="Your Apartment" 
-									pattern="[A-Za-z0-9]{0,10}" 
+									pattern="[А-ЯЁа-яёA-Za-z0-9]{0,10}" 
 	        						maxlength="10" 
 	        						title="Your Apartment. Max Length 10 characters. Can be used only letters and digits."/>
 	    </label>    

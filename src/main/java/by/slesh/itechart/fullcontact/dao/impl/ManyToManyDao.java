@@ -14,7 +14,7 @@ import com.mysql.jdbc.StringUtils;
 import by.slesh.itechart.fullcontact.dao.AbstractDao;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReader;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.Entity;
 
@@ -22,7 +22,7 @@ import by.slesh.itechart.fullcontact.domain.Entity;
  * @author Eugene Putsykovich(slesh) Mar 9, 2015
  *
  */
-public class ManyToManyDao extends AbstractDao{
+public final class ManyToManyDao extends AbstractDao{
     private final static Logger LOGGER = LoggerFactory.getLogger(ManyToManyDao.class);
     
     private static ManyToManyDao instance;
@@ -88,13 +88,14 @@ public class ManyToManyDao extends AbstractDao{
     }
     
     private static final String GET_ATACHMENTS_OF_EMAIL_QUERY = 
-	    AtachmentDaoImpl.GET_QUERY
-	  + "\n\t LEFT JOIN emails_atachments ON emails_atachments.atachment_id = atachments.atachment_id "
-	  + "\n\t WHERE emails_atachments.email_id = ?";
+	    AtachmentDaoImpl.GET_QUERY_BODY
+	  + "FROM emails_atachments "
+	  + "LEFT JOIN atachments ON emails_atachments.atachment_id = atachments.atachment_id "
+	  + "WHERE email_id = ?";
     
-    public List<AtachmentEntity> getAtachmentsOfEmail(long emailId) throws ClassNotFoundException, SQLException, IOException {
+    public List<AttachmentEntity> getAtachmentsOfEmail(Long emailId) throws ClassNotFoundException, SQLException, IOException {
 	LOGGER.info("BEGIN");
-	return new SimpleReader<AtachmentEntity>().get(GET_ATACHMENTS_OF_EMAIL_QUERY, DaoReadersContainer.ATACHMENTS_READER, emailId);
+	return new SimpleReader<AttachmentEntity>().get(GET_ATACHMENTS_OF_EMAIL_QUERY, DaoReadersContainer.ATACHMENTS_READER, emailId);
     }
     
     private static final String GET_RECEIVERS_OF_EMAIL_QUERY = 
@@ -102,7 +103,7 @@ public class ManyToManyDao extends AbstractDao{
 	  + "\n\t LEFT JOIN emails_receivers ON emails_receivers.contact_id = contacts.contact_id "
 	  + "\n\t WHERE emails_receivers.email_id = ?";
     
-    public List<ContactEntity> getReceiversOfEmail(long emailId) throws SQLException, ClassNotFoundException, IOException {
+    public List<ContactEntity> getReceiversOfEmail(Long emailId) throws SQLException, ClassNotFoundException, IOException {
 	LOGGER.info("BEGIN");
 	return new SimpleReader<ContactEntity>().get(GET_RECEIVERS_OF_EMAIL_QUERY, DaoReadersContainer.LIMIT_CONTACT_READER, emailId);
     }

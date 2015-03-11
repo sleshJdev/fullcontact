@@ -28,7 +28,7 @@ public class ContactEntity extends Entity {
     private String apartment;
     private String cityIndex;
     private List<PhoneEntity> phones = new ArrayList<PhoneEntity>();
-    private List<AtachmentEntity> atachments = new ArrayList<AtachmentEntity>();
+    private List<AttachmentEntity> atachments = new ArrayList<AttachmentEntity>();
 
     public ContactEntity() {
     }
@@ -36,7 +36,7 @@ public class ContactEntity extends Entity {
     public ContactEntity(Long id, String firstName, String lastName, String middleName, Date dateOfBirth,
 	    String avatarPath, String sex, String nationality, String familyStatus, String webSite,
 	    String emailAddress, String currentEmployment, String country, String city, String street, String house,
-	    String block, String apartment, String cityIndex, List<PhoneEntity> phones, List<AtachmentEntity> atachments) {
+	    String block, String apartment, String cityIndex, List<PhoneEntity> phones, List<AttachmentEntity> atachments) {
 	super(id, firstName);
 	this.middleName = middleName;
 	this.dateOfBirth = dateOfBirth;
@@ -131,20 +131,20 @@ public class ContactEntity extends Entity {
 	phones.add(phone);
     }
 
-    public List<AtachmentEntity> getAtachments() {
+    public List<AttachmentEntity> getAtachments() {
 	return atachments;
     }
 
-    public void setAtachments(List<AtachmentEntity> atachments) {
+    public void setAtachments(List<AttachmentEntity> atachments) {
 	if (atachments == null) {
 	    return;
 	}
-	for (AtachmentEntity atachment : atachments) {
+	for (AttachmentEntity atachment : atachments) {
 	    addAtachment(atachment);
 	}
     }
 
-    public void addAtachment(AtachmentEntity atachment) {
+    public void addAtachment(AttachmentEntity atachment) {
 	atachments.add(atachment);
     }
 
@@ -262,7 +262,7 @@ public class ContactEntity extends Entity {
 	}
 
 	if (atachments != null) {
-	    for (AtachmentEntity atachment : atachments) {
+	    for (AttachmentEntity atachment : atachments) {
 		sb.append("\n\t");
 		sb.append(atachment);
 	    }

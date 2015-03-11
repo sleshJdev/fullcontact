@@ -14,11 +14,10 @@ public class ActionFactory {
 	try {
 	    return (Action) actionClass.newInstance();
 	} catch (InstantiationException | IllegalAccessException e) {
-	    e.printStackTrace();
 	    throw new ServletException(e);
 	}
     }
-
+    
     public static final Action getActionByName(String className) throws ServletException {
 	try {
 	    String[] tokens = className.split("-");
@@ -29,7 +28,6 @@ public class ActionFactory {
 	    String name = String.format("%s%s%s", PACKAGE, className, SUFFIX);
 	    return getControllerByClass(Class.forName(name));
 	} catch (ClassNotFoundException e) {
-	    e.printStackTrace();
 	    throw new ServletException(e);
 	}
     }

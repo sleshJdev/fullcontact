@@ -22,7 +22,7 @@ import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import by.slesh.itechart.fullcontact.dao.AtachmentDao;
+import by.slesh.itechart.fullcontact.dao.AttachmentDao;
 import by.slesh.itechart.fullcontact.dao.ContactDao;
 import by.slesh.itechart.fullcontact.dao.EmailDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
@@ -30,7 +30,7 @@ import by.slesh.itechart.fullcontact.dao.impl.ContactDaoImp;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
 import by.slesh.itechart.fullcontact.dao.impl.ManyToManyDao;
 import by.slesh.itechart.fullcontact.db.JdbcConnector;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.EmailEntity;
 import by.slesh.itechart.fullcontact.settings.G;
@@ -42,13 +42,15 @@ import com.mysql.jdbc.StringUtils;
 
 /**
  * @author Eugene Putsykovich(slesh) Mar 5, 2015
- *
+ * 
+ *         Send mails to contacts
  */
 public class SendAction extends AbstractAction {
     private final static Logger LOGGER = LoggerFactory.getLogger(SendAction.class);
 
     private String action;
-
+    private String filesDirectory;
+    
     @Override
     public void execute() throws ServletException, IOException {
 	LOGGER.info("BEGIN");
@@ -77,16 +79,13 @@ public class SendAction extends AbstractAction {
 	super.init(request, response);
 	action = request.getParameter("x");
 	request.setAttribute("status", "");
-
-	LOGGER.info("x: {}", action);
-	LOGGER.info("END");
+	filesDirectory = getRequest().getServletContext().getAttribute("files-directory-path").toString();
+	
+	LOGGER.info("END. x: {}", action);
     }
+
     private void sendAction() throws IOException, ServletException, ClassNotFoundException, ParseException,
 	    SQLException {
-	final String destination = (String) getRequest().getServletContext().getAttribute("upload-directory-path");
-
-	LOGGER.info("destination: {}", destination);
-
 	String[] to = getRequest().getParameter("email-address").trim().replaceAll("\\s+", "").split(";");
 	String subject = getRequest().getParameter("email-subject");
 	String message = getRequest().getParameter("email-message");
@@ -94,15 +93,11 @@ public class SendAction extends AbstractAction {
 	Collection<Part> parts = getRequest().getParts();
 	List<File> files = new ArrayList<File>();
 
-	LOGGER.info("obtained files: {}", parts.size());
-
 	if (parts.size() > 0) {
-	    files = processParts(parts, destination);
+	    files = processParts(parts, filesDirectory);
 	}
 
 	performeMailing(to, subject, message, files);
-
-	LOGGER.info("obtained files: {}", parts.size());
     }
 
     private void performeMailing(String[] to, String subject, String message, List<File> files) throws ParseException,
@@ -110,24 +105,24 @@ public class SendAction extends AbstractAction {
 	try {
 	    List<Long> atachmentsId = new ArrayList<Long>();
 	    // not close connection after work
-	    AtachmentDao atachmentDao = (AtachmentDao) DaoFactory.getAtachmentDao(true, false); 
+	    AttachmentDao atachmentDao = (AttachmentDao) DaoFactory.getAtachmentDao(true, false);
 	    for (File file : files) {
-		AtachmentEntity atachmentEntity = new AtachmentEntity(null, G.MY_ID, file.getName(), null, DateUtil.getSqlDate(), null);
+		AttachmentEntity atachmentEntity = new AttachmentEntity(null, G.MY_ID, file.getName(), null, DateUtil.getSqlDate(), null);
 		long atachmentId = atachmentDao.add(atachmentEntity);
 		atachmentsId.add(atachmentId);
 	    }
 	    Sender sender = Sender.createSender(Sender.SSL);
 	    // not close connection after work
-	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false); 
+	    EntityDao<EmailEntity> emailDao = DaoFactory.getEmailDao(true, false);
 	    // not close connection after work
-	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false); 
+	    EntityDao<ContactEntity> contactDao = DaoFactory.getContactDao(true, false);
 	    for (String t : to) {
 		StringTemplate template = new StringTemplate(message, DefaultTemplateLexer.class);
 		String name = ((ContactDao) contactDao).getName(t);
 		template.setAttribute("NAME", name);
-		template.setAttribute("US_FULL_NAME", "Putsykovich Eugene");
-		template.setAttribute("US_PHONE", "2030327");
-		template.setAttribute("US_EMAIL", "slesh@gmail.com");
+		template.setAttribute("US_FULL_NAME", G.US_NAME);
+		template.setAttribute("US_PHONE", G.US_PHONE);
+		template.setAttribute("US_EMAIL", G.US_EMAIL);
 		String body = template.toString();
 
 		Email email = sender.createEmail();
@@ -148,7 +143,7 @@ public class SendAction extends AbstractAction {
 		for (int i = 0; i < to.length; ++i) {
 		    long contactId = contactDao.getId(to[i]);
 		    // not close connection after work
-		    ManyToManyDao.getInstance(true, false).doLinkEmailContact(emailId, contactId); 
+		    ManyToManyDao.getInstance(true, false).doLinkEmailContact(emailId, contactId);
 		}
 		for (Long atachmentId : atachmentsId) {
 		    // not close connection after work
@@ -159,9 +154,12 @@ public class SendAction extends AbstractAction {
 	    JdbcConnector.close();// close current opened connection
 	}
     }
-    
+
     private void defaultAction() throws IOException, ClassNotFoundException, SQLException {
 	String[] contactsId = getRequest().getParameterValues("id");
+	if(contactsId == null || (contactsId.length == 1 && contactsId.equals(G.MY_ID))){
+	    return;
+	}
 	List<String> emails = new ArrayList<String>(contactsId.length);
 	ContactDao contactDao = new ContactDaoImp();
 	for (int i = 0; i < contactsId.length; i++) {
@@ -171,7 +169,7 @@ public class SendAction extends AbstractAction {
 	}
 	getRequest().setAttribute("emails", emails);
     }
-    
+
     private static List<File> processParts(Collection<Part> parts, final String destination) throws IOException {
 	List<File> files = new ArrayList<File>();
 	for (Part part : parts) {
@@ -200,14 +198,14 @@ public class SendAction extends AbstractAction {
 	File file = null;
 	try {
 	    file = new File(destination + File.separator + fileName);
-	    
+
 	    LOGGER.info("file name: {}", fileName);
 
 	    out = new FileOutputStream(file);
 	    fileContent = part.getInputStream();
 
 	    int read = 0;
-	    final byte[] buffer = new byte[1024];
+	    final byte[] buffer = new byte[2048];
 
 	    while ((read = fileContent.read(buffer)) != -1) {
 		out.write(buffer, 0, read);

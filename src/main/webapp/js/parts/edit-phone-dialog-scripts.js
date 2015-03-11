@@ -230,7 +230,7 @@ function validatePhone() {
 	
 	console.log("\t phone phone number: " + value + " is valid!");
 
-	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;]{0,100}$/;
+	PATTERN = /^[А-ЯЁа-яё\w!?\s,.\n\<\>\[\]\"\'\(\):;]{0,100}$/;
 	value = dialogPhoneComment.value;
 	if (!PATTERN.test(value)) {
 		alert("Phone Comment. Max Length 100 characters.");

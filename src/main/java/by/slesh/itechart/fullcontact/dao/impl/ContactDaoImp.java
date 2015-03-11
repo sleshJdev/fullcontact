@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import by.slesh.itechart.fullcontact.dao.AtachmentDao;
+import by.slesh.itechart.fullcontact.dao.AttachmentDao;
 import by.slesh.itechart.fullcontact.dao.ContactDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.PhoneDao;
@@ -137,7 +137,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
     @Override
     public void setAvatar(long contactId, String path) throws ClassNotFoundException, IOException, SQLException {
 	LOGGER.info("BEGIN");
-	LOGGER.info("contact id = {}, path = ", contactId, path);
+	LOGGER.info("contact id = {}, path = {}", contactId, path);
 	
 	try{
 	    connect();
@@ -145,6 +145,8 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    preparedStatement.setString(1, path);
 	    preparedStatement.setLong(2, contactId);
 	    preparedStatement.executeUpdate();
+	    
+	    LOGGER.info("query: {}", preparedStatement);
 	}finally{
 	    closeResources();
 	}
@@ -168,6 +170,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    preparedStatement = getPrepareStatement(GET_AVATAR_PATH_QUERY);
 	    preparedStatement.setLong(1, contactId);
 	    resultSet = preparedStatement.executeQuery();
+	    
+	    LOGGER.info("query: {}", preparedStatement);
+	    
 	    while(resultSet.next()){
 		path = resultSet.getString(1);
 	    }
@@ -175,8 +180,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    closeResources();
 	}
 	
-	LOGGER.info("path: {}", path);
-	LOGGER.info("END");
+	LOGGER.info("END. path: {}", path);
 	return path;
     }
     
@@ -283,7 +287,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 		contact.setId(resultSet.getLong(1));
 	    }
 	    ((PhoneDao) DaoFactory.getPhoneDao(true, false)).add(contact);
-	    ((AtachmentDao) DaoFactory.getAtachmentDao(true, false)).add(contact);
+	    ((AttachmentDao) DaoFactory.getAtachmentDao(true, false)).add(contact);
 
 	    LOGGER.info("add follow contact {}", contact);
 	} finally {
@@ -301,7 +305,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    	"\n\t\t %s LIKE ? AND ";
 
     private static final String SEARCH_COMPARE_DATE_TEMPLATE = 
-	    	"\n\t\t %s %s ?  OR ";
+	    	"\n\t\t %s %s ?  AND ";
     
     private static final String END = 
 	    	" \n\t )";
@@ -486,7 +490,7 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    phoneDao.update(contact);
 	    phoneDao.add(contact);
 
-	    AtachmentDao atachmentDao = (AtachmentDao) DaoFactory.getAtachmentDao(true, false);
+	    AttachmentDao atachmentDao = (AttachmentDao) DaoFactory.getAtachmentDao(true, false);
 	    atachmentDao.update(contact);
 	    atachmentDao.add(contact);
 	} finally {

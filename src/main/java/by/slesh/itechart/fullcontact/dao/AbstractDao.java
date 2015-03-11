@@ -7,14 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import by.slesh.itechart.fullcontact.db.JdbcConnector;
 
 public abstract class AbstractDao {
-    private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDao.class);
-
     private boolean isUseCurrentConnection = true;
     private boolean isCloseConnectionAfterWork = true;
 
@@ -80,25 +75,6 @@ public abstract class AbstractDao {
     }
 
     protected void closeResource(Connection connection, Statement... statements) {
-	try {
-	    if (isCloseConnectionAfterWork) {
-		if (connection != null) {
-		    connection.close();
-		    connection = null;
-		}
-	    }
-	} catch (SQLException e) {
-	    LOGGER.error("error occured release resources: {}", e.getMessage());
-	}
-	for (Statement statement : statements) {
-	    try {
-		if (statement != null) {
-		    statement.close();
-		    statement = null;
-		}
-	    } catch (SQLException e) {
-		LOGGER.error("error occured release resources: {}", e.getMessage());
-	    }
-	}
+	JdbcConnector.closeResource(isCloseConnectionAfterWork ? connection : null, statements);
     }
 }

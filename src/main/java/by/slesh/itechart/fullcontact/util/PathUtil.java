@@ -24,8 +24,7 @@ public final class PathUtil {
      *         .../'application-name'/WEB-INF/classes/
      */
     public static final String goToClasses() {
-	File f = new File(PathUtil.class.getClassLoader().getResource("web.properties").getPath());
-	return f.getParent();
+	return PathUtil.class.getClassLoader().getResource("").getPath();
     }
     
     /**
@@ -37,7 +36,6 @@ public final class PathUtil {
 	File file = new File(path).getParentFile().getParentFile();
 
 	LOGGER.info("root: {}", file);
-
 	return file;
     }
 
@@ -50,17 +48,6 @@ public final class PathUtil {
 	File file = new File(path).getParentFile();
 
 	LOGGER.info("webInf: {}", file);
-
 	return file;
-    }
-
-    public static void listFilesForFolder(final File folder) {
-	for (final File fileEntry : folder.listFiles()) {
-	    if (fileEntry.isDirectory()) {
-		listFilesForFolder(fileEntry);
-	    } else {
-		LOGGER.info(fileEntry.getName());
-	    }
-	}
     }
 }

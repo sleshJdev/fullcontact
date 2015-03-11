@@ -18,7 +18,7 @@
 <c:set var="is" value="${isSearchResult }"/>
 
 <div id="content">
-	<form id="show-contacts-form" action="delete" method="get">
+	<form id="show-contacts-form" action="delete-contacts" method="get">
 		<div class="send-div">
 			<a id="send-email-link" href="#">SEND MAIL</a>
 		</div>
@@ -46,9 +46,11 @@
 				<tr>
 					<td>${begin + loop.index + 1}</td>
 					<td>
-						<div style="width: 10px; height: 10px; margin: 0 auto;">
-							<input name="id" value="${contact.id}" type="checkbox">
-						</div>
+						<c:if test="${contact.id != 1 }">
+							<div style="width: 10px; height: 10px; margin: 0 auto;">
+								<input name="id" value="${contact.id}" type="checkbox">
+							</div>
+						</c:if>
 					</td>
 					<td><a href="edit?&id=${contact.id}">${contact.firstName} ${contact.middleName} ${contact.lastName}</a></td>
 					<td>${contact.dateOfBirth}</td>

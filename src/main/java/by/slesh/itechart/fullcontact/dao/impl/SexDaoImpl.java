@@ -1,8 +1,5 @@
 package by.slesh.itechart.fullcontact.dao.impl;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.SexDao;
 import by.slesh.itechart.fullcontact.dao.reader.DaoReadersContainer;
@@ -41,9 +38,4 @@ public class SexDaoImpl extends EntityDao<SexEntity> implements SexDao {
 	setGetLimitQuery(GET_LIMIT_QUERY);
 	setReader(DaoReadersContainer.ENTITY_READER);
     }
-    
-    @Override
-    public long deleteRange(Long contactId, Long[] ids) throws ClassNotFoundException, IOException, SQLException {
-	throw new SQLException("not supported this operation!");
-    }
-}
+	}

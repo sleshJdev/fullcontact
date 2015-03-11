@@ -1,17 +1,42 @@
 @CHARSET "UTF-8";
 
-td{
+td {
 	padding-left: 15px;
 }
 
 ul {
-    list-style-type: none;
-    padding: 0px;
-    margin-left: 0px;
+	list-style-type: none;
+	padding: 0px;
+	margin-left: 0px;
 }
 
 ul li {
-    background-image: url(sqpurple.gif);
-    background-repeat: no-repeat;
-    background-position: 0px center;
+	background-image: url(sqpurple.gif);
+	background-repeat: no-repeat;
+	background-position: 0px center;
+}
+
+.menu {
+	float: left;
+	width: 50px;
+}
+
+#delete-selected, #select-all {
+	height: 24px;
+}
+
+#delete-selected, #select-all {
+	width: 20px;
+	background-repeat: no-repeat;
+	border: none;
+	background-color: white;
+	cursor: pointer;
+}
+
+#delete-selected {
+	background-image: url("../images/icons/delete-phone.png");
+}
+
+#select-all {
+	background-image: url("../images/icons/ok.png");
 }

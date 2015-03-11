@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import by.slesh.itechart.fullcontact.dao.AtachmentDao;
+import by.slesh.itechart.fullcontact.dao.AttachmentDao;
 import by.slesh.itechart.fullcontact.dao.EntityDao;
 import by.slesh.itechart.fullcontact.dao.impl.AtachmentDaoImpl;
 import by.slesh.itechart.fullcontact.dao.impl.DaoFactory;
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 
 /**
@@ -24,15 +24,15 @@ import by.slesh.itechart.fullcontact.domain.ContactEntity;
 public class AtachmentDaoImplTest {
     @Test
     public void testGetAll() throws ClassNotFoundException, IOException, SQLException {
-	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	List<AtachmentEntity> atachment = atachmentDao.getAll();
+	EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	List<AttachmentEntity> atachment = atachmentDao.getAll();
 	assertNotNull(atachment);
     }
 
     @Test
     public void testGetById() throws ClassNotFoundException, IOException, SQLException {
-	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	AtachmentEntity atachment = atachmentDao.get(new Long(1));
+	EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	AttachmentEntity atachment = atachmentDao.get(new Long(1));
 	assertNotNull(atachment);
     }
 
@@ -41,36 +41,36 @@ public class AtachmentDaoImplTest {
 	ContactEntity contact = new ContactEntity();
 	contact.setId(new Long(8));
 	
-	AtachmentEntity atachment1 = new AtachmentEntity();
+	AttachmentEntity atachment1 = new AttachmentEntity();
 	atachment1.setId(null);
 	atachment1.setContactId(contact.getId());
 	atachment1.setName("addname1.txt");
 	atachment1.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment1.setComment("add comment 1");
 
-	AtachmentEntity atachment2 = new AtachmentEntity();
+	AttachmentEntity atachment2 = new AttachmentEntity();
 	atachment2.setId(null);
 	atachment2.setContactId(contact.getId());
 	atachment2.setName("addname2.txt");
 	atachment2.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment2.setComment("add comment 2");
 
-	List<AtachmentEntity> atachments = new ArrayList<AtachmentEntity>();
+	List<AttachmentEntity> atachments = new ArrayList<AttachmentEntity>();
 	atachments.add(atachment1);
 	atachments.add(atachment2);
 	long expectedQuantityInsert = atachments.size();
 
 	contact.setAtachments(atachments);
 
-	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
-	long actualQuantityInsert = ((AtachmentDao) atachmentDao).add(contact);
+	EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	long actualQuantityInsert = ((AttachmentDao) atachmentDao).add(contact);
 
 	assertEquals("Not equals quantity INSERT rows and actual entity", expectedQuantityInsert, actualQuantityInsert);
     }
 
     @Test
     public void testDelete() throws ClassNotFoundException, IOException, SQLException {
-	EntityDao<AtachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
+	EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, true);
 	final Long contactId = new Long(15);
 	final Long[] ids = new Long[] { new Long(22), new Long(23), new Long(24), new Long(25), new Long(26) };
 	final long expectedQuantityUpdate = ids.length;
@@ -84,28 +84,28 @@ public class AtachmentDaoImplTest {
 	ContactEntity contact = new ContactEntity();
 	contact.setId(new Long(1));
 
-	AtachmentEntity atachment1 = new AtachmentEntity();
+	AttachmentEntity atachment1 = new AttachmentEntity();
 	atachment1.setContactId(contact.getId());
 	atachment1.setId(new Long(1));
 	atachment1.setName("updatename1.txt");
 	atachment1.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment1.setComment("update comment 1");
 
-	AtachmentEntity atachment2 = new AtachmentEntity();
+	AttachmentEntity atachment2 = new AttachmentEntity();
 	atachment2.setId(new Long(2));
 	atachment2.setContactId(contact.getId());
 	atachment2.setName("updatename2.txt");
 	atachment2.setUploadDate((new Date(new java.util.Date().getTime())));
 	atachment2.setComment("update comment 2");
 
-	List<AtachmentEntity> atachments = new ArrayList<AtachmentEntity>();
+	List<AttachmentEntity> atachments = new ArrayList<AttachmentEntity>();
 	atachments.add(atachment1);
 	atachments.add(atachment2);
 	long expectedQuantityUpdate = atachments.size();
 
 	contact.setAtachments(atachments);
 
-	AtachmentDao atachmentDao = new AtachmentDaoImpl();
+	AttachmentDao atachmentDao = new AtachmentDaoImpl();
 	long actualQuantityUpdate = atachmentDao.update(contact);
 
 	assertEquals("Not equals quantity UPDATE rows and actual entity", expectedQuantityUpdate, actualQuantityUpdate);

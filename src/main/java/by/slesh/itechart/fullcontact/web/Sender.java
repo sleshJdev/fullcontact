@@ -71,7 +71,7 @@ public class Sender {
     public static Sender createSender(Properties properties) {
 	return new Sender(properties);
     }
-
+    
     public Email createEmail() {
 	LOGGER.info("BEGIN");
 	Message message = null;
@@ -86,13 +86,13 @@ public class Sender {
 	LOGGER.info("END email created successful!");
 	return new Email(message);
     }
-
+    
     public void send(Email email) {
 	try {
 	    Message message = email.getMessage();
 	    Transport.send(message);
 	} catch (MessagingException e) {
-	    throw new RuntimeException(e);
+	    throw new RuntimeException("Some problem occured during send. Maybe internet connection bad.");
 	}
     }
 }

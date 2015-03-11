@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import by.slesh.itechart.fullcontact.domain.AtachmentEntity;
+import by.slesh.itechart.fullcontact.domain.AttachmentEntity;
 import by.slesh.itechart.fullcontact.domain.ContactEntity;
 import by.slesh.itechart.fullcontact.domain.PhoneEntity;
 
@@ -179,7 +179,7 @@ public final class HttpProcessUtil {
 		continue;
 	    }
 	    
-	    AtachmentEntity atachment = new AtachmentEntity();
+	    AttachmentEntity atachment = new AttachmentEntity();
 	    atachment.setId("null".equals(id) ? null : Long.parseLong(id));
 	    atachment.setContactId(targetContact.getId());
 	    atachment.setName(atachmentsName[i].trim());

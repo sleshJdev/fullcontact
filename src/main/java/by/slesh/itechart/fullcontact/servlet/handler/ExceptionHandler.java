@@ -30,7 +30,7 @@ public class ExceptionHandler extends HttpServlet {
 	    ServletException {
 	// Set response content type
 	response.setContentType("text/html");
-
+	
 	// Analyze the servlet exception
 	Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 	String message = throwable == null ? "" : throwable.getMessage();
@@ -45,7 +45,7 @@ public class ExceptionHandler extends HttpServlet {
 	    requestUri = "Unknown";
 	}
 
-	String header = statusCode == 500 ? "ERROR DETAILS" : "ERROR DETAILS";
+	String header = statusCode == 500 ? "ERROR DETAILS" : "EXEPTION DETAILS";
 	Error error = new Error(header, statusCode, requestUri, servletName, className, message);
 
 	request.setAttribute("content", "error.jsp");

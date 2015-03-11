@@ -30,22 +30,26 @@ public class FrontController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 	    IOException {
 	LOGGER.info("BEGIN");
-
+	
 	try {
 	    response.setContentType("text/html;charset=UTF-8");
 	    request.setCharacterEncoding("utf-8");
 
 	    StringBuffer url = request.getRequestURL();
+	    
 	    String actionName = url.substring(url.lastIndexOf("/") + 1, url.length());
-
-	    LOGGER.info("request url: " + url);
-	    LOGGER.info("action : " + actionName);
+	    if(url.indexOf("delete") != -1){
+		actionName = "delete";
+	    }
+	    
+	    LOGGER.info("request url: {}", url);
+	    LOGGER.info("action {}:", actionName);
 
 	    Action action = ActionFactory.getActionByName(actionName);
 	    action.init(request, response);
 	    action.execute();
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    LOGGER.error("{}", e);
 	    throw new ServletException(e);
 	}
 

@@ -79,8 +79,6 @@ function atachmentEditPopupShow(action, rowNumber) {
 		if (action == "edit") {
 			var row = atachmentTable.getElementsByTagName("tr")[rowNumber];
 			row.style.backgroundColor = oldColor;
-//			if (afterAtachmentEdit(rowNumber)) {
-//			}
 		}
 	}
 
@@ -198,28 +196,30 @@ function validateAtachment() {
 	console.log("validateAtachment() BEGIN");
 	
 	var PATTERN;
-	var value;
+	var VALUE;
 	
-	value = dialogAtachmentName.value;
+	VALUE = dialogAtachmentName.value;
 
-	if (!/\.(?:mp3|wav|og(?:g|a)|flac|midi?|rm|aac|wma|mka|ape)$/i.test(value) && // not audio
-		!/\.(?:z(?:ip|[0-9]{2})|r(?:ar|[0-9]{2})|jar|bz2|gz|tar|rpm)$/i.test(value) && // archive
-		!/\.(?:jp(?:e?g|e|2)|gif|png|tiff?|bmp|ico)$/i.test(value) && // not image
-		!/\.(?:mpeg|ra?m|avi|mp(?:g|e|4)|mov|divx|asf|qt|wmv|m\dv|rv|vob|asx|ogm)$/i.test(value) // not video
+	if (!/\.(?:mp3|wav|og(?:g|a)|flac|midi?|rm|aac|wma|mka|ape)$/i.test(VALUE) && // not audio
+		!/\.(?:z(?:ip|[0-9]{2})|r(?:ar|[0-9]{2})|jar|bz2|gz|tar|rpm)$/i.test(VALUE) && // archive
+		!/\.(?:jp(?:e?g|e|2)|gif|png|tiff?|bmp|ico)$/i.test(VALUE) && // not image
+		!/\.(?:mpeg|ra?m|avi|mp(?:g|e|4)|mov|divx|asf|qt|wmv|m\dv|rv|vob|asx|ogm)$/i.test(VALUE) && // not video
+		!/\.(?:|doc|pdf|djvu|docx)$/i.test(VALUE) // not docs
 	) {
 		alert("Atachment Name. Length 1-50 characters. Can be only audio, archive, image or video");
 		return false;
 	}
 	
-	console.log("\t atachment name: " + value + " is valid!");
+	console.log("\t atachment name: " + VALUE + " is valid!");
 
-	PATTERN = /^[\w!?\s,.\n\<\>\[\]\"\'\(\):;]{0,100}$/;
-	value = dialogAtachmentComment.value;
-	if (!PATTERN.test(value)) {
+	PATTERN = /^[А-ЯЁа-яё\w!?\s,.\n\<\>\[\]\"\'\(\):;]{0,100}$/;
+	VALUE = dialogAtachmentComment.value;
+	if (!PATTERN.test(VALUE)) {
 		alert("Atachment Comment. Max Length 100 characters.");
+		return false;
 	}
 
-	console.log("\t atachment comment: " + value + " is valid!");
+	console.log("\t atachment comment: " + VALUE + " is valid!");
 
 	console.log("validateAtachment() END");
 	return true;
