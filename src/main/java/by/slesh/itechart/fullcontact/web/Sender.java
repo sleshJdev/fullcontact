@@ -1,7 +1,5 @@
 package by.slesh.itechart.fullcontact.web;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -48,8 +46,7 @@ public class Sender {
 
     private void fetchCredentials() {
 	Properties credentials = new Properties();
-	File file = PathUtil.getResourceFile("web.properties");
-	try (InputStream input = new FileInputStream(file)) {
+	try (InputStream input = PathUtil.getResourceFile("web.properties")) {
 	    credentials.load(input);
 	    from = credentials.getProperty("from");
 	    username = credentials.getProperty("username");

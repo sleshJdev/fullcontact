@@ -1,7 +1,6 @@
 package by.slesh.itechart.fullcontact.servlet.listener;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -78,7 +77,7 @@ public class ApplicationListener implements ServletContextListener {
 
     private void fileLocationSetup(ServletContext context) throws FileNotFoundException, IOException {
 	Properties properties = new Properties();
-	properties.load(new FileInputStream(PathUtil.getResourceFile("upload.properties")));
+	properties.load(PathUtil.getResourceFile("upload.properties"));
 
 	File attachmentsFile = new File(properties.getProperty("attachments_directory"));
 	if (!attachmentsFile.exists()) {
@@ -105,7 +104,7 @@ public class ApplicationListener implements ServletContextListener {
 	context.setAttribute("files-directory-path", files.getPath());
 
 	properties = new Properties();
-	properties.load(new FileInputStream(PathUtil.getResourceFile("us.properties")));
+	properties.load(PathUtil.getResourceFile("us.properties"));
 
 	G.US_NAME = properties.getProperty("us_phone");
 	G.US_EMAIL = properties.getProperty("us_email");
