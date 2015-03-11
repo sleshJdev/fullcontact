@@ -66,29 +66,16 @@ public class DeleteAction extends AbstractAction {
 
 		    List<AttachmentEntity> part = ((AttachmentDao) attachmentDao).getAttachmentsOfContact(id);
 		    if(part != null){
-			
-			LOGGER.info("part size: {}", part.size());
-			
-			for (AttachmentEntity attachmentEntity : part) {
-			    LOGGER.info("atachment from part name, changedname, value, path: {}, {}, {}, {}", attachmentEntity.getName(), attachmentEntity.getChangedName(), attachmentEntity.getValue(), attachmentEntity.getPath());
-			}
-			
 			attachmentsToDelete.addAll(part);
-			
-			LOGGER.info("quantity atachments to delete: {}", attachmentsToDelete.size());
 		    }
 
 		    String avatarPath = ((ContactDao) contactDao).getAvatar(id);
 		    if(avatarPath != null){
 			avatarsToDelete.add(avatarPath);
-
-			LOGGER.info("quantity avatars to delete: {}", avatarsToDelete.size());
 		    }
 		    
 		    contactDao.delete(id);
 		}
-
-		LOGGER.info("begin deleting files: {} avatar, {} atachments...", avatarsToDelete.size(), attachmentsToDelete.size());
 		
 		// remove !file! avatars
 		for (String path : avatarsToDelete) {
