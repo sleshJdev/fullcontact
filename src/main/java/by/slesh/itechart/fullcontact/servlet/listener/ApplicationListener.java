@@ -76,12 +76,6 @@ public class ApplicationListener implements ServletContextListener {
 	LOGGER.info("END");
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-	Properties p = new Properties();
-	p.load(new FileInputStream(PathUtil.getResourceFile("us.properties")));
-	System.out.println(p.toString());
-    }
-
     private void fileLocationSetup(ServletContext context) throws FileNotFoundException, IOException {
 	Properties properties = new Properties();
 	properties.load(new FileInputStream(PathUtil.getResourceFile("upload.properties")));
