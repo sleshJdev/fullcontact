@@ -111,6 +111,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    rowsDeleted = preparedStatement.getUpdateCount();
 
 	    LOGGER.info("query: {}", preparedStatement);
+	} catch (SQLException e) {
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -136,6 +138,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    preparedStatement.executeUpdate();
 
 	    LOGGER.info("query: {}", preparedStatement);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -162,6 +166,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
 	    LOGGER.info("quantity: {} contacts", quantity);
 	    LOGGER.info("query: {}", statement);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -192,6 +198,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
 	    LOGGER.info("query: {}", preparedStatement);
 	    LOGGER.info("id for {} = {}", value, id);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -219,6 +227,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 
 	    LOGGER.info("query: {}", preparedStatement);
 	    LOGGER.info("entity with id {}: {}", id, item);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -240,6 +250,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    preparedStatement.setLong(1, start);
 	    preparedStatement.setLong(2, size);
 	    list = getHelper(preparedStatement);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -285,6 +297,8 @@ public abstract class EntityDao<T extends Entity> extends AbstractDao implements
 	    }
 
 	    LOGGER.info("query: {}", statement);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}

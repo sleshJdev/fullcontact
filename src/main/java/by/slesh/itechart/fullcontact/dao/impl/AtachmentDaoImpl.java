@@ -92,6 +92,8 @@ public class AtachmentDaoImpl extends EntityDao<AttachmentEntity> implements Att
 	    while ((attachmentEntity = (AttachmentEntity) DaoReadersContainer.ATACHMENTS_READER.read(resultSet)) != null) {
 		atachments.add(attachmentEntity);
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -118,6 +120,8 @@ public class AtachmentDaoImpl extends EntityDao<AttachmentEntity> implements Att
 	try {
 	    connect();
 	    addHelper(atachment);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -145,6 +149,8 @@ public class AtachmentDaoImpl extends EntityDao<AttachmentEntity> implements Att
 		addHelper(atachment);
 		++rowsAddeds;
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -171,6 +177,8 @@ public class AtachmentDaoImpl extends EntityDao<AttachmentEntity> implements Att
 
 		LOGGER.info("query: {}", preparedStatement);
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} catch (ParseException e) {
 	    throw new SQLException(e);
 	} finally {
@@ -217,6 +225,8 @@ public class AtachmentDaoImpl extends EntityDao<AttachmentEntity> implements Att
 		    closeResource(null, preparedStatement);
 		}
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}

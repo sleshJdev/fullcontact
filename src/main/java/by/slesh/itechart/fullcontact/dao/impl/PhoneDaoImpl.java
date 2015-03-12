@@ -89,6 +89,8 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 		    closeResource(null, preparedStatement);
 		}
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -142,6 +144,8 @@ public class PhoneDaoImpl extends EntityDao<PhoneEntity> implements PhoneDao {
 		    closeResource(null, preparedStatement);
 		}
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}

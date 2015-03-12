@@ -22,14 +22,20 @@ public final class DateUtil {
 	DateTime dateTime = FORMATTER.parseDateTime(dateString);
 	java.sql.Date sqlDate = new java.sql.Date(dateTime.toDate().getTime());
 
-	System.out.println(sqlDate);
-
 	return sqlDate;
     }
 
+    public static void main(String[] args) throws ParseException {
+	System.out.println(getSqlDate("1999-02-12"));
+    }
+    
     public static final java.sql.Date getSqlDate() throws ParseException {
-	DateTime dt = new DateTime();
-	String date = String.format("%s-%s-%s", dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
-	return getSqlDate(date);
+//	DateTime dateTime = FORMATTER.f
+//	java.sql.Date sqlDate = new java.sql.Date(dateTime.toDate().getTime());
+
+	DateTime dt = new DateTime(TIME_ZONE);
+	
+//	return sqlDate;
+	return null;
     }
 }

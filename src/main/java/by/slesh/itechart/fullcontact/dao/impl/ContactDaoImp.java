@@ -176,7 +176,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    while(resultSet.next()){
 		path = resultSet.getString(1);
 	    }
-	}finally{
+	} catch(SQLException e){
+	    rollback();
+	} finally{
 	    closeResources();
 	}
 	
@@ -205,6 +207,8 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    }
 
 	    LOGGER.info("query: {}", preparedStatement );
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -235,6 +239,8 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    }
 
 	    LOGGER.info("query: {}", preparedStatement );
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -290,6 +296,8 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    ((AttachmentDao) DaoFactory.getAtachmentDao(true, false)).add(contact);
 
 	    LOGGER.info("add follow contact {}", contact);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -437,7 +445,9 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    }
 	    
 	    LOGGER.info("found {} contacts", contacts.size());
-	}finally{
+	} catch(SQLException e){
+	    rollback();
+	} finally{
 	    closeResources();
 	}
 
@@ -493,6 +503,8 @@ public class ContactDaoImp extends EntityDao<ContactEntity> implements ContactDa
 	    AttachmentDao atachmentDao = (AttachmentDao) DaoFactory.getAtachmentDao(true, false);
 	    atachmentDao.update(contact);
 	    atachmentDao.add(contact);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}

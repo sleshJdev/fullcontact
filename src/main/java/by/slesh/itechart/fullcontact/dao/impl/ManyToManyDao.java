@@ -82,6 +82,8 @@ public final class ManyToManyDao extends AbstractDao{
 	    preparedStatement.executeUpdate();
 
 	    LOGGER.info("query: {}", query);
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
@@ -142,6 +144,8 @@ public final class ManyToManyDao extends AbstractDao{
 		}
 
 		LOGGER.info("fetch {} entity", entities.size());
+	    } catch (SQLException e) {
+		rollback();
 	    } finally {
 		closeResources();
 	    }

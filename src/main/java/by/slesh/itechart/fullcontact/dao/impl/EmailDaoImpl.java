@@ -90,6 +90,8 @@ public class EmailDaoImpl extends EntityDao<EmailEntity> implements EmailDao {
 	    while (resultSet.next()) {
 		id = resultSet.getLong(1);
 	    }
+	} catch(SQLException e){
+	    rollback();
 	} finally {
 	    closeResources();
 	}
