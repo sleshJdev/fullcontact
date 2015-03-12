@@ -77,9 +77,8 @@ public abstract class AbstractDao {
 
     protected void rollback() {
 	try {
-	    if (connection != null && !connection.isClosed()) {
-		connection.rollback();
-	    }
+	    checkConnection();
+	    connection.rollback();
 	} catch (SQLException e) {
 	    LOGGER.error("rollback connection error: {}", e);
 	}

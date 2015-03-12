@@ -150,6 +150,9 @@ public class SendAction extends AbstractAction {
 		    ManyToManyDao.getInstance(true, false).doLinkEmailAtachment(emailId, atachmentId);
 		}
 	    }
+	} catch (SQLException e) {
+	    JdbcConnector.rollback();
+	    throw new ServletException(e);
 	} finally {
 	    JdbcConnector.close();// close current opened connection
 	}

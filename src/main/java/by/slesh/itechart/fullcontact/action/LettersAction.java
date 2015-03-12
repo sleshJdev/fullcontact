@@ -62,8 +62,11 @@ public class LettersAction extends AbstractAction {
 	    }
 	    getRequest().setAttribute("emails", emails);
 	    getRequest().setAttribute("status", String.format(SUCCESS, emails == null ? 0 : emails.size()));
-	} catch (ClassNotFoundException | SQLException e) {
+	} catch (ClassNotFoundException e) {
 	    getRequest().setAttribute("status", PROBLEM);
+	    throw new ServletException(e);
+	} catch (SQLException e) {
+	    JdbcConnector.rollback();
 	    throw new ServletException(e);
 	} finally {
 	    try {

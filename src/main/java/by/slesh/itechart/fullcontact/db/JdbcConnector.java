@@ -64,13 +64,24 @@ public final class JdbcConnector {
 	return connection;
     }
 
+    public static void rollback() {
+	try {
+	    if (connection == null || connection.isClosed()) {
+		throw new SQLException("connection is null or closed");
+	    }
+	    connection.rollback();
+	} catch (SQLException e) {
+	    LOGGER.error("rollback connection error: {}", e);
+	}
+    }
+
     public static void close() throws SQLException {
 	closeResource(connection);
     }
 
     public static void closeResource(Connection connection, Statement... statements) {
 	LOGGER.info("BEGIN closeResource....");
-	
+
 	if (connection != null) {
 	    try {
 		if (!connection.isClosed()) {
@@ -113,7 +124,7 @@ public final class JdbcConnector {
 		}
 	    }
 	}
-	
+
 	LOGGER.info("END closeResource");
     }
 }

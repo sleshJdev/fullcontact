@@ -143,28 +143,35 @@ public class EditAction extends AbstractAction {
 
 	Long[] ids = null;
 
-	if ((ids = HttpProcessUtil.checkForDeletingAtachments(getRequest())) != null) {
-	    // open connection
-	    EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);
-	    for (long id : ids) {
-		AttachmentEntity atachment = atachmentDao.get(id);
+	try{
+	    if ((ids = HttpProcessUtil.checkForDeletingAtachments(getRequest())) != null) {
+		    // open connection
+		    EntityDao<AttachmentEntity> atachmentDao = DaoFactory.getAtachmentDao(true, false);
+		    for (long id : ids) {
+			AttachmentEntity atachment = atachmentDao.get(id);
 
-		LOGGER.info("emtity is null? - {}", (atachment == null));
+			LOGGER.info("emtity is null? - {}", (atachment == null));
 
-		File file = new File(String.format("%s%s%s", attachmentsDirectory, File.separator, atachment.getName()));
-		if (file.delete()) {
-		    LOGGER.info("atachment by path {} deleted successful", file.getPath());
-		} else {
-		    LOGGER.info("atachment by path {} not found or not exists", file.getPath());
+			File file = new File(String.format("%s%s%s", attachmentsDirectory, File.separator, atachment.getName()));
+			if (file.delete()) {
+			    LOGGER.info("atachment by path {} deleted successful", file.getPath());
+			} else {
+			    LOGGER.info("atachment by path {} not found or not exists", file.getPath());
+			}
+		    }
+		    atachmentDao.deleteRange(contact.getId(), ids);
 		}
-	    }
+
+		if ((ids = HttpProcessUtil.checkForDeletingPhones(getRequest())) != null) {
+		    DaoFactory.getPhoneDao(true, true).deleteRange(contact.getId(), ids);
+		}
+	} catch (SQLException e) {
+	    JdbcConnector.rollback();
+	    throw new ServletException(e);
+	} finally {
 	    JdbcConnector.close();// close connection
-	    atachmentDao.deleteRange(contact.getId(), ids);
 	}
 
-	if ((ids = HttpProcessUtil.checkForDeletingPhones(getRequest())) != null) {
-	    DaoFactory.getPhoneDao(true, true).deleteRange(contact.getId(), ids);
-	}
 	getResponse().sendRedirect(getRequest().getHeader("referer"));
 
 	LOGGER.info("END");

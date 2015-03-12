@@ -65,18 +65,18 @@ public class DeleteAction extends AbstractAction {
 		    }
 
 		    List<AttachmentEntity> part = ((AttachmentDao) attachmentDao).getAttachmentsOfContact(id);
-		    if(part != null){
+		    if (part != null) {
 			attachmentsToDelete.addAll(part);
 		    }
 
 		    String avatarPath = ((ContactDao) contactDao).getAvatar(id);
-		    if(avatarPath != null){
+		    if (avatarPath != null) {
 			avatarsToDelete.add(avatarPath);
 		    }
-		    
+
 		    contactDao.delete(id);
 		}
-		
+
 		// remove !file! avatars
 		for (String path : avatarsToDelete) {
 		    removeFile(String.format("%s%s%s", G.AVATARS_DIRECTORY, File.separator, path));
@@ -85,7 +85,10 @@ public class DeleteAction extends AbstractAction {
 		// remove !file! atachments according contact
 		removeAttachmets(attachmentsToDelete, G.ATTACHMENTS_DIRECTORY);
 		getRequest().setAttribute("status", String.format(SUCCESS2, ids.length));
-	    } catch (ClassNotFoundException | SQLException e) {
+	    } catch (ClassNotFoundException e) {
+		throw new ServletException(e);
+	    } catch (SQLException e) {
+		JdbcConnector.rollback();
 		throw new ServletException(e);
 	    } finally {
 		try {
@@ -95,7 +98,6 @@ public class DeleteAction extends AbstractAction {
 		    throw new ServletException(e);
 		}
 	    }
-
 	    break;
 	case "delete-letters":
 	    try {
@@ -108,7 +110,7 @@ public class DeleteAction extends AbstractAction {
 		    }
 		    // not close current connection
 		    List<AttachmentEntity> list = ManyToManyDao.getInstance(true, false).getAtachmentsOfEmail(id);
-		    if(list != null){
+		    if (list != null) {
 			attachmentsToDelete.addAll(list);
 		    }
 
@@ -124,8 +126,12 @@ public class DeleteAction extends AbstractAction {
 		// remove !file! attachments according letters
 		removeAttachmets(attachmentsToDelete, G.FILES_DIRECTORY);
 
-		getRequest().setAttribute("status", String.format(SUCCESS1, letterIds.length, attachmentsToDelete.size()));
-	    } catch (ClassNotFoundException | SQLException e) {
+		getRequest().setAttribute("status",
+			String.format(SUCCESS1, letterIds.length, attachmentsToDelete.size()));
+	    } catch (ClassNotFoundException e) {
+		throw new ServletException(e);
+	    }catch(SQLException e){
+		JdbcConnector.rollback();
 		throw new ServletException(e);
 	    } finally {
 		// close connection only
