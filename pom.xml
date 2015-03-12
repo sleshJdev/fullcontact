@@ -84,16 +84,16 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<url>http://localhost:8080/manager</url>
-					<server>localhost</server>
-					<path>/${project.build.finalName}</path>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.tomcat.maven</groupId> -->
+<!-- 				<artifactId>tomcat7-maven-plugin</artifactId> -->
+<!-- 				<version>2.2</version> -->
+<!-- 				<configuration> -->
+<!-- 					<url>http://localhost:8080/manager</url> -->
+<!-- 					<server>localhost</server> -->
+<!-- 					<path>/${project.build.finalName}</path> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 	</build>
 </project>
