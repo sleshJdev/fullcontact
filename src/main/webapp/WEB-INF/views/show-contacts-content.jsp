@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- ${pageContext.request.contextPath} -->
 
@@ -64,6 +65,7 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<div class="quantity-contacts status"><span>Total: </span>${total}</div>
 	</form>
 </div>
 

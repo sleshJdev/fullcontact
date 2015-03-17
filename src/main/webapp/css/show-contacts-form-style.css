@@ -1,5 +1,11 @@
 @CHARSET "UTF-8";
 
+
+.quantity-contacts{
+	float: right;
+	background: none;
+}
+
 .pagination {
 	padding: 20px;
 	margin-bottom: 20px;

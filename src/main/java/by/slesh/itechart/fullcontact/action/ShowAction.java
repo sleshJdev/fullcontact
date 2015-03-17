@@ -32,9 +32,10 @@ public class ShowAction extends AbstractAction {
 	    if (quantityRestPages > 0) {
 		++quantityPages;
 	    }
-	    getRequest().setAttribute("status", String.format("Your Contacts. Total %d", quantityContacts));
+	    getRequest().setAttribute("status", "Your Contacts");
 	    getRequest().setAttribute("begin", G.LIMIT_ROWS_PER_PAGE * page);
 	    getRequest().setAttribute("pages", quantityPages);
+	    getRequest().setAttribute("total", quantityContacts);
 	    getRequest().setAttribute("contacts", contacts);
 	    getRequest().setAttribute("content", "show-contacts-content.jsp");
 	    getRequest().setAttribute("title", "Full Contact Page");

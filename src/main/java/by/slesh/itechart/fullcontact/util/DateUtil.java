@@ -28,14 +28,9 @@ public final class DateUtil {
     public static void main(String[] args) throws ParseException {
 	System.out.println(getSqlDate("1999-02-12"));
     }
-    
-    public static final java.sql.Date getSqlDate() throws ParseException {
-//	DateTime dateTime = FORMATTER.f
-//	java.sql.Date sqlDate = new java.sql.Date(dateTime.toDate().getTime());
 
-	DateTime dt = new DateTime(TIME_ZONE);
-	
-//	return sqlDate;
-	return null;
+    public static final java.sql.Date getSqlDate() throws ParseException {
+	java.util.Date date = DateTime.now().toDate();
+	return new java.sql.Date(date.getTime());
     }
 }
